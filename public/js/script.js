@@ -9,7 +9,7 @@ async function uploadPDF() {
     }
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('pdf', file);
 
     try {
         const response = await fetch(url, {
