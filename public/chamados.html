@@ -46,7 +46,7 @@
         }
       }
 
-      async function aceitarSolicitacao(id, botao) {
+      async function cancelarSolicitacao(id, botao) {
         try {
           const resposta = await fetch(`http://localhost:8080/syntro/solicitacoes/${id}`, {
             method: 'DELETE'
@@ -63,8 +63,8 @@
         }
       }
 
-      function cancelarSolicitacao(id) {
-        alert(`Solicitação ${id} cancelada.`);
+      function aceitarSolicitacao(id) {
+        alert(`Solicitação ${id} aceita.`);
       }
 
       carregarSolicitacoes();
