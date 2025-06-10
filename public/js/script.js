@@ -1,7 +1,7 @@
 async function uploadPDF() {
     const fileInput = document.querySelector('#fileInput');
     const file = fileInput.files[0];
-    const url = 'URL';
+    const url = '/nf/nota-fiscal/upload';
 
     if (!file) {
         console.log('Selecione um arquivo primeiro!');
@@ -9,7 +9,7 @@ async function uploadPDF() {
     }
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('pdf', file);
 
     try {
         const response = await fetch(url, {
