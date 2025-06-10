@@ -44,7 +44,7 @@
                 <p><strong>Justificativa:</strong> <span>${solicitacao.justificativa}</span></p>
                 <div class="d-flex justify-content-end gap-2 mt-3">
                   <button class="btn btn-success" onclick="concluirSolicitacao('${solicitacao.id}')">Aceitar</button>
-                  <button class="btn btn-danger" onclick="cancelarSolicitacao('${solicitacao.id}')">Cancelar</button>
+                  <button class="btn btn-danger" onclick="cancelarSolicitacao('${solicitacao.id}', this)">Cancelar</button>
                 </div>
               </div>
             `;
@@ -92,7 +92,7 @@
                 <p><strong>Justificativa:</strong> <span>${solicitacao.justificativa}</span></p>
                 <div class="d-flex justify-content-end gap-2 mt-3">
                   <button class="btn btn-success" onclick="concluirSolicitacao('${solicitacao.id}')">Aceitar</button>
-                  <button class="btn btn-danger" onclick="cancelarSolicitacao('${solicitacao.id}')">Cancelar</button>
+                  <button class="btn btn-danger" onclick="cancelarSolicitacao('${solicitacao.id}, this')">Cancelar</button>
                 </div>
               </div>
             `;
@@ -101,7 +101,7 @@
         }
       }
 
-      async function cancelarSolicitacao(id) {
+      async function cancelarSolicitacao(id, event) {
         try {
           const resposta = await fetch(`/nf/solicitacao-servico/${id}`, {
             method: 'DELETE'
