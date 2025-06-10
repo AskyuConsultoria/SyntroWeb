@@ -102,22 +102,22 @@
       }
 
       async function cancelarSolicitacao(id) {
-        // try {
-        //   const resposta = await fetch(`/syntro/solicitacoes/${id}`, {
-        //     method: 'DELETE'
-        //   });
+        try {
+          const resposta = await fetch(`/nf/solicitacao-servico/${id}`, {
+            method: 'DELETE'
+          });
 
-        //   if (resposta.ok) {
-        //     const botao = event.target;
-        //     botao.closest(".card").remove();
-        //     alert(`Solicitação ${id} deletada.`);
-        //   } else {
-        //     alert("Erro ao cancelar solicitação.");
-        //   }
-        // } catch {
-        //   alert("Erro de conexão com o backend.");
-        // }
-        alert(`Solicitação ${id} deletada.`);
+          if (resposta.ok) {
+            const botao = event.target;
+            botao.closest(".card").remove();
+            alert(`Solicitação ${id} deletada.`);
+          } else {
+            alert("Erro ao cancelar solicitação.");
+          }
+        } catch {
+          alert("Erro de conexão com o backend.");
+        }
+        //alert(`Solicitação ${id} deletada.`);
         const botao = event.target;
         botao.closest(".card").remove();
       }
