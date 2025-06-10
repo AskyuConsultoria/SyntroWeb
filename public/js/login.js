@@ -4,8 +4,6 @@ async function entrarEmpresa(event) {
         const usuario = document.getElementById('usuario').value;
         const senha = document.getElementById('senha').value;
 
-        alert(usuario)
-        alert(senha)
         alert("sucesso")
         window.location.href = "chamados.html";
 
@@ -41,8 +39,6 @@ async function entrarFornecedor(event) {
         const cnpj = document.getElementById('cnpj').value;
         const senha = document.getElementById('senha_fornecedor').value;
 
-        alert(cnpj)
-        alert(senha)
         alert("sucesso")
         window.location.href = "upload.html";
         // try {
