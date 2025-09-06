@@ -8,7 +8,7 @@ var app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "src")));
 
 app.use(cors());
 
@@ -17,6 +17,11 @@ router.get("/", function (res) {
     res.render("index");
 })
 );
+
+app.get("/password_recovery", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/components/password_recovery/password_recovery.html"));
+});
+
 
 var url = `http://localhost:${PORTA}`
 
