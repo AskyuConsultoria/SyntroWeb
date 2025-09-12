@@ -1,30 +1,29 @@
-var express = require("express");
-var cors = require("cors");
-var path = require("path");
-var router = express.Router();
-var PORTA = 80;
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
 
-var app = express();
+const PORTA = 80;
+const app = express();
 
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "src")));
-
 app.use(cors());
 
-app.use("/", 
-router.get("/", function (res) {
-    res.render("index");
-})
-);
+// Servir arquivos estáticos (CSS, JS, imagens)
+app.use(express.static(path.join(__dirname, "src")));
 
-app.get("/password_recovery", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/components/password_recovery/password_recovery.html"));
+// Rota principal
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/index.html"));
 });
 
+// Rota de recuperação de senha
+app.get("/password_recovery", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/features/password_recovery/password_recovery.html"));
+});
 
-var url = `http://localhost:${PORTA}`
-
-app.listen(PORTA, function () {
-    console.log(`O seu site já está na web na url ${url}`);
+// Iniciar servidor
+app.listen(PORTA, () => {
+    console.log(`O seu site já está na web na url http://localhost:${PORTA}`);
 });
