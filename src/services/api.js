@@ -1,5 +1,5 @@
 
-const API_BASE_URL = "/syntro"; 
+const API_BASE_URL = "http://localhost:8080/syntro"; 
 
 async function apiFetch(endpoint, options = {}) {
   try {
