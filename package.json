@@ -21,9 +21,5 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "nodemon": "^3.1.0"
-  },
-  "devDependencies": {
-    "daisyui": "^5.1.10",
-    "tailwindcss": "^4.1.13"
   }
 }
