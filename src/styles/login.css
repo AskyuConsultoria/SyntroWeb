@@ -158,6 +158,10 @@ body {
   }
 }
 
+.btn-entrar{
+  background-color: #1A2A80 !important;
+}
+
 .carousel {
   height: 207px;
 }
