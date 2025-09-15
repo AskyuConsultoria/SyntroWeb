@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    const buttons = document.querySelectorAll('.btn-action');
+    const cancelButton = buttons[0];
+    const sendButton = buttons[1];
+
     const dropzone = document.getElementById('dropzone');
     const fileInput = document.getElementById('fileInput');
     const inputPDFButton = document.getElementById('inputPDFButton');
-    const cancelButton = document.querySelector('.btn-action:nth-child(2)');
-    const sendButton = document.querySelector('.btn-action:nth-child(3)');
 
     dropzone.addEventListener('click', () => fileInput.click());
 
@@ -34,14 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendButton.addEventListener('click', async () => {
         const file = fileInput.files[0];
-        const url = `/syntro/nota-fiscal/upload?idUsuario=${sessionStorage.getItem("usuarioLogado").id}`;
+        const url = `/syntro/nota-fiscal/upload?idUsuario=${JSON.parse(sessionStorage.getItem("usuarioLogado")).id}`;
 
         if (!file) {
             alert('Selecione um arquivo primeiro!');
             return;
         }
 
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'application/zip', 'multipart/form-data', 'application/pdf'];
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'application/zip', 'application/pdf'];
         if (!allowedTypes.includes(file.type)) {
             alert('Tipo de arquivo não suportado! Use .jpg, .pdf ou .zip.');
             return;
