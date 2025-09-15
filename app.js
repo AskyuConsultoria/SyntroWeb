@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 
-const PORTA = 80;
+const PORTA = 3333;
 const app = express();
 
 // Middleware
