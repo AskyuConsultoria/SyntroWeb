@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'application/zip', 'multipart/form-data'];
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'application/zip', 'multipart/form-data', 'application/pdf'];
         if (!allowedTypes.includes(file.type)) {
             alert('Tipo de arquivo não suportado! Use .jpg, .pdf ou .zip.');
             return;
