@@ -75,22 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function uploadChecker(key) {
     //Começar o loading spinner aqui
-    while(true) {
-        setInterval(() => {}, 5000);
-        try {
+    try {
+        while (true) {
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Espera 5s
+            
             const response = await fetch(`/syntro/temp/${key}`, {
                 method: 'GET',
             });
 
-            if (response.status === 404){
-                alert('Upload Concluido!');
+            if (response.status === 404) {
+                alert('Upload Concluído!');
                 break;
             }
-
-        } catch (error) {
-            alert('Não foi possível verificar o upload!');
-            console.error('Erro:', error);
         }
+    } catch (error) {
+        alert('Não foi possível verificar o upload!');
+        console.error('Erro:', error);
     }
     //Parar o loading spinner aqui
 }
