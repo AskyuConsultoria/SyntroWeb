@@ -46,20 +46,40 @@
 </div>
       </div>
     </div>
-
-    <div class="overlay-container">
-      <div class="overlay p-4">
-        <div class="row">
-          <div class="col-md-6 overlay-panel overlay-left text-center">
-            <h1>Bem Vindo!</h1>
-            <p>Para ter acesso às notas recebidas por sua empresa, informe seu usuário e senha.</p>
-            <button class="btn btn-gradient stylist ghost w-50 mt-4" id="loginFornecedor" style="background-color: white; border: none;" onclick="loginFornecedor()">Entrar do Fornecedor</button>
+    <div class="card shadow mt-4">
+      <div style="margin-top: 10%;">
+        <div class="mb-4 mt-2 text-start">
+          <span>BEM VINDO DE VOLTA</span>
+          <h3 style="font-weight: 600;">Faça o login na sua conta!</h3>
+        </div>
+        <div>
+          <div class="mb-3 input-container">
+            <input type="email" id="email" placeholder=" " required>
+            <label for="email">E-mail</label>
           </div>
-
-          <div class="col-md-6 overlay-panel overlay-right text-center">
-            <h1>Olá</h1>
-            <p>Para enviar Notas fiscais ou verificar as enviadas, por favor informe seu CNPJ e senha.</p>
-            <button class="btn btn-gradient stylist ghost w-50 mt-4" id="loginEmpresa" style="background-color: white; border: none;" onclick="loginEmpresa()">Entrar da Empresa</button>
+          <div class="mb-3 input-icon input-container">
+            <input type="password" id="senha" placeholder=" " required>
+            <label for="senha">Senha</label>
+            <span id="toggleSenha" class="material-symbols-outlined">visibility</span>
+          </div>
+          <div class="mb-2 d-flex justify-content-between align-items-center">
+            <label class="checkbox-container">
+              <input type="checkbox" id="remember">
+              <span class="checkmark"></span>
+              Lembre-se de mim
+            </label>
+            <a href="#" style="color: #333; text-decoration: none; font-weight: normal;">Esqueci a senha</a>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-entrar" style="height: 50px; border: none;"
+          action="#" onclick="logar()">
+            Entrar
+          </button>
+          <div class="divider">
+            <span>OU</span>
+          </div>
+          <div class="register-btn">
+            <span>Primeiro acesso?</span>
+            <a href="#">CRIE UMA CONTA</a>
           </div>
         </div>
       </div>
@@ -70,21 +90,20 @@
 
 
 <script>
-    function transição(){
-    sumirMensagem()
-    loginFornecedor()
-    loginEmpresa()
-    }
+  const checkbox = document.getElementById('remember');
+  checkbox.addEventListener('change', () => {
+    console.log('Checkbox está agora:', checkbox.checked);
+  });
 
-    function sumirMensagem() {
-        cardErro.style.display = "none"
-    }
-    function loginFornecedor() {
-        container.classList.remove("right-panel-active");
-    }
-    function loginEmpresa() {
-        container.classList.add("right-panel-active");
-    }
+  const senhaInput = document.getElementById("senha");
+  const toggleSenha = document.getElementById("toggleSenha");
+
+  toggleSenha.addEventListener("click", () => {
+    const isPassword = senhaInput.type === "password";
+    senhaInput.type = isPassword ? "text" : "password";
+
+    toggleSenha.textContent = isPassword ? "visibility_off" : "visibility";
+  });
 </script>
 
 </html>
