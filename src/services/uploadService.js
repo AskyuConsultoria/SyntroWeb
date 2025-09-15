@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function uploadChecker(key) {
     //Começar o loading spinner aqui
     while(true) {
+        setInterval(() => {}, 5000);
         try {
             const response = await fetch(`/syntro/temp/${key}`, {
                 method: 'GET',
