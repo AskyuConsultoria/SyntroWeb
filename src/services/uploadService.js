@@ -60,8 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Erro na requisição');
 
             const result = await response.json();
-            alert('Upload realizado com sucesso!');
+            alert('Upload sendo processado com sucesso!');
             console.log('Sucesso:', result);
+
+            uploadChecker(result);
 
             fileInput.value = '';
         } catch (error) {
@@ -70,3 +72,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+async function uploadChecker(key) {
+    //Começar o loading spinner aqui
+    while(true) {
+        try {
+            const response = await fetch(`/syntro/temp/${key}`, {
+                method: 'GET',
+            });
+
+            if (response.status === 404){
+                alert('Upload Concluido!');
+                break;
+            }
+
+        } catch (error) {
+            alert('Não foi possível verificar o upload!');
+            console.error('Erro:', error);
+        }
+    }
+    //Parar o loading spinner aqui
+}
