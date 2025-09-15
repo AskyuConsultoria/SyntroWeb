@@ -34,16 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendButton.addEventListener('click', async () => {
         const file = fileInput.files[0];
-        const url = '/nf/nota-fiscal/upload';
+        const url = `/syntro/nota-fiscal/upload?idUsuario=${sessionStorage.getItem("usuarioLogado").id}`;
 
         if (!file) {
             alert('Selecione um arquivo primeiro!');
             return;
         }
 
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'application/zip'];
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'application/zip', 'multipart/form-data'];
         if (!allowedTypes.includes(file.type)) {
-            alert('Tipo de arquivo não suportado! Use .jpg, .png, .svg ou .zip.');
+            alert('Tipo de arquivo não suportado! Use .jpg, .pdf ou .zip.');
             return;
         }
 
