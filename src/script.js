@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('fileInput');
     const inputPDFButton = document.getElementById('inputPDFButton');
 
-    dropzone.addEventListener('click', () => fileInput.click());
-
     dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropzone.style.borderColor = '#0d6efd';
