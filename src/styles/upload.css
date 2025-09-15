@@ -159,3 +159,13 @@
     background-color: #531d7c;
     color: #fff;
 }
+
+.acesso{
+    gap: 740px;
+}
+
+@media (min-width: 1600px){
+    .acesso{
+        gap: 1020px ;
+    }
+}
