@@ -1,9 +1,7 @@
 async function logar() {
         const email = document.getElementById('email').value;
         const senha = document.getElementById('senha').value;
-
-        alert("sucesso")
-        window.location.href = "upload.html";
+        
         try {
           const resposta = await fetch('/syntro/user', {
             method: 'POST',
