@@ -9,7 +9,7 @@ async function entrarEmpresa() {
           if (resposta.ok) {
             const dados = await resposta.json();
             sessionStorage.setItem("usuarioLogado", JSON.stringify(dados));
-            window.location.href = '/depracted/upload.html';
+            window.location.href = '/upload.html';
           } else {
             const msg = await resposta.text();
             erroLogin.textContent = "Falha no login: " + msg;
@@ -33,7 +33,7 @@ async function entrarFornecedor(event) {
           console.log("Dados do login: ", dados)
           if (dados != null) {
             sessionStorage.setItem("usuarioLogado", JSON.stringify(dados));
-            window.location.href = '/depracted/upload.html';
+            window.location.href = '/upload.html';
           } else {
             alert("Ocorreu um erro no Login")
           }

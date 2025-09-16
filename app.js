@@ -30,9 +30,6 @@ app.get("/upload.html", (req, res) => {
     res.sendFile(path.join(__dirname, "src/depracted/upload.html"));
 });
 
-
-
-
 // Iniciar servidor
 app.listen(PORTA, () => {
     console.log(`O seu site já está na web na url http://localhost:${PORTA}`);
