@@ -5,7 +5,7 @@ async function logar() {
         alert("sucesso")
         window.location.href = "upload.html";
         try {
-          const resposta = await fetch('localhost:8080/syntro/user', {
+          const resposta = await fetch('/syntro/user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
