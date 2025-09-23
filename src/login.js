@@ -3,7 +3,7 @@ async function logar() {
         const senha = document.getElementById('senha').value;
 
         try {
-          const resposta = await fetch('/syntro/user', {
+          const resposta = await fetch('https://localhost:8080/syntro/user', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
