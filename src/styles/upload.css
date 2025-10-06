@@ -5,10 +5,15 @@
     font-family: 'ZenKakuGothicNew', 'Roboto', sans-serif;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 .nav-content {
     display: flex;
     flex-direction: row;
     align-items: center;
+    min-width: 86vw;
 }
 
 .add-text-icon {
@@ -65,10 +70,12 @@
         flex: 1;
         border-bottom: 1px solid white;
     }
+
     .divider span {
-    color: white;
-}
-    .btn-upload{
+        color: white;
+    }
+
+    .btn-upload {
         background-color: white;
     }
 }
@@ -148,6 +155,20 @@
     transition: all 0.2s ease-in-out;
 }
 
+.all-content {
+    transition: width 0.3s, padding 0.3s, margin-left 0.3s;
+    width: calc(100% - 240px);
+    padding: 0 60px;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+body.sidebar-collapsed .all-content {
+    width: calc(100% - 60px);
+    padding: 0 30px;
+}
+
+
 .btn-upload:active,
 .btn-upload:focus {
     background-color: #7C2DB9;
@@ -160,12 +181,44 @@
     color: #fff;
 }
 
-.acesso{
-    gap: 740px;
+.icon-btn {
+    height: 28px;
+    width: 30px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-@media (min-width: 1600px){
-    .acesso{
-        gap: 1020px ;
+.acesso {
+    gap: 25rem;
+}
+
+body.sidebar-collapsed .acesso {
+    gap: 37rem;
+}
+
+.fornecedor-icon{
+    margin-left: calc(30vw - 440px)
+}
+
+body.sidebar-collapsed .fornecedor-icon{
+    margin-left: calc(30vw - 450px)
+}
+
+@media (min-width: 1600px) {
+    .acesso {
+        gap: 40rem;
     }
+
+    body.sidebar-collapsed .acesso {
+        gap: 72rem;
+    }
+
+    .fornecedor-icon{
+        margin-left: calc(30vw - 300px)
+      }
+
+    body.sidebar-collapsed .fornecedor-icon{
+        margin-left: calc(30vw - 640px)
+      }
 }
