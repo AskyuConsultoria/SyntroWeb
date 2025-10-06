@@ -197,6 +197,14 @@ body.sidebar-collapsed .acesso {
     gap: 37rem;
 }
 
+.fornecedor-icon{
+    margin-left: calc(30vw - 440px)
+}
+
+body.sidebar-collapsed .fornecedor-icon{
+    margin-left: calc(30vw - 450px)
+}
+
 @media (min-width: 1600px) {
     .acesso {
         gap: 40rem;
@@ -205,4 +213,12 @@ body.sidebar-collapsed .acesso {
     body.sidebar-collapsed .acesso {
         gap: 72rem;
     }
+
+    .fornecedor-icon{
+        margin-left: calc(30vw - 300px)
+      }
+
+    body.sidebar-collapsed .fornecedor-icon{
+        margin-left: calc(30vw - 640px)
+      }
 }
