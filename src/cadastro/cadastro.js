@@ -141,7 +141,7 @@ async function cadastrar_auditor() {
         const permissionamento  = document.getElementById('permissionamento').value;
 
         try {
-          const resposta = await fetch('https://localhost:8080/syntro/servico', {
+          const resposta = await fetch('https://localhost:8080/syntro/auditor', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
