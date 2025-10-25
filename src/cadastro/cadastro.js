@@ -11,7 +11,7 @@ async function cadastrar_empresa() {
   const complemento = document.getElementById('complemento').value;
 
   try {
-    const resposta = await fetch('https://localhost:8080/syntro/empresa', {
+    const resposta = await fetch('https://localhost:8080/syntro/empresas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
