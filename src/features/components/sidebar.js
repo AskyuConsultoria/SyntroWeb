@@ -9,7 +9,7 @@ class Sidebar extends HTMLElement {
 
     // Logo
     const logo = document.createElement("img");
-    logo.src = "assets/syntro_icon.svg";
+    logo.src = "../../assets/syntro_icon.svg";
     logo.classList.add("logo-icon");
     logo.style.height = "50px";
     logo.style.marginBottom = "20px";
@@ -21,15 +21,14 @@ class Sidebar extends HTMLElement {
     menu.classList.add("menu");
 
     const links = [
-      { text: "Meu acesso", icon: "assets/home.svg" },
-      { text: "Serviços", icon: "assets/box.svg" },
-      { text: "Repres.", icon: "assets/people.svg" },
-      { text: "Empresas", icon: "assets/building-3.svg" },
-      { text: "Cadastros", icon: "assets/paperclip-2.svg" },
-      { text: "Notas fiscais", icon: "assets/folder-add2.svg" },
-      { text: "Permissões", icon: "assets/user-search.svg" },
-      { text: "Controle", icon: "assets/icons.svg" },
-      { text: "Ajuda", icon: "assets/info.svg" },
+      { text: "Minhas notas", icon: "../../assets/home.svg" },
+      { text: "Serviços", icon: "../../assets/box.svg" },
+      { text: "Repres.", icon: "../../assets/people.svg" },
+      { text: "Empresas", icon: "../../assets/building-3.svg" },
+      { text: "Cadastros", icon: "../../assets/paperclip-2.svg" },
+      { text: "Permissões", icon: "../../assets/user-search.svg" },
+      { text: "Controle", icon: "../../assets/icons.svg" },
+      { text: "Ajuda", icon: "../../assets/info.svg" },
     ];
 
     links.forEach(item => {
@@ -60,7 +59,7 @@ class Sidebar extends HTMLElement {
     logout.href = "#";
 
     const logoutIcon = document.createElement("img");
-    logoutIcon.src = "assets/logout.svg";
+    logoutIcon.src = "../../assets/logout.svg";
     logoutIcon.alt = "Sair";
     logoutIcon.classList.add("icon");
 
