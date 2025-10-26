@@ -18,6 +18,7 @@
     a {
       text-decoration: none;
     }
+
     th[data-col] {
       cursor: pointer;
     }
@@ -38,7 +39,8 @@
               <img src="../../assets/home.svg" style="height: 20px;">
             </div>
             <input type="search" id="searchInput" class="form-control search-bar" placeholder="Buscar nota...">
-            <button id="addNotaBtn" class="btn btn-primary" style="background-color: #1A2A80; border-color: #1A2A80;" onclick="upload()"> 
+            <button id="addNotaBtn" class="btn btn-primary" style="background-color: #1A2A80; border-color: #1A2A80;"
+              onclick="upload()">
               <i class="bi bi-plus-lg"></i> Adicionar Nota Fiscal
             </button>
           </div>
@@ -85,11 +87,11 @@
     });
 
     const notasMock = [
-      { servico: "Serviço de Consultoria Técnica", nota: "NF-001245", auditor: "Mariana Costa", vencimento: "15/11/2025", status: "Em andamento", valor: "R$ 2.500,00" },
-      { servico: "Treinamento de Equipe", nota: "NF-001246", auditor: "João Ribeiro", vencimento: "22/11/2025", status: "Aprovada", valor: "R$ 1.800,00" },
-      { servico: "Auditoria Interna", nota: "NF-001247", auditor: "Ana Souza", vencimento: "30/11/2025", status: "Em validação", valor: "R$ 3.200,00" },
-      { servico: "Serviço Contábil", nota: "NF-001248", auditor: "Carlos Lima", vencimento: "05/12/2025", status: "Congelada", valor: "R$ 1.000,00" },
-      { servico: "Auditoria Externa", nota: "NF-001249", auditor: "Fernanda Dias", vencimento: "10/12/2025", status: "Reprovada", valor: "R$ 2.000,00" }
+      { id: 1, servico: "Serviço de Consultoria Técnica", nota: "NF-001245", auditor: "Mariana Costa", vencimento: "15/11/2025", status: "Em andamento", valor: "R$ 2.500,00" },
+      { id: 2, servico: "Treinamento de Equipe", nota: "NF-001246", auditor: "João Ribeiro", vencimento: "22/11/2025", status: "Aprovada", valor: "R$ 1.800,00" },
+      { id: 3, servico: "Auditoria Interna", nota: "NF-001247", auditor: "Ana Souza", vencimento: "30/11/2025", status: "Em validação", valor: "R$ 3.200,00" },
+      { id: 4, servico: "Serviço Contábil", nota: "NF-001248", auditor: "Carlos Lima", vencimento: "05/12/2025", status: "Congelada", valor: "R$ 1.000,00" },
+      { id: 5, servico: "Auditoria Externa", nota: "NF-001249", auditor: "Fernanda Dias", vencimento: "10/12/2025", status: "Reprovada", valor: "R$ 2.000,00" }
     ];
 
     const tableBody = document.getElementById("tableBody");
@@ -139,15 +141,26 @@
       }
 
       filtradas.forEach(nota => {
-        tableBody.insertAdjacentHTML("beforeend", `<tr>
+        const row = document.createElement("tr");
+        row.innerHTML = `
           <td>${nota.servico}</td>
           <td>${nota.nota}</td>
           <td>${nota.auditor}</td>
           <td>${nota.vencimento}</td>
           <td>${nota.status}</td>
           <td>${nota.valor}</td>
-        </tr>`);
+        `;
+        row.style="cursor: pointer"
+        row.addEventListener("click", () => {
+          verIndividual(nota.id);
+        });
+        tableBody.appendChild(row);
       });
+    }
+
+    function verIndividual(id) {
+      window.localStorage.setItem('id', id)
+      window.location.href = "individual.html";
     }
 
     renderTable("Todas");
@@ -176,4 +189,5 @@
     }
   </script>
 </body>
+
 </html>

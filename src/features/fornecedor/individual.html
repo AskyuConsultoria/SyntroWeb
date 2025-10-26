@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Syntro Web - Visualização notas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="../components/sidebar.js">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <link rel="shortcut icon" href="../../assets/syntro_icon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="../../styles/upload.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    a {
+      text-decoration: none;
+    }
+
+    th[data-col] {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body style="background-color: #F1F5F8;">
+  <div class="d-flex flex-row justify-content-between">
+    <div>
+      <side-bar></side-bar>
+    </div>
+    <div class="all-content">
+    <nav-content title="Minhas notas" subtitle="Visualização" title-link="../fornecedor/visualizacao.html"></nav-content>
+      <div class="content">
+        <div class="add-text-icon">
+          <div class="d-flex flex-row gap-4 align-center">
+            <div>
+              <span>Notas registradas</span>
+            </div>
+            <button id="addNotaBtn" class="btn btn-primary" style="background-color: #1A2A80; border-color: #1A2A80;"
+              onclick="upload()">
+              <i class="bi bi-plus-lg"></i> Seguir NF
+            </button>
+          </div>
+        </div>
+        <hr style="width: 90%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
+        <div>
+         <div>
+          <div class="input">
+          <span>Entrada no sistema</span>
+          <input type="datetime-local" class="form-control search-bar" style="border-radius: 4px">
+          </div>
+          <div class="input">
+          <span>Data vencimento</span>
+          <input type="date" class="form-control search-bar" style="border-radius: 4px">
+          </div>
+          <div class="input">
+          <span>Data e hora de emissão</span>
+          <input type="datetime-local" class="form-control search-bar" style="border-radius: 4px">
+          </div>
+          <div class="input">
+          <span>Valor da cobrança*</span>
+          <input type="number" class="form-control search-bar" style="border-radius: 4px" placeholder="R$ 00,00">
+          </div>
+          <div class="input">
+          <span>Descrição do serviço</span>
+          <input type="text" class="form-control search-bar" style="border-radius: 4px" placeholder="Descrição do serviço">
+          </div>
+         </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../components/sidebar.js" type="module"></script>
+  <script src="../components/navcontent.js" type="module"></script>
+
+</body>
+
+</html>

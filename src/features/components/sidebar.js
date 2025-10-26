@@ -3,7 +3,6 @@ class Sidebar extends HTMLElement {
     super();
     const shadow = this.attachShadow({ mode: "open" });
 
-    // Wrapper da sidebar
     const wrapper = document.createElement("div");
     wrapper.setAttribute("class", "sidebar");
 
@@ -21,20 +20,23 @@ class Sidebar extends HTMLElement {
     menu.classList.add("menu");
 
     const links = [
-      { text: "Minhas notas", icon: "../../assets/home.svg" },
-      { text: "Serviços", icon: "../../assets/box.svg" },
-      { text: "Repres.", icon: "../../assets/people.svg" },
-      { text: "Empresas", icon: "../../assets/building-3.svg" },
-      { text: "Cadastros", icon: "../../assets/paperclip-2.svg" },
-      { text: "Permissões", icon: "../../assets/user-search.svg" },
-      { text: "Controle", icon: "../../assets/icons.svg" },
-      { text: "Ajuda", icon: "../../assets/info.svg" },
+      { text: "Minhas notas", icon: "../../assets/home.svg", href: ["visualizacao.html","upload.html","individual.html"] },
+      { text: "Serviços", icon: "../../assets/box.svg", href: ["servicos.html"] },
+      { text: "Repres.", icon: "../../assets/people.svg", href: ["representantes.html"] },
+      { text: "Empresas", icon: "../../assets/building-3.svg", href: ["empresas.html"] },
+      { text: "Cadastros", icon: "../../assets/folder-add2.svg", href: ["cadastros.html"] },
+      { text: "Permissões", icon: "../../assets/user-search.svg", href: ["permissoes.html"] },
+      { text: "Controle", icon: "../../assets/icons.svg", href: ["controle.html"] },
+      { text: "Ajuda", icon: "../../assets/info.svg", href: ["ajuda.html"] },
     ];
 
     links.forEach(item => {
       const li = document.createElement("li");
       const a = document.createElement("a");
-      a.href = "#";
+
+      // Sempre pega o primeiro href para o <a>, mas armazena todos no dataset
+      a.href = item.href[0];
+      a.dataset.hrefs = item.href.join(",");
 
       const img = document.createElement("img");
       img.src = item.icon;
@@ -69,31 +71,18 @@ class Sidebar extends HTMLElement {
     logout.appendChild(logoutIcon);
     logout.appendChild(logoutText);
     footer.appendChild(logout);
-
     wrapper.appendChild(footer);
 
     // Estilos
     const style = document.createElement("style");
     style.textContent = `
-      .sidebar {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        background-color: white;
-        height: calc(100vh - 40px);
-        width: 240px;
-        padding: 20px 10px;
-        box-shadow: 2px 0 6px rgba(0,0,0,0.1);
-        transition: width 0.3s;
-        overflow: hidden;
-      }
+      .sidebar { display: flex; flex-direction: column; align-items: center; justify-content: space-between; background-color: white; height: calc(100vh - 40px); width: 240px; padding: 20px 10px; box-shadow: 2px 0 6px rgba(0,0,0,0.1); transition: width 0.3s; overflow: hidden; }
       .sidebar.collapsed { width: 60px; }
       ul.menu { list-style: none; padding: 0; margin: 0; width: 100%; }
       ul.menu li { display: flex; justify-content: center; margin: 8px 0; }
       a { display: flex; align-items: center; gap: 10px; width: 95%; padding: 12px 15px; text-decoration: none; font-size: 16px; color: black; border-radius: 8px; transition: background 0.3s; margin-left: 10%; box-sizing: border-box; }
       ul.menu li a:hover { background-color: #CED9F9; color: #1A2A80; border-radius:8px; }
-      li:active { border-left: 6px solid #1A2A80; font-weight: 600; }
+      ul.menu li a.active { border-left: 6px solid #1A2A80; font-weight: 600; color: #1A2A80; }
       a .icon { height: 20px; width: 20px; }
       .sidebar.collapsed a span, .sidebar.collapsed .footer span { display: none; }
       .logo-icon { transition: transform 0.3s; }
@@ -101,17 +90,41 @@ class Sidebar extends HTMLElement {
       .footer { margin-top: auto; width: 100%; }
     `;
 
-    // Append no shadow DOM
     shadow.appendChild(style);
     shadow.appendChild(wrapper);
 
-    // Evento do logo
+    // Evento do logo (colapsar)
     logo.addEventListener("click", () => {
       wrapper.classList.toggle("collapsed");
-      this.dispatchEvent(new CustomEvent("toggle-sidebar", {
-        bubbles: true,
-        composed: true
-      }));
+      this.dispatchEvent(new CustomEvent("toggle-sidebar", { bubbles: true, composed: true }));
+    });
+
+    // Função de ativar link atual
+    const atualizarAtivo = () => {
+      const currentPath = window.location.pathname.split("/").pop();
+      const allLinks = menu.querySelectorAll("a");
+
+      allLinks.forEach(link => {
+        const hrefs = link.dataset.hrefs.split(",");
+        if (hrefs.includes(currentPath)) {
+          link.classList.add("active");
+        } else {
+          link.classList.remove("active");
+        }
+      });
+    };
+
+    atualizarAtivo();
+    window.addEventListener("popstate", atualizarAtivo);
+    window.addEventListener("hashchange", atualizarAtivo);
+    menu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setTimeout(atualizarAtivo, 100)));
+
+    // Logout
+    logout.addEventListener("click", () => {
+      // Aqui você pode limpar sessão, token, etc.
+      console.log("Faz logout!");
+      // Exemplo: redirecionar para login
+      window.location.href = "login.html";
     });
   }
 }
