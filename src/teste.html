@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrar Div com Botão</title>
+    <style>
+        /* Estilos CSS para a div: começa oculta */
+        #memberForm {
+            display: none; /* Inicia oculto */
+            padding: 20px;
+            border: 2px solid #3498db;
+            margin-top: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+
+        /* Estilo para o botão */
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="addMember()">Adicionar Novo Membro</button>
+
+    <div id="memberForm">
+        <h2>Formulário de Novo Membro</h2>
+        <p>Esta div apareceu após o clique no botão.</p>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome">
+        </div>
+
+    <script>
+        // Função JavaScript que será chamada pelo onclick
+        function addMember() {
+            // 1. Obter a referência para a div usando seu ID
+            var memberDiv = document.getElementById('memberForm');
+
+            // 2. Mudar a propriedade 'display' de 'none' para 'block'
+            // Isso fará com que a div, que estava oculta, se torne visível
+            memberDiv.style.display = 'block';
+
+            // Opcional: Desabilitar o botão após o clique para evitar cliques repetidos
+            // document.querySelector('button').disabled = true;
+
+            console.log('A div memberForm foi exibida.');
+        }
+    </script>
+
+</body>
+</html>
