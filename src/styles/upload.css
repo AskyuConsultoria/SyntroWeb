@@ -261,6 +261,23 @@ body.sidebar-collapsed .fornecedor-icon {
     margin-left: calc(30vw - 450px)
 }
 
+.status{
+    background-color: #1A2A80;
+    color: white;
+    height: 9%;
+    width: 280px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.form{
+    background-color: white;
+    width: 100%;
+    border: 1px solid #545F71;
+    border-radius: 8px;
+    height: 350px;
+}
+
 @media (min-width: 1600px) {
     .acesso {
         gap: 38rem;

@@ -27,6 +27,7 @@ class Sidebar extends HTMLElement {
       { text: "Cadastros", icon: "../../assets/folder-add2.svg", href: ["cadastros.html"] },
       { text: "Permissões", icon: "../../assets/user-search.svg", href: ["permissoes.html"] },
       { text: "Controle", icon: "../../assets/icons.svg", href: ["controle.html"] },
+      { text: "Notificações", icon: "../../assets/bell.svg", href: ["notificacoes.html"] },
       { text: "Ajuda", icon: "../../assets/info.svg", href: ["ajuda.html"] },
     ];
 
@@ -119,12 +120,9 @@ class Sidebar extends HTMLElement {
     window.addEventListener("hashchange", atualizarAtivo);
     menu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setTimeout(atualizarAtivo, 100)));
 
-    // Logout
     logout.addEventListener("click", () => {
-      // Aqui você pode limpar sessão, token, etc.
       console.log("Faz logout!");
-      // Exemplo: redirecionar para login
-      window.location.href = "login.html";
+      window.location.href = "../index.html";
     });
   }
 }

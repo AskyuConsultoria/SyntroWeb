@@ -31,12 +31,15 @@
       <side-bar></side-bar>
     </div>
     <div class="all-content">
-    <nav-content title="Minhas notas" subtitle="Visualização" title-link="../fornecedor/visualizacao.html"></nav-content>
+      <div style="position: sticky;">
+        <nav-content title="Minhas notas" subtitle="Visualização"
+        title-link="../fornecedor/visualizacao.html"></nav-content>
+      </div>
       <div class="content">
         <div class="add-text-icon">
           <div class="d-flex flex-row gap-4 align-center">
             <div>
-              <span>Notas registradas</span>
+              <span id="id_nf">Nota nº xpto</span>
             </div>
             <button id="addNotaBtn" class="btn btn-primary" style="background-color: #1A2A80; border-color: #1A2A80;"
               onclick="upload()">
@@ -45,33 +48,78 @@
           </div>
         </div>
         <hr style="width: 90%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
-        <div>
-         <div>
-          <div class="input">
-          <span>Entrada no sistema</span>
-          <input type="datetime-local" class="form-control search-bar" style="border-radius: 4px">
+        <div class="d-flex flex-row align-center" style="gap: 8%">
+          <div>
+            <div>
+              <span>Entrada no sistema</span>
+              <input type="datetime-local" class="form-control search-bar" style="border-radius: 4px">
+            </div>
+            <div>
+              <span>Data vencimento</span>
+              <input type="date" class="form-control search-bar" style="border-radius: 4px">
+            </div>
+            <div>
+              <span>Data e hora de emissão</span>
+              <input type="datetime-local" class="form-control search-bar" style="border-radius: 4px">
+            </div>
+            <div>
+              <span>Valor da cobrança*</span>
+              <input type="number" class="form-control search-bar" style="border-radius: 4px" placeholder="R$ 00,00">
+            </div>
+            <div>
+              <span>Descrição do serviço</span>
+              <input type="text" class="form-control search-bar" style="border-radius: 4px; height: 120px;"
+                placeholder="...">
+            </div>
           </div>
-          <div class="input">
-          <span>Data vencimento</span>
-          <input type="date" class="form-control search-bar" style="border-radius: 4px">
-          </div>
-          <div class="input">
-          <span>Data e hora de emissão</span>
-          <input type="datetime-local" class="form-control search-bar" style="border-radius: 4px">
-          </div>
-          <div class="input">
-          <span>Valor da cobrança*</span>
-          <input type="number" class="form-control search-bar" style="border-radius: 4px" placeholder="R$ 00,00">
-          </div>
-          <div class="input">
-          <span>Descrição do serviço</span>
-          <input type="text" class="form-control search-bar" style="border-radius: 4px" placeholder="Descrição do serviço">
-          </div>
-         </div>
+          <div style="width: 500px;" class="d-flex flex-column justify-content-evenly gap-3">
+            <div class="status d-flex align-items-center justify-content-center gap-2">
+              <span>Em andamento</span>
+              <img src="../../assets/arrow-down.svg" alt="">
+            </div>
+            <div class="form d-flex flex-column justify-content-evenly">
+           <div style="margin-left: 10%;">
+               <div style="width: 270px;">
+              <span style="font-size: 22px;">Informações</span>
+              </div>
+              <div>
+                <span>Nome do serviço*</span>
+                <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                  placeholder="Nome serviço">
+              </div>
+              <div>
+                <span>Representante do fornecedor*</span>
+                <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                  placeholder="Nome do representante fornecedor">
+              </div>
+              <div>
+                <span>Empresa fornecedora*</span>
+                <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                  placeholder="Empresa fornecedora">
+              </div>
+              <div>
+                <span>Auditor*</span>
+                <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                  placeholder="Nome auditor">
+              </div>
+           </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="">
+        <div>
+          <span>Anexos</span>
+          <div></div>
+        </div>
+        <div>
+          <span>Atividade</span>
+          <div></div>
+        </div>
+      </div>
     </div>
+  </div>
   </div>
 
   <script src="../components/sidebar.js" type="module"></script>
@@ -79,4 +127,11 @@
 
 </body>
 
+<script>
+  //trocar esse id pelo do back (id fiscal no caso)
+  const id= window.localStorage.getItem("id");
+  let sessaoIdNf= document.getElementById("id_nf");
+  sessaoIdNf.innerHTML=id
+
+</script>
 </html>

@@ -86,13 +86,13 @@
       document.body.classList.toggle('sidebar-collapsed');
     });
 
-    const notasMock = [
-      { id: 1, servico: "Serviço de Consultoria Técnica", nota: "NF-001245", auditor: "Mariana Costa", vencimento: "15/11/2025", status: "Em andamento", valor: "R$ 2.500,00" },
-      { id: 2, servico: "Treinamento de Equipe", nota: "NF-001246", auditor: "João Ribeiro", vencimento: "22/11/2025", status: "Aprovada", valor: "R$ 1.800,00" },
-      { id: 3, servico: "Auditoria Interna", nota: "NF-001247", auditor: "Ana Souza", vencimento: "30/11/2025", status: "Em validação", valor: "R$ 3.200,00" },
-      { id: 4, servico: "Serviço Contábil", nota: "NF-001248", auditor: "Carlos Lima", vencimento: "05/12/2025", status: "Congelada", valor: "R$ 1.000,00" },
-      { id: 5, servico: "Auditoria Externa", nota: "NF-001249", auditor: "Fernanda Dias", vencimento: "10/12/2025", status: "Reprovada", valor: "R$ 2.000,00" }
-    ];
+   const notasMock = [
+  { id: "NF-001245", servico: "Serviço de Consultoria Técnica", nota: "NF-001245", auditor: "Mariana Costa", vencimento: "15/11/2025", status: "Em andamento", valor: "R$ 2.500,00" },
+  { id: "NF-001246", servico: "Treinamento de Equipe", nota: "NF-001246", auditor: "João Ribeiro", vencimento: "22/11/2025", status: "Aprovada", valor: "R$ 1.800,00" },
+  { id: "NF-001247", servico: "Auditoria Interna", nota: "NF-001247", auditor: "Ana Souza", vencimento: "30/11/2025", status: "Em validação", valor: "R$ 3.200,00" },
+  { id: "NF-001248", servico: "Serviço Contábil", nota: "NF-001248", auditor: "Carlos Lima", vencimento: "05/12/2025", status: "Congelada", valor: "R$ 1.000,00" },
+  { id: "NF-001249", servico: "Auditoria Externa", nota: "NF-001249", auditor: "Fernanda Dias", vencimento: "10/12/2025", status: "Reprovada", valor: "R$ 2.000,00" }
+];
 
     const tableBody = document.getElementById("tableBody");
     const tags = document.querySelectorAll(".tags span");
