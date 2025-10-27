@@ -88,6 +88,7 @@ class Sidebar extends HTMLElement {
         box-shadow: 2px 0 6px rgba(0,0,0,0.1);
         transition: width 0.3s;
         overflow: hidden;
+        position: fixed;
       }
       .sidebar.collapsed { width: 60px; }
       ul.menu { list-style: none; padding: 0; margin: 0; width: 100%; }
