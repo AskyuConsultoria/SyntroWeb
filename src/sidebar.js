@@ -33,9 +33,30 @@ class Sidebar extends HTMLElement {
     ];
 
     links.forEach(item => {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    
+    if(item.text === "Meu acesso") {
       a.href = "#";
+    } else if(item.text === "Serviços") {
+      a.href = "#";
+    } else if(item.text === "Repres.") {
+      a.href = "#";
+    } else if(item.text === "Empresas") {
+      a.href = "#";
+    } else if(item.text === "Cadastros") {
+      a.href = "cadastros-home.html";
+    } else if(item.text === "Notas fiscais") {
+      a.href = "#";
+    } else if(item.text === "Permissões") {
+      a.href = "#";
+    } else if(item.text === "Controle") {
+      a.href = "#";
+    } else if(item.text === "Ajuda") {
+      a.href = "#";
+    } else {
+      a.href = "#";
+    }
 
       const img = document.createElement("img");
       img.src = item.icon;
@@ -57,7 +78,7 @@ class Sidebar extends HTMLElement {
     const footer = document.createElement("div");
     footer.classList.add("footer");
     const logout = document.createElement("a");
-    logout.href = "#";
+    logout.href = "index.html";
 
     const logoutIcon = document.createElement("img");
     logoutIcon.src = "assets/logout.svg";
