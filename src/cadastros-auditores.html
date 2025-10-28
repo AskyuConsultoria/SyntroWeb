@@ -69,6 +69,7 @@
                 <label for="paisOrigem">País de Origem *</label>
                 <select id="paisOrigem">
                   <option>Selecione</option>
+                  <option value="Brasil">Brasil</option>
                 </select>
               </div>
 
@@ -76,12 +77,14 @@
                 <label for="tipoDocumento">Tipo de Documento *</label>
                 <select id="tipoDocumento">
                   <option>Selecione</option>
+                  <option value="CPF">CPF</option>
+                  <option value="CNPJ">CNPJ</option>
                 </select>
               </div>
-
+              
               <div class="auditor-form-group">
                 <label for="documentoAuditor">Documento *</label>
-                <input type="text" id="documentoAuditor" placeholder="000.000.000-00">
+                <input type="text" id="documentoAuditor" placeholder="CPF ou CNPJ">
               </div>
             </div>
 
@@ -95,6 +98,7 @@
                 <label for="departamentoAuditor">Departamento *</label>
                 <select id="departamentoAuditor">
                   <option>Selecione</option>
+                  <option value="Financeiro">Financeiro</option>
                 </select>
               </div>
 
@@ -109,6 +113,10 @@
                 <label for="permissionamentoAuditor">Permissionamento *</label>
                 <select id="permissionamentoAuditor">
                   <option>Selecione</option>
+                  <option value="1">Administrador Interno</option>
+                  <option value="2">Gestor</option>
+                  <option value="3">Auditor</option>
+                  <option value="4">Emissor</option>
                 </select>
               </div>
             </div>
