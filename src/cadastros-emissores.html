@@ -135,4 +135,25 @@
     document.body.classList.toggle('sidebar-collapsed');
   });
 
+   async function carregarEmpresas() {
+        try {
+            const response = await fetch('http://localhost:8080/syntro/empresas');
+            if (!response.ok) throw new Error('Erro ao buscar empresas');
+            
+            const empresas = await response.json();
+            const select = document.getElementById('empresaFornecedora');
+            
+            empresas.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.idEmpresa; 
+                option.textContent = emp.nomeEmpresa;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar empresas:', error);
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', carregarEmpresas);
+
 </script>

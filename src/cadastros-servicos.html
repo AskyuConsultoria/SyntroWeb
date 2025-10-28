@@ -178,4 +178,57 @@
   desc.addEventListener('input', () => {
     contador.textContent = `${desc.value.length}/500`;
   });
+
+  async function carregarEmpresas() {
+      try {
+          const response = await fetch('http://localhost:8080/syntro/empresas');
+          if (!response.ok) throw new Error('Erro ao buscar empresas');
+          
+          const empresas = await response.json();
+          const select = document.getElementById('empresaFornecedor');
+          
+          empresas.forEach(emp => {
+              const option = document.createElement('option');
+              option.value = emp.idEmpresa; 
+              option.textContent = emp.nomeEmpresa;
+              select.appendChild(option);
+          });
+      } catch (error) {
+          console.error('Erro ao carregar empresas:', error);
+      }
+      try {
+          const response = await fetch(`http://localhost:8080/syntro/usuario/emissor/${idEmpresa}`);
+          if (!response.ok) throw new Error('Erro ao buscar emissores');
+          
+          const empresas = await response.json();
+          const select = document.getElementById('representante');
+          
+          empresas.forEach(emp => {
+              const option = document.createElement('option');
+              option.value = emp.idUsuario; 
+              option.textContent = emp.nomeUsuario;
+              select.appendChild(option);
+          });
+      } catch (error) {
+          console.error('Erro ao carregar emissores:', error);
+      }
+      try {
+          const response = await fetch(`http://localhost:8080/syntro/usuario/auditor`);
+          if (!response.ok) throw new Error('Erro ao buscar auditores');
+          
+          const empresas = await response.json();
+          const select = document.getElementById('representanteInterno');
+          
+          empresas.forEach(emp => {
+              const option = document.createElement('option');
+              option.value = emp.idUsuario; 
+              option.textContent = emp.nomeUsuario;
+              select.appendChild(option);
+          });
+      } catch (error) {
+          console.error('Erro ao carregar auditores:', error);
+      }
+  }
+
+  window.addEventListener('DOMContentLoaded', carregarEmpresas);
 </script>
