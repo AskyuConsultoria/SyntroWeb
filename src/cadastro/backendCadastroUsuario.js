@@ -1,4 +1,4 @@
-const API_BASE_USUARIO = "/syntro/controller/user";
+const API_BASE_USUARIO = "http://localhost:8080/syntro/user";
 
 // Função para cadastrar Auditor ou Emissor
 async function cadastrarUsuario(tipo) {
@@ -23,6 +23,7 @@ async function cadastrarUsuario(tipo) {
 
         // Monta objeto Usuario
         const usuario = {
+            nomeUsuario: nome,
             nomeCompleto: nome,
             email: email,
             cargo: cargo,

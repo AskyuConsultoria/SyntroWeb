@@ -1,15 +1,17 @@
 // Endpoints da API
-const API_BASE_EMPRESA = "/syntro/controller/empresas";
-const API_BASE_ENDERECO = "/syntro/controller/enderecos";
+const API_BASE_EMPRESA = "http://localhost:8080/syntro/empresas";
+const API_BASE_ENDERECO = "http://localhost:8080/syntro/enderecos";
 
 // Função para cadastrar empresa e retornar o ID
 async function cadastrarEmpresa() {
     const nomeServico = document.getElementById("razaoSocial").value;
+    const nomeFantasia = document.getElementById("razaoSocial").value;
     const areaAtuacao = document.getElementById("tipoEmpresa").value;
     const identificacaoFiscal = document.getElementById("cnpj").value;
 
     const empresa = {
         nomeServico,
+        nomeFantasia,
         areaAtuacao,
         identificacaoFiscal,
         fornecedor: true,       // ou false, conforme necessidade
@@ -41,12 +43,17 @@ async function cadastrarEmpresa() {
 
 // Função para cadastrar endereço vinculado à empresa
 async function cadastrarEndereco(idEmpresa) {
+    
+    const raw = sessionStorage.getItem('usuarioLogado');
+    const user = raw ? JSON.parse(raw) : null;
+    const id = user ? user.id : null;
+
     const logradouro = document.getElementById("logradouro").value;
     const bairro = document.getElementById("bairro").value;
     const cidade = document.getElementById("cidade").value;
     const uf = document.getElementById("uf").value;
     const cepRaw = document.getElementById("cep").value;
-    const cep = parseInt(cepRaw.replace(/\D/g, ""), 10); // remove não números
+    const cep = parseInt(cepRaw.replace(/\D/g, ""), 10);
 
     const endereco = {
         logradouro,
@@ -55,8 +62,8 @@ async function cadastrarEndereco(idEmpresa) {
         uf,
         cep,
         complemento: document.getElementById("complemento").value,
-        idFornecedor: idEmpresa, // vincula o endereço à empresa
-        idUsuario: null           // ou outro ID se necessário
+        idFornecedor: idEmpresa,
+        idUsuario: null           
     };
 
     try {
@@ -83,15 +90,22 @@ function limparFormulario() {
 }
 
 // Adiciona listener ao botão de cadastro
+// document.addEventListener("DOMContentLoaded", () => {
+//     let botao = document.getElementById("btnCadastrar");
+//     if (!botao) {
+//         botao = document.createElement("button");
+//         botao.id = "btnCadastrar";
+//         botao.type = "button";
+//         botao.textContent = "Salvar";
+//         botao.className = "btn btn-primary";
+//         document.querySelector(".cadastro-form-card").appendChild(botao);
+//     }
+//     botao.addEventListener("click", cadastrarEmpresa);
+// });
+
 document.addEventListener("DOMContentLoaded", () => {
-    let botao = document.getElementById("btnCadastrar");
-    if (!botao) {
-        botao = document.createElement("button");
-        botao.id = "btnCadastrar";
-        botao.type = "button";
-        botao.textContent = "Cadastrar Empresa e Endereço";
-        botao.className = "btn btn-primary";
-        document.querySelector(".cadastro-form-card").appendChild(botao);
+    const botaoSalvar = document.querySelector(".empresa-salvar-btn");
+    if (botaoSalvar) {
+        botaoSalvar.addEventListener("click", cadastrarEmpresa);
     }
-    botao.addEventListener("click", cadastrarEmpresa);
 });

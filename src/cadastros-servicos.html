@@ -70,19 +70,21 @@
 
           <div class="servico-form-card">
             <div class="servico-form-row">
+
               <div class="servico-form-group">
-                <label for="representante">Nome do Representante *</label>
-                <select id="representante">
-                  <option>Selecione o Representante</option>
+                <label for="empresaFornecedor">Empresa Fornecedora *</label>
+                <select id="empresaFornecedor" onchange="carregarEmissores()">
+                  <option>Selecione a Empresa</option>
                 </select>
               </div>
 
               <div class="servico-form-group">
-                <label for="empresaFornecedor">Empresa Fornecedora *</label>
-                <select id="empresaFornecedor">
-                  <option>Selecione a Empresa</option>
+                <label for="representante">Nome do Emissor *</label>
+                <select id="representante">
+                  <option>Selecione o Emissor</option>
                 </select>
               </div>
+
 
               <div class="servico-form-group">
                 <label for="cargoRepresentante">Cargo/Função *</label>
@@ -133,9 +135,9 @@
               </div>
 
               <div class="servico-form-group">
-                <label for="representanteInterno">Representante Interno *</label>
+                <label for="representanteInterno">Auditor *</label>
                 <select id="representanteInterno">
-                  <option>Selecione o Representante Interno</option>
+                  <option>Selecione o Auditor</option>
                 </select>
               </div>
             </div>
@@ -189,31 +191,15 @@
           
           empresas.forEach(emp => {
               const option = document.createElement('option');
-              option.value = emp.idEmpresa; 
-              option.textContent = emp.nomeEmpresa;
+              option.value = emp.id; 
+              option.textContent = emp.nomeFantasia;
               select.appendChild(option);
           });
       } catch (error) {
           console.error('Erro ao carregar empresas:', error);
       }
       try {
-          const response = await fetch(`http://localhost:8080/syntro/usuario/emissor/${idEmpresa}`);
-          if (!response.ok) throw new Error('Erro ao buscar emissores');
-          
-          const empresas = await response.json();
-          const select = document.getElementById('representante');
-          
-          empresas.forEach(emp => {
-              const option = document.createElement('option');
-              option.value = emp.idUsuario; 
-              option.textContent = emp.nomeUsuario;
-              select.appendChild(option);
-          });
-      } catch (error) {
-          console.error('Erro ao carregar emissores:', error);
-      }
-      try {
-          const response = await fetch(`http://localhost:8080/syntro/usuario/auditor`);
+          const response = await fetch(`http://localhost:8080/syntro/user/auditor`);
           if (!response.ok) throw new Error('Erro ao buscar auditores');
           
           const empresas = await response.json();
@@ -221,12 +207,32 @@
           
           empresas.forEach(emp => {
               const option = document.createElement('option');
-              option.value = emp.idUsuario; 
+              option.value = emp.id; 
               option.textContent = emp.nomeUsuario;
               select.appendChild(option);
           });
       } catch (error) {
           console.error('Erro ao carregar auditores:', error);
+      }
+  }
+
+  async function carregarEmissores(){
+    var idEmpresa = document.getElementById('empresaFornecedor').value;
+    try {
+          const response = await fetch(`http://localhost:8080/syntro/user/emissor/${idEmpresa}`);
+          if (!response.ok) throw new Error('Erro ao buscar emissores');
+          
+          const empresas = await response.json();
+          const select = document.getElementById('representante');
+          
+          empresas.forEach(emp => {
+              const option = document.createElement('option');
+              option.value = emp.id; 
+              option.textContent = emp.nomeUsuario;
+              select.appendChild(option);
+          });
+      } catch (error) {
+          console.error('Erro ao carregar emissores:', error);
       }
   }
 

@@ -462,6 +462,12 @@ body.sidebar-collapsed .fornecedor-icon{
   margin-top: 10px;
 }
 
+.empresa-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
 .servico-salvar-btn {
   background-color: #7c3aed;
   color: #fff;
@@ -531,7 +537,35 @@ body.sidebar-collapsed .fornecedor-icon{
   margin-top: 10px;
 }
 
+.emissor-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
 .auditor-salvar-btn {
+  background-color: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.emissor-salvar-btn {
+  background-color: #7c3aed;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.empresa-salvar-btn {
   background-color: #7c3aed;
   color: #fff;
   border: none;

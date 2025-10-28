@@ -85,19 +85,12 @@
 
                 <div class="cadastro-form-group cadastro-form-small">
                   <label for="uf">UF *</label>
-                  <select id="uf">
-                    <option>Selecione</option>
-                    <option value="SP">SP</option>
-                  </select>
+                  <input type="text" id="uf" placeholder="Insira a UF">
                 </div>
 
                 <div class="cadastro-form-group">
                   <label for="cidade">Cidade *</label>
-                  <select id="cidade">
-                    <option>Selecione</option>
-                    <option value="São Paulo">São Paulo</option>
-                    <option value="São Caetano do Sul">São Caetano do Sul</option>
-                  </select>
+                  <input type="text" id="cidade" placeholder="Insira a Cidade">
                 </div>
 
                 <div class="cadastro-form-group">
@@ -116,6 +109,9 @@
                   <label for="complemento">Complemento</label>
                   <input type="text" id="complemento" placeholder="Insira o complemento">
                 </div>
+              </div>
+              <div class="empresa-form-actions">
+                <button class="empresa-salvar-btn">Salvar</button>
               </div>
             </div>
 
@@ -137,4 +133,35 @@ sidebarElement.addEventListener('toggle-sidebar', () => {
   document.body.classList.toggle('sidebar-collapsed');
 });
 
+  document.addEventListener("DOMContentLoaded", () => {
+    const cepInput = document.getElementById("cep");
+    const ufInput = document.getElementById("uf");
+    const cidadeInput = document.getElementById("cidade");
+    const bairroInput = document.getElementById("bairro");
+    const logradouroInput = document.getElementById("logradouro");
+
+    cepInput.addEventListener("input", async () => {
+      const cep = cepInput.value.replace(/\D/g, "");
+
+      if (cep.length === 8) {
+        try {
+          const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+          const data = await response.json();
+
+          if (data.erro) {
+            alert("CEP não encontrado!");
+            return;
+          }
+
+          ufInput.value = data.uf || "";
+          cidadeInput.value = data.localidade || "";
+          bairroInput.value = data.bairro || "";
+          logradouroInput.value = data.logradouro || "";
+        } catch (error) {
+          console.error("Erro ao buscar CEP:", error);
+          alert("Erro ao buscar o CEP. Tente novamente.");
+        }
+      }
+    });
+  });
 </script>

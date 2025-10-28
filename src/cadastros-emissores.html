@@ -115,6 +115,9 @@
                 <input type="text" id="cargoEmissor" placeholder="Insira o Cargo/Função do emissor">
               </div>
             </div>
+            <div class="auditor-form-actions">
+              <button class="emissor-salvar-btn">Salvar</button>
+            </div>
           </div>
 
         </div>
@@ -145,8 +148,8 @@
             
             empresas.forEach(emp => {
                 const option = document.createElement('option');
-                option.value = emp.idEmpresa; 
-                option.textContent = emp.nomeEmpresa;
+                option.value = emp.id; 
+                option.textContent = emp.nomeFantasia;
                 select.appendChild(option);
             });
         } catch (error) {
