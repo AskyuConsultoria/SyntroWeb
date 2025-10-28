@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Syntro Web - Cadastro Emissor</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <link rel="shortcut icon" href="../../assets/syntro_icon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="../../styles/cadastro.css">
+  <script src="../components/sidebar.js"></script>
+  <script src="../../services/cadastro/backendCadastroUsuario.js"></script>
+</head>
+<style>a{text-decoration: none;}</style>
+
+<body style="background-color: #F1F5F8;">
+  <div class="d-flex flex-row justify-content-between">
+    <div>
+      <side-bar></side-bar>
+    </div>
+    <div class="all-content">
+      <div class="nav-content">
+        <div class="bnts" style="display: flex; width: 110px; justify-content: space-evenly;">
+          <img src="../../assets/arrow-square-right.svg" style="transform: rotate(180deg); cursor: pointer;" onclick="history.back()" alt="Voltar">
+          <img src="../../assets/arrow-square-right.svg" style="cursor: pointer;" onclick="history.forward()" alt="Avançar">
+        </div>
+        <div class="d-flex flex-row align-items-center acesso">
+          <span style="color: #5e5959;">Meu acesso | <a href="cadastros-home.html" style="all: unset; cursor: pointer;">Cadastro</a> | Emissor </span>
+          <div style="gap: 10px;" >
+            <div class="d-flex align-items-center gap-2">
+              <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly" style="cursor: pointer">
+              <img src="../../assets/bell.svg" style="height: 20px;">
+            </div>
+            <div>
+              <img src="../../assets/Component 1.svg" style="height: 30px;">
+            <span>Fornecedor</span>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="add-text-icon">
+          <span>Cadastro</span>
+          <img src="../../assets/folder-add2.svg" style="height: 20px;">
+        </div>
+        <hr style="width: 90%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
+        <div class="box-titulo">
+          <div style="width: 95%; margin-left: 2.5%; padding-top: 1%; padding-bottom: 1%;">
+            <div style="display: flex; flex-direction: column;">
+              <span style="font-size: 20px;">Informações do Emissor</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="emissor-alert-box">
+            <span class="emissor-alert-icon">ⓘ</span>
+            <div class="emissor-alert-content">
+              <strong>Cadastro de Emissor</strong><br>
+              Antes de adicionar um emissor, tenha certeza de ter a empresa dele cadastrada, para assim conseguir selecionar nessa etapa.
+            </div>
+            <span class="emissor-alert-close" onclick="this.parentElement.style.display='none'">x</span>
+          </div>
+
+          <div class="emissor-form-card">
+            <div class="emissor-form-row">
+              <div class="emissor-form-group">
+                <label for="nomeEmissor">Nome do Emissor *</label>
+                <input type="text" id="nomeEmissor" placeholder="Insira o nome do emissor">
+              </div>
+
+              <div class="emissor-form-group">
+                <label for="paisOrigem">País de Origem *</label>
+                <select id="paisOrigem">
+                  <option>Selecione</option>
+                  <option value="São Paulo">São Paulo</option>
+                </select>
+              </div>
+
+              <div class="emissor-form-group">
+                <label for="tipoDocumento">Tipo de Documento *</label>
+                <select id="tipoDocumento">
+                  <option>Selecione</option>
+                  <option value="CPF">CPF</option>
+                  <option value="CNPJ">CNPJ</option>
+                </select>
+              </div>
+
+              <div class="emissor-form-group">
+                <label for="documento">Documento *</label>
+                <input type="text" id="documento" placeholder="000.000.000-00">
+              </div>
+            </div>
+
+            <div class="emissor-form-row">
+              <div class="emissor-form-group">
+                <label for="emailEmissor">Email do Emissor *</label>
+                <input type="email" id="emailEmissor" placeholder="Insira o email do emissor">
+              </div>
+
+              <div class="emissor-form-group">
+                <label for="empresaFornecedora">Empresa Fornecedora *</label>
+                <select id="empresaFornecedora">
+                  <option>Selecione a Empresa</option>
+                </select>
+              </div>
+
+              <div class="emissor-form-group">
+                <label for="cargoEmissor">Cargo/Função *</label>
+                <input type="text" id="cargoEmissor" placeholder="Insira o Cargo/Função do emissor">
+              </div>
+            </div>
+            <div class="auditor-form-actions">
+              <button class="emissor-salvar-btn">Salvar</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+</body>
+
+</html>
+
+<script>
+  const sidebarElement = document.querySelector('side-bar');
+
+  sidebarElement.addEventListener('toggle-sidebar', () => {
+    document.body.classList.toggle('sidebar-collapsed');
+  });
+
+   async function carregarEmpresas() {
+        try {
+            const response = await fetch('http://localhost:8080/syntro/empresas');
+            if (!response.ok) throw new Error('Erro ao buscar empresas');
+            
+            const empresas = await response.json();
+            const select = document.getElementById('empresaFornecedora');
+            
+            empresas.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.id; 
+                option.textContent = emp.nomeFantasia;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar empresas:', error);
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', carregarEmpresas);
+
+</script>
