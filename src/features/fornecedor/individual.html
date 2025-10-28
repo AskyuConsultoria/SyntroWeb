@@ -33,7 +33,7 @@
     <div class="all-content">
       <div style="position: sticky;">
         <nav-content title="Minhas notas" subtitle="Visualização"
-        title-link="../fornecedor/visualizacao.html"></nav-content>
+          title-link="../fornecedor/visualizacao.html"></nav-content>
       </div>
       <div class="content">
         <div class="add-text-icon">
@@ -78,60 +78,260 @@
               <img src="../../assets/arrow-down.svg" alt="">
             </div>
             <div class="form d-flex flex-column justify-content-evenly">
-           <div style="margin-left: 10%;">
-               <div style="width: 270px;">
-              <span style="font-size: 22px;">Informações</span>
+              <div style="margin-left: 10%;">
+                <div style="width: 270px;">
+                  <span style="font-size: 22px;">Informações</span>
+                </div>
+                <div>
+                  <span>Nome do serviço*</span>
+                  <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                    placeholder="Nome serviço">
+                </div>
+                <div>
+                  <span>Representante do fornecedor*</span>
+                  <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                    placeholder="Nome do representante fornecedor">
+                </div>
+                <div>
+                  <span>Empresa fornecedora*</span>
+                  <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                    placeholder="Empresa fornecedora">
+                </div>
+                <div>
+                  <span>Auditor*</span>
+                  <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                    placeholder="Nome auditor">
+                </div>
               </div>
-              <div>
-                <span>Nome do serviço*</span>
-                <input type="text" class="form-control search-bar" style="border-radius: 4px"
-                  placeholder="Nome serviço">
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="anexos-container bg-light rounded p-4" style="width: 100%; max-width: 100%; margin-top: 2rem;">
+            <h6 class="fw-semibold mb-3">Anexos</h6>
+
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Arquivo</th>
+                  <th scope="col">Tamanho</th>
+                  <th scope="col">Data em que foi adicionado</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-pdf text-danger fs-4"></i>
+                    <span>NF - Jun/25 - Dados A.pdf</span>
+                  </td>
+                  <td>93 KB</td>
+                  <td>03 de julho de 2025 às 17:45</td>
+                  <td class="text-end">
+                    <i class="bi bi-download" style="cursor: pointer;"></i>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="d-flex align-items-center gap-2">
+                    <i class="bi bi-file-image text-primary fs-4"></i>
+                    <span>image-202507-193911.png</span>
+                  </td>
+                  <td>20 KB</td>
+                  <td>04 de julho de 2025 às 16:02</td>
+                  <td class="text-end">
+                    <i class="bi bi-download" style="cursor: pointer;"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-zip text-warning fs-4"></i>
+                    <span>arquivos-comprimidos.zip</span>
+                  </td>
+                  <td>450 KB</td>
+                  <td>14 de julho de 2025 às 18:22</td>
+                  <td class="text-end">
+                    <i class="bi bi-download" style="cursor: pointer;"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr>
+          <div>
+            <span style="font-size: 17px; font-weight: 600;">Atividade</span>
+            <div>
+              <div class="d-flex align-center flex-column justify-content-evenly gap-4 ">
+                <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
+                  <div><span class="active" data-status="Tudo">Tudo</span></div>
+              <div><span data-status="Comentários">Comentários</span></div>
+              <div><span data-status="Histórico">Histórico</span></div>
+                </div>
               </div>
-              <div>
-                <span>Representante do fornecedor*</span>
-                <input type="text" class="form-control search-bar" style="border-radius: 4px"
-                  placeholder="Nome do representante fornecedor">
+            </div>
+            <div class="mt-3">
+              <div class="comments">
+                <div class="comment-add">
+                  <input type="text" class="comment-input" placeholder="Adicione um comentário">
+                  <button class="btn-post">Postar</button>
+                </div>
+
+                <!-- Área que exibe os comentários -->
+                <div class="comments-list mt-2" id="comments-list">
+                  <!-- Comentários serão adicionados dinamicamente -->
+                </div>
               </div>
-              <div>
-                <span>Empresa fornecedora*</span>
-                <input type="text" class="form-control search-bar" style="border-radius: 4px"
-                  placeholder="Empresa fornecedora">
-              </div>
-              <div>
-                <span>Auditor*</span>
-                <input type="text" class="form-control search-bar" style="border-radius: 4px"
-                  placeholder="Nome auditor">
-              </div>
-           </div>
+              <div>teste</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="">
-        <div>
-          <span>Anexos</span>
-          <div></div>
-        </div>
-        <div>
-          <span>Atividade</span>
-          <div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-
-  <script src="../components/sidebar.js" type="module"></script>
-  <script src="../components/navcontent.js" type="module"></script>
+      <script src="../components/sidebar.js" type="module"></script>
+      <script src="../components/navcontent.js" type="module"></script>
 
 </body>
 
 <script>
   //trocar esse id pelo do back (id fiscal no caso)
-  const id= window.localStorage.getItem("id");
-  let sessaoIdNf= document.getElementById("id_nf");
-  sessaoIdNf.innerHTML=id
+  const id = window.localStorage.getItem("id");
+  let sessaoIdNf = document.getElementById("id_nf");
+  sessaoIdNf.innerHTML = id
+
+  const input = document.querySelector('.comment-input');
+  const btnPost = document.querySelector('.btn-post');
+  const commentsList = document.getElementById('comments-list');
+
+const btnSeguir = document.getElementById("addNotaBtn");
+const nfId = id || "nf-desconhecida"; // fallback caso não tenha id
+const seguirKey = `seguir_${nfId}`;
+
+let estaSeguindo = sessionStorage.getItem(seguirKey) === "true";
+
+function atualizarBotaoSeguir() {
+  const icon = btnSeguir.querySelector("i");
+  if (estaSeguindo) {
+    icon.classList.remove("bi-plus-lg");
+    icon.classList.add("bi-check-lg");
+    btnSeguir.innerHTML = `<i class="bi bi-check-lg"></i> Seguindo`;
+    btnSeguir.classList.add("btn-success");
+    btnSeguir.classList.remove("btn-primary");
+  } else {
+    btnSeguir.innerHTML = `<i class="bi bi-plus-lg"></i> Seguir NF`;
+    btnSeguir.classList.add("btn-primary");
+    btnSeguir.classList.remove("btn-success");
+  }
+}
+
+btnSeguir.addEventListener("click", () => {
+  estaSeguindo = !estaSeguindo;
+  //invés do session storage isso é um post
+  sessionStorage.setItem(seguirKey, estaSeguindo);
+  atualizarBotaoSeguir();
+});
+
+atualizarBotaoSeguir();
+
+  function addComment(name, text) {
+    if (!text.trim()) return;
+
+    const commentDiv = document.createElement('div');
+    commentDiv.classList.add('comment');
+
+    const contentDiv = document.createElement('div');
+    contentDiv.classList.add('comment-content');
+
+    const nameSpan = document.createElement('span');
+    nameSpan.classList.add('comment-name');
+    nameSpan.textContent = name;
+
+    const textSpan = document.createElement('span');
+    textSpan.classList.add('comment-text');
+    textSpan.textContent = text;
+
+    const dateSpan = document.createElement('span');
+    dateSpan.classList.add('comment-date');
+    const now = new Date();
+    dateSpan.textContent = now.toLocaleString();
+
+    contentDiv.appendChild(nameSpan);
+    contentDiv.appendChild(textSpan);
+    contentDiv.appendChild(dateSpan);
+    commentDiv.appendChild(contentDiv);
+    commentsList.appendChild(commentDiv);
+
+    input.value = '';
+    commentsList.scrollTop = commentsList.scrollHeight;
+  }
+
+  btnPost.addEventListener('click', () => addComment('Você', input.value));
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') addComment('Você', input.value);
+  });
+
+const tags = document.querySelectorAll(".tags span");
+tags.forEach(tag => {
+  tag.addEventListener('click', () => {
+    tags.forEach(t => t.classList.remove('active'));
+    tag.classList.add('active');
+  });
+});
+
+// Função para criar e exibir um comentário
+function addComment(name, text) {
+  if (!text.trim()) return;
+
+  const commentDiv = document.createElement('div');
+  commentDiv.classList.add('comment', 'd-flex', 'justify-content-between', 'align-items-start', 'p-2', 'border', 'rounded', 'mb-2');
+
+  const contentDiv = document.createElement('div');
+  contentDiv.classList.add('comment-content', 'd-flex', 'flex-column');
+
+  const nameSpan = document.createElement('span');
+  nameSpan.classList.add('fw-bold');
+  nameSpan.textContent = name;
+
+  const textSpan = document.createElement('span');
+  textSpan.textContent = text;
+
+  const dateSpan = document.createElement('small');
+  dateSpan.classList.add('text-muted');
+  dateSpan.textContent = new Date().toLocaleString();
+
+  contentDiv.appendChild(nameSpan);
+  contentDiv.appendChild(textSpan);
+  contentDiv.appendChild(dateSpan);
+
+  const deleteIcon = document.createElement('i');
+  deleteIcon.classList.add('bi', 'bi-trash', 'text-danger', 'fs-5');
+  deleteIcon.style.cursor = 'pointer';
+  deleteIcon.title = 'Apagar comentário';
+
+  // Evento de apagar
+  deleteIcon.addEventListener('click', () => {
+    commentDiv.remove();
+    alert("comentário deletado com sucesso")
+  });
+
+  // Monta o comentário
+  commentDiv.appendChild(contentDiv);
+  commentDiv.appendChild(deleteIcon);
+
+  // Adiciona à lista
+  commentsList.appendChild(commentDiv);
+
+  input.value = '';
+  commentsList.scrollTop = commentsList.scrollHeight;
+}
+
+// Eventos de postagem
+btnPost.addEventListener('click', () => addComment('Você', input.value));
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') addComment('Você', input.value);
+});
+
 
 </script>
+
 </html>

@@ -27,7 +27,7 @@ class Sidebar extends HTMLElement {
       { text: "Cadastros", icon: "../../assets/folder-add2.svg", href: ["cadastros.html"] },
       { text: "Permissões", icon: "../../assets/user-search.svg", href: ["permissoes.html"] },
       { text: "Controle", icon: "../../assets/icons.svg", href: ["controle.html"] },
-      { text: "Notificações", icon: "../../assets/bell.svg", href: ["notificacoes.html"] },
+      { text: "Notificações", icon: "../../assets/bell-2.svg", href: ["notificacoes.html"]},
       { text: "Ajuda", icon: "../../assets/info.svg", href: ["ajuda.html"] },
     ];
 
