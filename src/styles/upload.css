@@ -60,7 +60,7 @@ th {
   color: white;
   border-color: #1A2A80;
 }
-
+/* 
 th i {
     margin-left: 4px;
     font-size: 0.9rem;
@@ -70,7 +70,7 @@ th i {
 
 th.active i {
     color: #000;
-}
+} */
 
 .add-text-icon {
     padding-top: 3%;
