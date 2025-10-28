@@ -16,6 +16,62 @@ body {
     min-width: 86vw;
 }
 
+th {
+    cursor: pointer;
+    user-select: none;
+}
+
+.search-bar {
+  width: 300px;
+  border-radius: 50px;
+  border: 1px solid #ced4da;
+  padding-left: 15px;
+  transition: all 0.3s ease;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.5);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 10px;
+}
+.tags span {
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #1A2A80;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tags span:hover {
+  background-color: #E6E9F8;
+}
+
+.tags span.active {
+  background-color: #1A2A80;
+  color: white;
+  border-color: #1A2A80;
+}
+/* 
+th i {
+    margin-left: 4px;
+    font-size: 0.9rem;
+    color: #6c757d;
+    transition: transform 0.2s, color 0.2s;
+}
+
+th.active i {
+    color: #000;
+} */
+
 .add-text-icon {
     padding-top: 3%;
     color: black;
@@ -190,35 +246,35 @@ body.sidebar-collapsed .all-content {
 }
 
 .acesso {
-    gap: 25rem;
+    gap: 30rem;
 }
 
 body.sidebar-collapsed .acesso {
     gap: 37rem;
 }
 
-.fornecedor-icon{
+.fornecedor-icon {
     margin-left: calc(30vw - 440px)
 }
 
-body.sidebar-collapsed .fornecedor-icon{
+body.sidebar-collapsed .fornecedor-icon {
     margin-left: calc(30vw - 450px)
 }
 
 @media (min-width: 1600px) {
     .acesso {
-        gap: 40rem;
+        gap: 38rem;
     }
 
     body.sidebar-collapsed .acesso {
-        gap: 72rem;
+        gap: 70rem;
     }
 
-    .fornecedor-icon{
+    .fornecedor-icon {
         margin-left: calc(30vw - 300px)
-      }
+    }
 
-    body.sidebar-collapsed .fornecedor-icon{
+    body.sidebar-collapsed .fornecedor-icon {
         margin-left: calc(30vw - 640px)
-      }
+    }
 }
