@@ -17,6 +17,7 @@
     a {
       text-decoration: none;
     }
+
     th[data-col] {
       cursor: pointer;
     }
@@ -37,7 +38,8 @@
               <img src="/assets/home.svg" style="height: 20px;">
             </div>
             <input type="search" id="searchInput" class="form-control search-bar" placeholder="Buscar nota...">
-            <button id="addNotaBtn" class="btn btn-primary" style="background-color: #1A2A80; border-color: #1A2A80;" onclick="upload()"> 
+            <button id="addNotaBtn" class="btn btn-primary" style="background-color: #1A2A80; border-color: #1A2A80;"
+              onclick="upload()">
               <i class="bi bi-plus-lg"></i> Adicionar Nota Fiscal
             </button>
           </div>
@@ -76,31 +78,30 @@
   </div>
 
   <script src="/public/components/sidebar.js" type="module"></script>
-  <script src="/public/components/navcontent.js" type="module"></script>
- <script>
-  const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+  <script>
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
 
-  const sidebarElement = document.querySelector('side-bar');
-  sidebarElement.addEventListener('toggle-sidebar', () => {
-    document.body.classList.toggle('sidebar-collapsed');
-  });
+    const sidebarElement = document.querySelector('side-bar');
+    sidebarElement.addEventListener('toggle-sidebar', () => {
+      document.body.classList.toggle('sidebar-collapsed');
+    });
 
-  // const listaNotas = [
-  //   { servico: "Serviço de Consultoria Técnica", nota: "NF-001245", emissor: "Mariana Costa", vencimento: "15/11/2025", status: "Em andamento", valor: "R$ 2.500,00" },
-  //   { servico: "Treinamento de Equipe", nota: "NF-001246", emissor: "João Ribeiro", vencimento: "22/11/2025", status: "Aprovada", valor: "R$ 1.800,00" },
-  //   { servico: "Auditoria Interna", nota: "NF-001247", emissor: "Ana Souza", vencimento: "30/11/2025", status: "Em validação", valor: "R$ 3.200,00" },
-  //   { servico: "Serviço Contábil", nota: "NF-001248", emissor: "Carlos Lima", vencimento: "05/12/2025", status: "Congelada", valor: "R$ 1.000,00" },
-  //   { servico: "Auditoria Externa", nota: "NF-001249", emissor: "Fernanda Dias", vencimento: "10/12/2025", status: "Reprovada", valor: "R$ 2.000,00" }
-  // ];
+    // const listaNotas = [
+    //   { servico: "Serviço de Consultoria Técnica", nota: "NF-001245", emissor: "Mariana Costa", vencimento: "15/11/2025", status: "Em andamento", valor: "R$ 2.500,00" },
+    //   { servico: "Treinamento de Equipe", nota: "NF-001246", emissor: "João Ribeiro", vencimento: "22/11/2025", status: "Aprovada", valor: "R$ 1.800,00" },
+    //   { servico: "Auditoria Interna", nota: "NF-001247", emissor: "Ana Souza", vencimento: "30/11/2025", status: "Em validação", valor: "R$ 3.200,00" },
+    //   { servico: "Serviço Contábil", nota: "NF-001248", emissor: "Carlos Lima", vencimento: "05/12/2025", status: "Congelada", valor: "R$ 1.000,00" },
+    //   { servico: "Auditoria Externa", nota: "NF-001249", emissor: "Fernanda Dias", vencimento: "10/12/2025", status: "Reprovada", valor: "R$ 2.000,00" }
+    // ];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const table = document.querySelector("table");
-  if (!table) return;
+    document.addEventListener("DOMContentLoaded", () => {
+      const table = document.querySelector("table");
+      if (!table) return;
 
-  table.classList.add("card-table");
+      table.classList.add("card-table");
 
-  const style = document.createElement("style");
-   style.textContent = `
+      const style = document.createElement("style");
+      style.textContent = `
     /* Estilo apenas da tabela dessa página */
     .card-table {
       border-collapse: separate !important;
@@ -164,176 +165,184 @@ document.addEventListener("DOMContentLoaded", () => {
       background: white;
     }
   `;
-  document.head.appendChild(style);
-  });
-
-  const tableBody = document.getElementById("tableBody");
-  const tags = document.querySelectorAll(".tags span");
-  const searchInput = document.getElementById("searchInput");
-  let currentSort = { col: null, asc: true };
-
-  function normalizarTexto(texto) {
-    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9\s]/g, "").toLowerCase();
-  }
-
-  async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
-    tableBody.innerHTML = "";
-    const listaNotas = await carregarNotas();
-    const buscaNormalizada = normalizarTexto(termoBusca);
-    let filtradas = listaNotas.filter(nota => {
-      const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
-      const textoNota = Object.values(nota).join(" ");
-      return matchStatus && normalizarTexto(textoNota).includes(buscaNormalizada);
+      document.head.appendChild(style);
     });
 
-    if (sortCol) {
-      filtradas.sort((a, b) => {
-        let valA = a[sortCol];
-        let valB = b[sortCol];
+    const tableBody = document.getElementById("tableBody");
+    const tags = document.querySelectorAll(".tags span");
+    const searchInput = document.getElementById("searchInput");
+    let currentSort = { col: null, asc: true };
 
-        if (sortCol === "vencimento") {
-          const [dA, mA, aA] = valA.split("/").map(Number);
-          const [dB, mB, aB] = valB.split("/").map(Number);
-          valA = new Date(aA, mA - 1, dA);
-          valB = new Date(aB, mB - 1, dB);
-        }
+    function normalizarTexto(texto) {
+      return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9\s]/g, "").toLowerCase();
+    }
 
-        if (sortCol === "valor") {
-          valA = Number(valA.replace(/[^\d,]/g, "").replace(",", "."));
-          valB = Number(valB.replace(/[^\d,]/g, "").replace(",", "."));
-        }
+    async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
+      tableBody.innerHTML = "";
+      const listaNotas = await carregarNotas();
+      const buscaNormalizada = normalizarTexto(termoBusca);
+      let filtradas = listaNotas.filter(nota => {
+        const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
+        const textoNota = Object.values(nota).join(" ");
+        return matchStatus && normalizarTexto(textoNota).includes(buscaNormalizada);
+      });
 
-        if (valA < valB) return asc ? -1 : 1;
-        if (valA > valB) return asc ? 1 : -1;
-        return 0;
+      if (sortCol) {
+        filtradas.sort((a, b) => {
+          let valA = a[sortCol];
+          let valB = b[sortCol];
+
+          if (sortCol === "vencimento") {
+            const [dA, mA, aA] = valA.split("/").map(Number);
+            const [dB, mB, aB] = valB.split("/").map(Number);
+            valA = new Date(aA, mA - 1, dA);
+            valB = new Date(aB, mB - 1, dB);
+          }
+
+          if (sortCol === "valor") {
+            valA = Number(valA.replace(/[^\d,]/g, "").replace(",", "."));
+            valB = Number(valB.replace(/[^\d,]/g, "").replace(",", "."));
+          }
+
+          if (valA < valB) return asc ? -1 : 1;
+          if (valA > valB) return asc ? 1 : -1;
+          return 0;
+        });
+      }
+
+      if (filtradas.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="6" class="text-muted">Nenhuma nota encontrada.</td></tr>`;
+        return;
+      }
+      filtradas.forEach(nota => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+    <td>${nota.servico}</td>
+    <td>${nota.nota}</td>
+    <td>${nota.emissor}</td>
+    <td>${nota.vencimento}</td>
+    <td>${nota.status}</td>
+    <td>${nota.valor}</td>
+  `;
+        row.style.cursor = "pointer"; // deixa o cursor de click
+        row.addEventListener("click", () => {
+          verIndividual(nota.id); // ou nota.id se tiver
+        });
+        tableBody.appendChild(row);
       });
     }
+      renderTable("Todas");
 
-    if (filtradas.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="6" class="text-muted">Nenhuma nota encontrada.</td></tr>`;
-      return;
-    }
+      tags.forEach(tag => tag.addEventListener("click", () => {
+        tags.forEach(t => t.classList.remove("active"));
+        tag.classList.add("active");
+        renderTable(tag.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
+      }));
 
-    filtradas.forEach(nota => {
-      tableBody.insertAdjacentHTML("beforeend", `
-        <tr>
-          <td>${nota.servico}</td>
-          <td>${nota.nota}</td>
-          <td>${nota.emissor}</td>
-          <td>${nota.vencimento}</td>
-          <td>${nota.status}</td>
-          <td>${nota.valor}</td>
-        </tr>
-      `);
-    });
-  }
+      searchInput.addEventListener("input", () => {
+        const tagAtiva = document.querySelector(".tags span.active");
+        renderTable(tagAtiva.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
+      });
 
-  renderTable("Todas");
+      document.querySelectorAll("th[data-col]").forEach(th => th.addEventListener("click", () => {
+        const col = th.dataset.col;
+        if (currentSort.col === col) currentSort.asc = !currentSort.asc;
+        else currentSort = { col: col, asc: true };
+        const tagAtiva = document.querySelector(".tags span.active");
+        renderTable(tagAtiva.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
+      }));
 
-  tags.forEach(tag => tag.addEventListener("click", () => {
-    tags.forEach(t => t.classList.remove("active"));
-    tag.classList.add("active");
-    renderTable(tag.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
-  }));
-
-  searchInput.addEventListener("input", () => {
-    const tagAtiva = document.querySelector(".tags span.active");
-    renderTable(tagAtiva.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
-  });
-
-  document.querySelectorAll("th[data-col]").forEach(th => th.addEventListener("click", () => {
-    const col = th.dataset.col;
-    if (currentSort.col === col) currentSort.asc = !currentSort.asc;
-    else currentSort = { col: col, asc: true };
-    const tagAtiva = document.querySelector(".tags span.active");
-    renderTable(tagAtiva.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
-  }));
-
-  function upload() {
-    window.location.href = "/upload";
-  }
-
-async function carregarNotas() {
-  try {
-    var url = 'http://localhost:8080/syntro/nota-fiscal'
-    if(usuarioLogado?.emissor == true) {
-      url = `http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
-    }
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
+      function upload() {
+        window.location.href = "/upload";
       }
-    });
 
-    if (!response.ok) {
-      throw new Error(`Erro na requisição: ${response.status}`);
+      async function carregarNotas() {
+        try {
+          var url = 'http://localhost:8080/syntro/nota-fiscal'
+          if (usuarioLogado?.emissor == true) {
+            url = `http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
+          }
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          const listaNotas = await Promise.all(
+            data.map(async (nota) => {
+              console.log(nota)
+              let nomeUsuario = "Não Informado";
+
+              if (nota.idUsuario) {
+                try {
+                  const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                  if (userResponse.ok) {
+                    const userData = await userResponse.json();
+                    nomeUsuario = userData.nomeUsuario;
+                  }
+                } catch (err) {
+                  console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                }
+              }
+              var servicoNota = nota.descricao;
+              if (nota.idContrato) {
+                try {
+                  const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                  if (contratoResponse.ok) {
+                    const contratoData = await contratoResponse.json();
+                    servicoNota = contratoData.nomeServico;
+                  }
+                } catch (err) {
+                  console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                }
+              }
+              return {
+                servico: servicoNota,
+                nota: nota.numeroIdentificador,
+                valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                idEmpresa: nota.idEmpresa,
+                emissor: nomeUsuario,
+                status: "Em andamento",
+                idUsuario: nota.idUsuario
+              };
+            })
+          );
+
+          return listaNotas;
+
+        } catch (error) {
+          console.error('Erro ao buscar notas fiscais:', error);
+          return [];
+        }
+      }
+
+
+    function verIndividual(id) {
+      window.location.href = "/individual";
     }
 
-    const data = await response.json();
+      function formatarData(data) {
+        if (!data) return null;
 
-    const listaNotas = await Promise.all(
-      data.map(async (nota) => {
-        console.log(nota)
-        let nomeUsuario = "Não Informado";
+        const d = new Date(data);
 
-        if (nota.idUsuario) {
-          try {
-            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
-            if (userResponse.ok) {
-              const userData = await userResponse.json();
-              nomeUsuario = userData.nomeUsuario;
-            }
-          } catch (err) {
-            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
-          }
-        }
-        var servicoNota = nota.descricao;
-        if (nota.idContrato) {
-          try {
-            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
-            if (contratoResponse.ok) {
-              const contratoData = await contratoResponse.json();
-              servicoNota = contratoData.nomeServico;
-            }
-          } catch (err) {
-            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
-          }
-        }
-        return {
-          servico: servicoNota,
-          nota: nota.numeroIdentificador,
-          valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
-          vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
-          idEmpresa: nota.idEmpresa,
-          emissor: nomeUsuario,
-          status: "Em andamento",
-          idUsuario: nota.idUsuario
-        };
-      })
-    );
+        const dia = String(d.getDate()).padStart(2, '0');
+        const mes = String(d.getMonth() + 1).padStart(2, '0');
+        const ano = d.getFullYear();
 
-    return listaNotas;
+        return `${dia}/${mes}/${ano}`;
+      }
 
-  } catch (error) {
-    console.error('Erro ao buscar notas fiscais:', error);
-    return [];
-  }
-}
-
-function formatarData(data) {
-  if (!data) return null;
-
-  const d = new Date(data);
-
-  const dia = String(d.getDate()).padStart(2, '0');
-  const mes = String(d.getMonth() + 1).padStart(2, '0');
-  const ano = d.getFullYear();
-
-  return `${dia}/${mes}/${ano}`;
-}
-
-</script>
+  </script>
 
 </body>
+
 </html>
