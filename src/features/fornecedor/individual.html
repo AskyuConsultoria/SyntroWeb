@@ -13,6 +13,7 @@
     crossorigin="anonymous"></script>
   <link rel="shortcut icon" href="../../assets/syntro_icon.png" type="image/x-icon" />
   <link rel="stylesheet" href="../../styles/upload.css">
+  <link rel="stylesheet" href="../../styles/fornecedor.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     a {
@@ -31,7 +32,7 @@
       <side-bar></side-bar>
     </div>
     <div class="all-content">
-      <div style="position: sticky;">
+      <div>
         <nav-content title="Minhas notas" subtitle="Visualização"
           title-link="../fornecedor/visualizacao.html"></nav-content>
       </div>
@@ -73,10 +74,13 @@
             </div>
           </div>
           <div style="width: 500px;" class="d-flex flex-column justify-content-evenly gap-3">
-            <div class="status d-flex align-items-center justify-content-center gap-2">
-              <span>Em andamento</span>
-              <img src="../../assets/arrow-down.svg" alt="">
+            <div class="status-dropdown" id="statusDropdown">
+           <div class="status-selected">
+              <span></span>
+              <img src="../../assets/arrow-down.svg" alt="arrow" width="16">
             </div>
+            <div class="status-options"></div>
+          </div>
             <div class="form d-flex flex-column justify-content-evenly">
               <div style="margin-left: 10%;">
                 <div style="width: 270px;">
@@ -164,8 +168,8 @@
               <div class="d-flex align-center flex-column justify-content-evenly gap-4 ">
                 <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
                   <div><span class="active" data-status="Tudo">Tudo</span></div>
-              <div><span data-status="Comentários">Comentários</span></div>
-              <div><span data-status="Histórico">Histórico</span></div>
+              <div style="display: none;"><span data-status="Comentários">Comentários</span></div>
+              <div style="display: none;" ><span data-status="Histórico">Histórico</span></div>
                 </div>
               </div>
             </div>
@@ -181,7 +185,8 @@
                   <!-- Comentários serão adicionados dinamicamente -->
                 </div>
               </div>
-              <div>teste</div>
+              <!-- aba futura para quando tiver outras atividades (historico)  -->
+              <div></div>
             </div>
           </div>
         </div>
@@ -331,6 +336,68 @@ input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') addComment('Você', input.value);
 });
 
+const dropdown = document.getElementById('statusDropdown');
+const selected = dropdown.querySelector('.status-selected span');
+const optionsContainer = dropdown.querySelector('.status-options');
+
+// Simulando dados do backend
+const backendStatus = {
+  default: "em-validacao",
+  options: [
+    { value: "em-andamento", label: "Em andamento" },
+    { value: "em-validacao", label: "Em validação" },
+    { value: "aprovadas", label: "Aprovada" },
+    { value: "congeladas", label: "Congelada" },
+    { value: "reprovadas", label: "Reprovada" }
+  ]
+};
+
+// Guardar status selecionado
+let currentValue = backendStatus.default;
+
+// Função para renderizar opções dinamicamente
+function renderOptions() {
+  optionsContainer.innerHTML = ''; // limpa tudo
+  backendStatus.options
+    .filter(opt => opt.value !== currentValue) // exclui o selecionado
+    .forEach(opt => {
+      const div = document.createElement('div');
+      div.dataset.value = opt.value;
+      div.innerHTML = `<span class="status-dot ${opt.value}"></span> ${opt.label}`;
+      optionsContainer.appendChild(div);
+
+      div.addEventListener('click', () => {
+        currentValue = opt.value;
+        selected.textContent = opt.label;
+        dropdown.dataset.value = opt.value;
+        renderOptions(); // re-renderiza mantendo a lógica de ocultar o selecionado
+        optionsContainer.style.display = 'none';
+        console.log("Valor enviado ao backend:", dropdown.dataset.value);
+      });
+    });
+}
+
+// Set default
+const defaultOption = backendStatus.options.find(o => o.value === backendStatus.default);
+if (defaultOption) {
+  selected.textContent = defaultOption.label;
+  dropdown.dataset.value = defaultOption.value;
+}
+
+// Render inicial
+renderOptions();
+
+// Toggle dropdown
+dropdown.querySelector('.status-selected').addEventListener('click', () => {
+  optionsContainer.style.display = optionsContainer.style.display === 'flex' ? 'none' : 'flex';
+});
+
+// Fechar dropdown ao clicar fora
+document.addEventListener('click', (e) => {
+  if (!dropdown.contains(e.target)) {
+    optionsContainer.style.display = 'none';
+  }
+});
 
 </script>
 
