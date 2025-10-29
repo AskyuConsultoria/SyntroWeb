@@ -8,7 +8,7 @@ class Sidebar extends HTMLElement {
 
     // Logo
     const logo = document.createElement("img");
-    logo.src = "../../assets/syntro_icon.svg";
+    logo.src = "/assets/syntro_icon.svg";
     logo.classList.add("logo-icon");
     logo.style.height = "50px";
     logo.style.marginBottom = "20px";
@@ -20,14 +20,14 @@ class Sidebar extends HTMLElement {
     menu.classList.add("menu");
 
     const links = [
-      { text: "Minhas notas", icon: "../../assets/home.svg", href: ["visualizacao.html","upload.html","individual.html"] },
-      { text: "Serviços", icon: "../../assets/box.svg", href: ["servicos.html"] },
-      { text: "Repres.", icon: "../../assets/people.svg", href: ["representantes.html"] },
-      { text: "Empresas", icon: "../../assets/building-3.svg", href: ["empresas.html"] },
-      { text: "Cadastros", icon: "../../assets/folder-add2.svg", href: ["cadastros.html"] },
-      { text: "Permissões", icon: "../../assets/user-search.svg", href: ["permissoes.html"] },
-      { text: "Controle", icon: "../../assets/icons.svg", href: ["controle.html"] },
-      { text: "Ajuda", icon: "../../assets/info.svg", href: ["ajuda.html"] },
+      { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
+      { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
+      { text: "Repres.", icon: "/assets/people.svg", href: ["#"] },
+      { text: "Empresas", icon: "/assets/building-3.svg", href: ["#"] },
+      { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
+      { text: "Permissões", icon: "/assets/user-search.svg", href: ["#"] },
+      { text: "Controle", icon: "/assets/icons.svg", href: ["#"] },
+      { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
     ];
 
     links.forEach(item => {
@@ -61,7 +61,7 @@ class Sidebar extends HTMLElement {
     logout.href = "#";
 
     const logoutIcon = document.createElement("img");
-    logoutIcon.src = "../../assets/logout.svg";
+    logoutIcon.src = "/assets/logout.svg";
     logoutIcon.alt = "Sair";
     logoutIcon.classList.add("icon");
 
@@ -121,7 +121,7 @@ class Sidebar extends HTMLElement {
 
     logout.addEventListener("click", () => {
       console.log("Faz logout!");
-      window.location.href = "../../index.html";
+      window.location.href = "/";
     });
   }
 }
