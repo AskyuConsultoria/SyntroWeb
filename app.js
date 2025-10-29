@@ -37,6 +37,10 @@ app.get("/cadastros/:pagina", (req, res) => {
     res.sendFile(path.join(__dirname, `src/public/cadastros/cadastros-${pagina}.html`));
 });
 
+app.get("/cadastros/departamentos/detalhes", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/public/cadastros/cadastros-departamentos-details.html"));
+});
+
 
 app.listen(PORTA, () => {
     console.log(`✅ Servidor rodando em http://localhost:${PORTA}`);

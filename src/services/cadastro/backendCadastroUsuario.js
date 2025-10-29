@@ -16,7 +16,7 @@ async function cadastrarUsuario(tipo) {
             nome = document.getElementById("nomeEmissor").value;
             email = document.getElementById("emailEmissor").value;
             cargo = document.getElementById("cargoEmissor").value;
-            departamento = ""; //n sei
+            departamento = "";
             empresa = parseInt(document.getElementById("empresaFornecedora").value);
             permissao = "Emissor";
         }

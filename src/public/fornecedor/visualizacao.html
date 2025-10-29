@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function carregarNotas() {
   try {
     var url = 'http://localhost:8080/syntro/nota-fiscal'
-    if(usuarioLogado?.emissor ?? true) {
+    if(usuarioLogado?.emissor == true) {
       url = `http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
     }
     const response = await fetch(url, {

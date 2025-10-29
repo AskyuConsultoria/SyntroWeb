@@ -22,7 +22,7 @@ class Sidebar extends HTMLElement {
 
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
 
-    if(usuarioLogado?.auditor ?? false){
+    if(usuarioLogado?.auditor == true){
       links = [
         { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
         { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
@@ -30,7 +30,7 @@ class Sidebar extends HTMLElement {
         { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
         { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
       ];
-    } else if(usuarioLogado?.emissor ?? false){
+    } else if(usuarioLogado?.emissor == true){
       links = [
         { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
         { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
