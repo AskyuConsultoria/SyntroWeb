@@ -226,7 +226,7 @@
   `;
         row.style.cursor = "pointer"; // deixa o cursor de click
         row.addEventListener("click", () => {
-          verIndividual(nota.id); // ou nota.id se tiver
+          verIndividual(nota.nota); // ou nota.id se tiver
         });
         tableBody.appendChild(row);
       });
@@ -327,6 +327,8 @@
 
     function verIndividual(id) {
       window.location.href = "/individual";
+      window.sessionStorage.setItem("id", id)
+      console.log(id)
     }
 
       function formatarData(data) {
