@@ -58,9 +58,9 @@
                 <thead>
                   <tr>
                     <th data-col="servico">Serviço<i class="bi bi-arrow-down-up"></i></th>
-                    <th data-col="nota">Nº Da Nota <i class="bi bi-arrow-down-up"></i></th>
+                    <th data-col="nota">Nº da nf <i class="bi bi-arrow-down-up"></i></th>
                     <th data-col="auditor">Emissor <i class="bi bi-arrow-down-up"></i></th>
-                    <th data-col="vencimento">Dta vencimento <i class="bi bi-arrow-down-up"></i></th>
+                    <th data-col="vencimento" style="width: 300px;">Vencimento<i class="bi bi-arrow-down-up"></i></th>
                     <th data-col="status">Status <i class="bi bi-arrow-down-up"></i></th>
                     <th data-col="valor">Valor <i class="bi bi-arrow-down-up"></i></th>
                   </tr>
@@ -307,7 +307,7 @@ async function carregarNotas() {
           vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
           idEmpresa: nota.idEmpresa,
           emissor: nomeUsuario,
-          status: "Em aguardo",
+          status: "Em andamento",
           idUsuario: nota.idUsuario
         };
       })
