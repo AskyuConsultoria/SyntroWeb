@@ -1,4 +1,4 @@
-import passwordRecoveryService from "../../services/passwordRecoveryService.js";
+import passwordRecoveryService from "/services/passwordRecoveryService.js";
 
 const btnEsqueceuSenha = document.querySelector("#btn_esqueceu_senha");
 const inputEmail = document.querySelector("#input_email");
@@ -15,7 +15,7 @@ function substituirElementosParaEnvioDeEmail() {
 
     primeiraLinhaEmailEl.innerHTML = "Seu e-mail foi enviado com sucesso!";
     segundaLinhaEmailEl.innerHTML = "Aguarde o recebimento da senha.";
-    boxEmailIconEl.innerHTML = "<img src='../../assets/email_icon.svg'>";
+    boxEmailIconEl.innerHTML = "<img src='/assets/email_icon.svg'>";
     div_input_email.innerHTML = "";
 }
 
