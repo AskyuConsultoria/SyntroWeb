@@ -78,6 +78,8 @@
   <script src="/public/components/sidebar.js" type="module"></script>
   <script src="/public/components/navcontent.js" type="module"></script>
  <script>
+  const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+
   const sidebarElement = document.querySelector('side-bar');
   sidebarElement.addEventListener('toggle-sidebar', () => {
     document.body.classList.toggle('sidebar-collapsed');
@@ -253,7 +255,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function carregarNotas() {
   try {
-    const response = await fetch('http://localhost:8080/syntro/nota-fiscal', {
+    var url = 'http://localhost:8080/syntro/nota-fiscal'
+    if(usuarioLogado?.emissor ?? true) {
+      url = `http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
+    }
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

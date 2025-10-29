@@ -18,17 +18,36 @@ class Sidebar extends HTMLElement {
     // Menu
     const menu = document.createElement("ul");
     menu.classList.add("menu");
+    var links = [];
 
-    const links = [
-      { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
-      { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
-      { text: "Repres.", icon: "/assets/people.svg", href: ["#"] },
-      { text: "Empresas", icon: "/assets/building-3.svg", href: ["#"] },
-      { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
-      { text: "Permissões", icon: "/assets/user-search.svg", href: ["#"] },
-      { text: "Controle", icon: "/assets/icons.svg", href: ["#"] },
-      { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
-    ];
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+
+    if(usuarioLogado?.auditor ?? false){
+      links = [
+        { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
+        { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
+        { text: "Empresas", icon: "/assets/building-3.svg", href: ["#"] },
+        { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
+        { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
+      ];
+    } else if(usuarioLogado?.emissor ?? false){
+      links = [
+        { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
+        { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
+        { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
+      ]
+    } else {
+      links = [
+        { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
+        { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
+        { text: "Repres.", icon: "/assets/people.svg", href: ["#"] },
+        { text: "Empresas", icon: "/assets/building-3.svg", href: ["#"] },
+        { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
+        { text: "Permissões", icon: "/assets/user-search.svg", href: ["#"] },
+        { text: "Controle", icon: "/assets/icons.svg", href: ["#"] },
+        { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
+      ]
+    }
 
     links.forEach(item => {
       const li = document.createElement("li");
