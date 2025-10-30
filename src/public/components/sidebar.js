@@ -43,7 +43,7 @@ class Sidebar extends HTMLElement {
         { text: "Repres.", icon: "/assets/people.svg", href: ["#"] },
         { text: "Empresas", icon: "/assets/building-3.svg", href: ["#"] },
         { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
-        { text: "Permissões", icon: "/assets/user-search.svg", href: ["#"] },
+        { text: "Permissões", icon: "/assets/user-search.svg", href: ["/permissionamento"] },
         { text: "Controle", icon: "/assets/icons.svg", href: ["#"] },
         { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
       ]

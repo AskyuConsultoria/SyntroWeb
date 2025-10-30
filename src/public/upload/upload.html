@@ -36,7 +36,7 @@
             </div>
             <div>
               <img src="/assets/Component 1.svg" style="height: 30px;">
-            <span>Fornecedor</span>
+            <span id="nomeUsuarioHeader"> ?</span>
               </div>
               </div>
           </div>
@@ -91,6 +91,9 @@
 </html>
 
 <script>
+const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+const nomeHeader = document.getElementById('nomeUsuarioHeader');
+nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 const sidebarElement = document.querySelector('side-bar');
 
 sidebarElement.addEventListener('toggle-sidebar', () => {

@@ -37,7 +37,7 @@
             </div>
             <div>
               <img src="/assets/Component 1.svg" style="height: 30px;">
-            <span>Fornecedor</span>
+            <span id="nomeUsuarioHeader"> ?</span>
             </div>
             </div>
           </div>
@@ -96,8 +96,7 @@
               <div class="auditor-form-group">
                 <label for="departamentoAuditor">Departamento *</label>
                 <select id="departamentoAuditor">
-                  <option>Selecione</option>
-                  <option value="Financeiro">Financeiro</option>
+                  <option value="">Selecione</option>
                 </select>
               </div>
 
@@ -112,9 +111,8 @@
                 <label for="permissionamentoAuditor">Permissionamento *</label>
                 <select id="permissionamentoAuditor">
                   <option>Selecione</option>
-                  <option value="1">Administrador Interno</option>
-                  <option value="2">Gestor</option>
-                  <option value="3">Auditor</option>
+                  <option value="Gestor">Gestor</option>
+                  <option value="Auditor">Auditor</option>
                 </select>
               </div>
             </div>
@@ -134,10 +132,52 @@
 </html>
 
 <script>
+  const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+const nomeHeader = document.getElementById('nomeUsuarioHeader');
+nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 const sidebarElement = document.querySelector('side-bar');
 
 sidebarElement.addEventListener('toggle-sidebar', () => {
   document.body.classList.toggle('sidebar-collapsed');
 });
+
+async function preencherSelectDepartamentosAuditor() {
+  const select = document.getElementById("departamentoAuditor");
+
+  select.innerHTML = '<option value="">Selecione</option>';
+
+
+  const departamentos = await carregarDepartamentos();
+
+
+  departamentos.forEach(dep => {
+    const option = document.createElement("option");
+    option.value = dep.id;
+    option.textContent = dep.nome;
+    select.appendChild(option);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  preencherSelectDepartamentosAuditor();
+});
+
+async function carregarDepartamentos() {
+      try {
+        const response = await fetch("http://localhost:8080/syntro/departamentos");
+        if (!response.ok) throw new Error("Erro ao buscar departamentos");
+        const data = await response.json();
+
+        return data.map(dept => ({
+          id: dept.id,
+          nome: dept.nome,
+          qtdMembros: dept.qtdMembros ?? 0,
+          servicosAtivos: dept.servicosAtivos ?? 0
+        }));
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    }
 
   </script>

@@ -32,6 +32,10 @@ app.get("/individual", (req, res) => {
     res.sendFile(path.join(__dirname, "src/public/fornecedor/individual.html"));
 });
 
+app.get("/permissionamento", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/public/permissionamento/acesso.html"));
+});
+
 app.get("/cadastros/:pagina", (req, res) => {
     const pagina = req.params.pagina;
     res.sendFile(path.join(__dirname, `src/public/cadastros/cadastros-${pagina}.html`));

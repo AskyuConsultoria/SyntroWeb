@@ -51,7 +51,7 @@
                                 </div>
                                 <div>
                                     <img src="/assets/Component 1.svg" style="height: 30px;">
-                                    <span>Fornecedor</span>
+                                    <span id="nomeUsuarioHeader"> ?</span>
                                 </div>
                             </div>
                         </div>
@@ -225,6 +225,9 @@
 </body>
 
 <script>
+const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+const nomeHeader = document.getElementById('nomeUsuarioHeader');
+nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 const identificadorNf = window.sessionStorage.getItem("id");
 const sessaoIdNf = document.getElementById("id_nf");
 sessaoIdNf.innerHTML = `${identificadorNf || "Nota não identificada"}`;
