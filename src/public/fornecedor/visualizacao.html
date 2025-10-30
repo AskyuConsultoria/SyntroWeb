@@ -258,9 +258,9 @@
 
       async function carregarNotas() {
         try {
-          var url = 'http://localhost:8080/syntro/nota-fiscal'
+          var url = '/syntro/nota-fiscal'
           if (usuarioLogado?.emissor == true) {
-            url = `http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
+            url = `/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
           }
           const response = await fetch(url, {
             method: 'GET',
@@ -282,7 +282,7 @@
 
               if (nota.idUsuario) {
                 try {
-                  const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                  const userResponse = await fetch(`/syntro/user/${nota.idUsuario}`);
                   if (userResponse.ok) {
                     const userData = await userResponse.json();
                     nomeUsuario = userData.nomeUsuario;
@@ -294,7 +294,7 @@
               var servicoNota = nota.descricao;
               if (nota.idContrato) {
                 try {
-                  const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                  const contratoResponse = await fetch(`/syntro/contrato/${nota.idContrato}`);
                   if (contratoResponse.ok) {
                     const contratoData = await contratoResponse.json();
                     servicoNota = contratoData.nomeServico;

@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendButton.addEventListener('click', async () => {
         const file = fileInput.files[0];
-        const url = `http://localhost:8080/syntro/nota-fiscal/upload-multiple?idUsuario=${JSON.parse(sessionStorage.getItem("usuarioLogado")).id}`;
+        const url = `/syntro/nota-fiscal/upload-multiple?idUsuario=${JSON.parse(sessionStorage.getItem("usuarioLogado")).id}`;
 
         if (!file) {
             alert('Selecione um arquivo primeiro!');

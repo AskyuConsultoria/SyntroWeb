@@ -1,4 +1,4 @@
-const API_BASE_USUARIO = "http://localhost:8080/syntro/user";
+const API_BASE_USUARIO = "/syntro/user";
 
 // Função para cadastrar Auditor ou Emissor
 async function cadastrarUsuario(tipo) {

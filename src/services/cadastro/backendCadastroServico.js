@@ -1,4 +1,4 @@
-const API_BASE_CONTRATO = "http://localhost:8080/syntro/contrato";
+const API_BASE_CONTRATO = "/syntro/contrato";
 
 // Função para cadastrar contrato
 async function cadastrarContrato() {

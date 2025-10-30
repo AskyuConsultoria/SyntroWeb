@@ -184,7 +184,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 
   async function carregarEmpresas() {
       try {
-          const response = await fetch('http://localhost:8080/syntro/empresas');
+          const response = await fetch('/syntro/empresas');
           if (!response.ok) throw new Error('Erro ao buscar empresas');
           
           const empresas = await response.json();
@@ -200,7 +200,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
           console.error('Erro ao carregar empresas:', error);
       }
       try {
-          const response = await fetch(`http://localhost:8080/syntro/user/auditor`);
+          const response = await fetch(`/syntro/user/auditor`);
           if (!response.ok) throw new Error('Erro ao buscar auditores');
           
           const empresas = await response.json();
@@ -220,7 +220,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
   async function carregarEmissores(){
     var idEmpresa = document.getElementById('empresaFornecedor').value;
     try {
-          const response = await fetch(`http://localhost:8080/syntro/user/emissor/${idEmpresa}`);
+          const response = await fetch(`/syntro/user/emissor/${idEmpresa}`);
           if (!response.ok) throw new Error('Erro ao buscar emissores');
           
           const empresas = await response.json();

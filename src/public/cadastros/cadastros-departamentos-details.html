@@ -153,7 +153,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
     }
 
     try {
-      const resposta = await fetch(`http://localhost:8080/syntro/departamentos/${departamentoId}`);
+      const resposta = await fetch(`/syntro/departamentos/${departamentoId}`);
       if (!resposta.ok) throw new Error("Erro ao buscar departamento");
 
       const departamento = await resposta.json();
@@ -236,7 +236,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
     }
 
     try {
-      const resposta = await fetch(`http://localhost:8080/syntro/user/${idUsuario}`, {
+      const resposta = await fetch(`/syntro/user/${idUsuario}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -263,7 +263,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
   var listaUsuarios = [];
   async function carregarUsuarios() {
     try {
-      const resposta = await fetch("http://localhost:8080/syntro/user/auditor");
+      const resposta = await fetch("/syntro/user/auditor");
 
       if (!resposta.ok) {
         throw new Error("Erro ao buscar usuários");

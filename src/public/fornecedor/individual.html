@@ -262,7 +262,7 @@ const inputDescricao = document.getElementById("descricao");
 
 async function carregarNota() {
     try {
-        const url = `http://localhost:8080/syntro/nota-fiscal/${identificadorNf}`;
+        const url = `/syntro/nota-fiscal/${identificadorNf}`;
         const response = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" }});
         if (!response.ok) throw new Error(`Erro na requisição: ${response.status}`);
         const nota = await response.json();
@@ -270,7 +270,7 @@ async function carregarNota() {
         let nomeUsuario = "Não Informado";
         if (nota.idUsuario) {
             try {
-                const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                const userResponse = await fetch(`/syntro/user/${nota.idUsuario}`);
                 if (userResponse.ok) {
                     const userData = await userResponse.json();
                     nomeUsuario = userData.nomeUsuario || nomeUsuario;
@@ -367,7 +367,7 @@ async function renderizarInfoContrato(idContrato, idEmpresa, emissor) {
 
     if (idContrato) {
         try {
-            const contratoResp = await fetch(`http://localhost:8080/syntro/contrato/${idContrato}`);
+            const contratoResp = await fetch(`/syntro/contrato/${idContrato}`);
             if (!contratoResp.ok) throw new Error("Contrato não encontrado");
             contrato = await contratoResp.json();
         } catch (e) {
@@ -377,7 +377,7 @@ async function renderizarInfoContrato(idContrato, idEmpresa, emissor) {
 
     if (idEmpresa) {
         try {
-            const empresaResp = await fetch(`http://localhost:8080/syntro/empresas/${idEmpresa}`);
+            const empresaResp = await fetch(`/syntro/empresas/${idEmpresa}`);
             if (!empresaResp.ok) throw new Error("Empresa não encontrada");
             empresa = await empresaResp.json();
         } catch (e) {
@@ -434,7 +434,7 @@ async function enviarComentario(texto) {
     };
 
     try {
-        const response = await fetch("http://localhost:8080/syntro/comentar", {
+        const response = await fetch("/syntro/comentar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)

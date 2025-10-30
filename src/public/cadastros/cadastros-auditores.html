@@ -164,7 +164,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function carregarDepartamentos() {
       try {
-        const response = await fetch("http://localhost:8080/syntro/departamentos");
+        const response = await fetch("/syntro/departamentos");
         if (!response.ok) throw new Error("Erro ao buscar departamentos");
         const data = await response.json();
 
