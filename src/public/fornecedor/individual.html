@@ -60,9 +60,9 @@
             </div>
             <div class="content">
                 <div class="add-text-icon">
-                    <div class="d-flex flex-row gap-4 align-center">
+                    <div class="d-flex flex-row align-center" style="gap: 5%">
                         <div>
-                            <span id="id_nf">Nota nº xpto</span>
+                            <span id="id_nf"></span>
                         </div>
                         <button id="addNotaBtn" class="btn btn-primary"
                             style="background-color: #1A2A80; border-color: #1A2A80;" onclick="upload()">
@@ -75,31 +75,33 @@
                     <div>
                         <div style="display: none;">
                             <span>Entrada no sistema</span>
-                            <input type="datetime-local" class="form-control search-bar" id="entrada" style="border-radius: 4px"
-                                readonly>
+                            <input type="datetime-local" class="form-control search-bar" id="entrada"
+                                style="border-radius: 4px" readonly>
                         </div>
                         <div>
                             <span>Data vencimento</span>
-                            <input type="date" class="form-control search-bar" style="border-radius: 4px" id="vencimento" readonly>
+                            <input type="date" class="form-control search-bar" style="border-radius: 4px"
+                                id="vencimento" readonly>
                         </div>
                         <div>
                             <span>Data e hora de emissão</span>
-                            <input type="datetime-local" class="form-control search-bar" id="emissao" style="border-radius: 4px"
-                                readonly>
+                            <input type="datetime-local" class="form-control search-bar" id="emissao"
+                                style="border-radius: 4px" readonly>
                         </div>
                         <div>
                             <span>Valor da cobrança*</span>
-                            <input type="number" class="form-control search-bar" id="cobranca" style="border-radius: 4px"
+                            <input type="text" class="form-control search-bar" id="cobranca" style="border-radius: 4px"
                                 placeholder="R$ 00,00" readonly>
                         </div>
                         <div>
                             <span>Descrição do serviço</span>
-                            <input type="text" class="form-control search-bar" id="descricao"
-                                style="border-radius: 4px; height: 120px;" placeholder="..." readonly>
+                            <textarea class="form-control search-bar" id="descricao"
+                            style="border-radius: 4px; height: 130px; resize: none;" 
+                            placeholder="..." readonly></textarea>
                         </div>
                     </div>
                     <div style="width: 500px;" class="d-flex flex-column justify-content-evenly gap-3">
-                        <div class="status-dropdown" id="statusDropdown">
+                        <div class="status-dropdown" id="statusDropdown" style="margin-left: 10%;">
                             <div class="status-selected">
                                 <span></span>
                                 <img src="../../assets/arrow-down.svg" alt="arrow" width="16">
@@ -136,7 +138,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="anexos-container bg-light rounded p-4"
+                    <!-- <div class="anexos-container bg-light rounded p-4"
                         style="width: 100%; max-width: 100%; margin-top: 2rem;">
                         <h6 class="fw-semibold mb-3">Anexos</h6>
 
@@ -186,7 +188,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
                     <hr>
                     <div>
                         <span style="font-size: 17px; font-weight: 600;">Atividade</span>
@@ -201,19 +203,18 @@
                             </div>
                         </div>
                         <div class="mt-3">
+                            <div class="atividade-container">
                             <div class="comments">
                                 <div class="comment-add">
-                                    <input type="text" class="comment-input" placeholder="Adicione um comentário">
+                                    <textarea class="comment-textarea" placeholder="Adicione um comentário"></textarea>
                                     <button class="btn-post">Postar</button>
                                 </div>
 
-                                <!-- Área que exibe os comentários -->
-                                <div class="comments-list mt-2" id="comments-list">
-                                    <!-- Comentários serão adicionados dinamicamente -->
+                                <div class="comments-list" id="comments-list">
+                                    <!-- Comentários serão adicionados aqui -->
                                 </div>
                             </div>
-                            <!-- aba futura para quando tiver outras atividades (historico)  -->
-                            <div></div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -224,363 +225,235 @@
 </body>
 
 <script>
-    const identificadorNf = window.sessionStorage.getItem("id");
-    let sessaoIdNf = document.getElementById("id_nf");
-    sessaoIdNf.innerHTML = identificadorNf
+const identificadorNf = window.sessionStorage.getItem("id");
+const sessaoIdNf = document.getElementById("id_nf");
+sessaoIdNf.innerHTML = `${identificadorNf || "Nota não identificada"}`;
 
-    const input = document.querySelector('.comment-input');
-    const btnPost = document.querySelector('.btn-post');
-    const commentsList = document.getElementById('comments-list');
+// Botão Seguir NF
+const btnSeguir = document.getElementById("addNotaBtn");
+const seguirKey = `seguir_${identificadorNf}`;
+let estaSeguindo = sessionStorage.getItem(seguirKey) === "true";
 
-    const btnSeguir = document.getElementById("addNotaBtn");
-    const nfId = id || "nf-desconhecida"; // fallback caso não tenha id
-    const seguirKey = `seguir_${nfId}`;
-
-    let estaSeguindo = sessionStorage.getItem(seguirKey) === "true";
-    async function renderInput() {
-        const listaNotas = await carregarNotas();
+function atualizarBotaoSeguir() {
+    if (estaSeguindo) {
+        btnSeguir.innerHTML = `<i class="bi bi-check-lg"></i> Seguindo`;
+        btnSeguir.classList.remove("btn-primary");
+        btnSeguir.classList.add("btn-success");
+    } else {
+        btnSeguir.innerHTML = `<i class="bi bi-plus-lg"></i> Seguir NF`;
+        btnSeguir.classList.remove("btn-success");
+        btnSeguir.classList.add("btn-primary");
     }
+}
 
-  async function carregarNotas() {
+btnSeguir.addEventListener("click", () => {
+    estaSeguindo = !estaSeguindo;
+    sessionStorage.setItem(seguirKey, estaSeguindo);
+    atualizarBotaoSeguir();
+});
+
+// Inputs da nota
+const inputEntrada = document.getElementById("entrada");
+const inputVencimento = document.getElementById("vencimento");
+const inputEmissao = document.getElementById("emissao");
+const inputCobranca = document.getElementById("cobranca");
+const inputDescricao = document.getElementById("descricao");
+
+// Função para carregar nota
+async function carregarNota() {
     try {
         const url = `http://localhost:8080/syntro/nota-fiscal/${identificadorNf}`;
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-
+        const response = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" }});
+        if (!response.ok) throw new Error(`Erro na requisição: ${response.status}`);
         const nota = await response.json();
-        console.log(nota);
 
+        // Busca usuário emissor
         let nomeUsuario = "Não Informado";
-
         if (nota.idUsuario) {
             try {
                 const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
                 if (userResponse.ok) {
                     const userData = await userResponse.json();
-                    nomeUsuario = userData.nomeUsuario;
+                    nomeUsuario = userData.nomeUsuario || nomeUsuario;
                 }
             } catch (err) {
-                console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                console.warn(`Erro ao buscar usuário ${nota.idUsuario}:`, err);
             }
         }
 
-        return [{
+        return {
             servico: nota.descricao || "Não informado",
-            nota: nota.numeroIdentificador,
-            valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
-            vencimento: nota.dataVencimento ? new Date(nota.dataVencimento).toISOString().split('T')[0] : null,
-            idEmpresa: nota.idEmpresa,
+            numero: nota.numeroIdentificador || "Sem número",
+            valor: nota.valorTotal ?? 0,
+            moeda: nota.nomeMoeda || "R$",
+            vencimento: nota.dataVencimento ? new Date(nota.dataVencimento) : null,
+            emissao: nota.dataEmissao ? new Date(nota.dataEmissao) : null,
             emissor: nomeUsuario,
-            status: "Em andamento",
-            idUsuario: nota.idUsuario,
-            emissao: nota.dataEmissao || null
-        }];
-
+            contrato: nota.idContrato,
+            status: nota.status || "em-validacao"
+        };
     } catch (error) {
-        console.error('Erro ao buscar notas fiscais:', error);
-        return [];
+        console.error("Erro ao buscar nota fiscal:", error);
+        return null;
     }
 }
 
+// Função para definir inputs da nota
+async function definirInputs() {
+    const nota = await carregarNota();
+    if (!nota) return;
 
-    window.addEventListener('DOMContentLoaded', () => {
-    definirInputs();
+    // Preenche datas
+    if (nota.vencimento) inputVencimento.value = nota.vencimento.toISOString().split("T")[0];
+    if (nota.emissao) {
+        const pad = n => n.toString().padStart(2, "0");
+        inputEmissao.value = `${nota.emissao.getFullYear()}-${pad(nota.emissao.getMonth()+1)}-${pad(nota.emissao.getDate())}T${pad(nota.emissao.getHours())}:${pad(nota.emissao.getMinutes())}`;
+    }
+
+    // Preenche valores
+    inputCobranca.value = `R$ ${Number(nota.valor).toFixed(2).replace('.', ',')}`;
+    inputDescricao.value = nota.servico;
+
+    // Preenche dropdown status
+    if (nota.status) currentStatus = nota.status;
+    const defaultStatus = statusList.find(s => s.value === currentStatus);
+    if (defaultStatus) selected.innerHTML = `<span class="status-dot" style="background:${defaultStatus.color}"></span> ${defaultStatus.label}`;
+    renderDropdownOptions();
+
+    // Renderiza contrato
+    await renderizarInfoContrato(nota.contrato);
+}
+
+// Dropdown de status
+const dropdown = document.getElementById('statusDropdown');
+const selected = dropdown.querySelector('.status-selected span');
+const optionsContainer = dropdown.querySelector('.status-options');
+
+const statusList = [
+    { value: "em-andamento", label: "Em andamento", color: "#007bff"}, 
+    { value: "em-validacao", label: "Em validação", color: "#ffc107"},  
+    { value: "aprovadas", label: "Aprovada", color: "#28a745"},        
+    { value: "congeladas", label: "Congelada", color: "#6c757d"},      
+    { value: "reprovadas", label: "Reprovada", color: "#dc3545"} 
+];
+
+let currentStatus = "em-validacao";
+
+function renderDropdownOptions() {
+    optionsContainer.innerHTML = "";
+    statusList.filter(s => s.value !== currentStatus).forEach(s => {
+        const div = document.createElement("div");
+        div.dataset.value = s.value;
+        div.innerHTML = `<span class="status-dot" style="background:${s.color}"></span> ${s.label}`;
+        optionsContainer.appendChild(div);
+
+        div.addEventListener("click", () => {
+            currentStatus = s.value;
+            selected.innerHTML = `<span class="status-dot" style="background:${s.color}"></span> ${s.label}`;
+            optionsContainer.style.display = "none";
+            renderDropdownOptions();
+            sessionStorage.setItem(`status_${identificadorNf}`, currentStatus);
+
+        });
+    });
+}
+
+dropdown.querySelector('.status-selected').addEventListener('click', () => {
+    optionsContainer.style.display = optionsContainer.style.display === 'flex' ? 'none' : 'flex';
+    optionsContainer.style.flexDirection = 'column';
 });
 
-    //tem que ver o ajuste desse endpoint
-    //quando tento consultar o log ele dá que: 
-    //
-    //     {
-    // 	"timestamp": "2025-10-29T16:43:51.057+00:00",
-    // 	"status": 400,
-    // 	"error": "Bad Request",
-    // 	"message": "Required parameter 'dataHoraComeco' is not present.",
-    // 	"path": "/syntro/comentar/data-hora/1"
-    // }
+document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) optionsContainer.style.display = 'none';
+});
 
+// Função para renderizar informações do contrato
+async function renderizarInfoContrato(idContrato) {
+    if (!idContrato) return;
+    try {
+        const url = `http://localhost:8080/syntro/contrato/${idContrato}`;
+        const response = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" }});
+        if (!response.ok) throw new Error(`Erro ao buscar contrato: ${response.status}`);
+        const contrato = await response.json();
 
-    async function carregarLogAtividade() {
-        try {
-            var url = `http://localhost:8080/syntro/nota-fiscal/data-hora/${identificadorNf}`
-
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Erro na requisição: ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            const logs = await Promise.all(
-                data.map(async (log) => {
-                    console.log(log)
-
-              return log.dataHora;
-                }))
-
-                return logs
-            
-        } catch (error) {
-            
+        // Representante
+        let representanteNome = "Desconhecido";
+        const representanteStr = window.sessionStorage.getItem("usuarioLogado");
+        if (representanteStr) {
+            const representanteObj = JSON.parse(representanteStr);
+            representanteNome = representanteObj.nomeUsuario || representanteNome;
         }
-    }
 
+        // Preenche campos do contrato
+        document.querySelector('input[placeholder="Nome serviço"]').value = contrato.nomeServico || "Não informado";
+        document.querySelector('input[placeholder="Nome do representante fornecedor"]').value = representanteNome;
+        document.querySelector('input[placeholder="Empresa fornecedora"]').value = contrato.nomeEmpresa || "Não informado";
+        document.querySelector('input[placeholder="Nome auditor"]').value = representanteNome;
 
-    const inputEntrada= document.getElementById("entrada")
-    const inputVencimento= document.getElementById("vencimento")
-    const inputEmissao= document.getElementById("emissao")
-    const inputCobranca= document.getElementById("cobranca")
-    const inputDescricao= document.getElementById("descricao")
-
-    async function definirInputs() {
-    const listaNota = await carregarNotas();
-    // const logs = await carregarLogAtividade();
-
-    // Verificações de segurança
-    // if (!logs || logs.length === 0) {
-    //     console.warn("Nenhum log encontrado");
-    //     return;
-    // }
-
-    if (!listaNota || listaNota.length === 0) {
-        console.warn("Nenhuma nota encontrada");
-        return;
-    }
-
-    // Pega o primeiro log válido para "entrada"
-    // const entradaData = logs.find(log => log); 
-    // if (entradaData) {
-    //     const data = new Date(entradaData);
-    //     const pad = n => n.toString().padStart(2, '0');
-    //     inputEntrada.value = `${data.getFullYear()}-${pad(data.getMonth() + 1)}-${pad(data.getDate())}T${pad(data.getHours())}:${pad(data.getMinutes())}`;
-    // }
-
-    // Pega a primeira nota filtrada
-    const nota = listaNota[0];
-
-    // --- Data de vencimento (date) ---
-    if (nota.vencimento) {
-        inputVencimento.value = nota.vencimento; // já no formato YYYY-MM-DD
-    }
-
-    // --- Data e hora de emissão (datetime-local) ---
-    if (nota.emissao) { 
-        const dataEmissao = new Date(nota.emissao);
-        const pad = n => n.toString().padStart(2, '0');
-        inputEmissao.value = `${dataEmissao.getFullYear()}-${pad(dataEmissao.getMonth() + 1)}-${pad(dataEmissao.getDate())}T${pad(dataEmissao.getHours())}:${pad(dataEmissao.getMinutes())}`;
-    }
-
-    // --- Valor da cobrança (number) ---
-    if (nota.valor) {
-        // Converte string monetária para número
-        const numero = parseFloat(nota.valor.replace(/[^\d,.]/g, '').replace(',', '.'));
-        inputCobranca.value = numero || 0;
-    }
-
-    // --- Descrição do serviço (text) ---
-    if (nota.servico) {
-        inputDescricao.value = nota.servico;
+    } catch (error) {
+        console.error("Erro ao renderizar contrato:", error);
     }
 }
 
+// Comentários
+const btnPost = document.querySelector(".btn-post");
+const textarea = document.querySelector(".comment-textarea");
+const commentsList = document.getElementById("comments-list");
 
-    function atualizarBotaoSeguir() {
-        const icon = btnSeguir.querySelector("i");
-        if (estaSeguindo) {
-            icon.classList.remove("bi-plus-lg");
-            icon.classList.add("bi-check-lg");
-            btnSeguir.innerHTML = `<i class="bi bi-check-lg"></i> Seguindo`;
-            btnSeguir.classList.add("btn-success");
-            btnSeguir.classList.remove("btn-primary");
-        } else {
-            btnSeguir.innerHTML = `<i class="bi bi-plus-lg"></i> Seguir NF`;
-            btnSeguir.classList.add("btn-primary");
-            btnSeguir.classList.remove("btn-success");
-        }
-    }
+async function enviarComentario(texto) {
+    const usuarioString = window.sessionStorage.getItem("usuarioLogado");
+    if (!usuarioString) return null;
+    const usuarioObj = JSON.parse(usuarioString);
+    const nomeUsuario = usuarioObj.nomeUsuario || "Desconhecido";
 
-    btnSeguir.addEventListener("click", () => {
-        estaSeguindo = !estaSeguindo;
-        //invés do session storage isso é um post
-        sessionStorage.setItem(seguirKey, estaSeguindo);
-        atualizarBotaoSeguir();
-    });
-
-    atualizarBotaoSeguir();
-
-    function addComment(name, text) {
-        if (!text.trim()) return;
-
-        const commentDiv = document.createElement('div');
-        commentDiv.classList.add('comment');
-
-        const contentDiv = document.createElement('div');
-        contentDiv.classList.add('comment-content');
-
-        const nameSpan = document.createElement('span');
-        nameSpan.classList.add('comment-name');
-        nameSpan.textContent = name;
-
-        const textSpan = document.createElement('span');
-        textSpan.classList.add('comment-text');
-        textSpan.textContent = text;
-
-        const dateSpan = document.createElement('span');
-        dateSpan.classList.add('comment-date');
-        const now = new Date();
-        dateSpan.textContent = now.toLocaleString();
-
-        contentDiv.appendChild(nameSpan);
-        contentDiv.appendChild(textSpan);
-        contentDiv.appendChild(dateSpan);
-        commentDiv.appendChild(contentDiv);
-        commentsList.appendChild(commentDiv);
-
-        input.value = '';
-        commentsList.scrollTop = commentsList.scrollHeight;
-    }
-
-    btnPost.addEventListener('click', () => addComment('Você', input.value));
-
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') addComment('Você', input.value);
-    });
-
-    const tags = document.querySelectorAll(".tags span");
-    tags.forEach(tag => {
-        tag.addEventListener('click', () => {
-            tags.forEach(t => t.classList.remove('active'));
-            tag.classList.add('active');
-        });
-    });
-
-    // Função para criar e exibir um comentário
-    function addComment(name, text) {
-        if (!text.trim()) return;
-
-        const commentDiv = document.createElement('div');
-        commentDiv.classList.add('comment', 'd-flex', 'justify-content-between', 'align-items-start', 'p-2', 'border', 'rounded', 'mb-2');
-
-        const contentDiv = document.createElement('div');
-        contentDiv.classList.add('comment-content', 'd-flex', 'flex-column');
-
-        const nameSpan = document.createElement('span');
-        nameSpan.classList.add('fw-bold');
-        nameSpan.textContent = name;
-
-        const textSpan = document.createElement('span');
-        textSpan.textContent = text;
-
-        const dateSpan = document.createElement('small');
-        dateSpan.classList.add('text-muted');
-        dateSpan.textContent = new Date().toLocaleString();
-
-        contentDiv.appendChild(nameSpan);
-        contentDiv.appendChild(textSpan);
-        contentDiv.appendChild(dateSpan);
-
-        const deleteIcon = document.createElement('i');
-        deleteIcon.classList.add('bi', 'bi-trash', 'text-danger', 'fs-5');
-        deleteIcon.style.cursor = 'pointer';
-        deleteIcon.title = 'Apagar comentário';
-
-        // Evento de apagar
-        deleteIcon.addEventListener('click', () => {
-            commentDiv.remove();
-            alert("comentário deletado com sucesso")
-        });
-
-        // Monta o comentário
-        commentDiv.appendChild(contentDiv);
-        commentDiv.appendChild(deleteIcon);
-
-        // Adiciona à lista
-        commentsList.appendChild(commentDiv);
-
-        input.value = '';
-        commentsList.scrollTop = commentsList.scrollHeight;
-    }
-
-    // Eventos de postagem
-    btnPost.addEventListener('click', () => addComment('Você', input.value));
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') addComment('Você', input.value);
-    });
-
-    const dropdown = document.getElementById('statusDropdown');
-    const selected = dropdown.querySelector('.status-selected span');
-    const optionsContainer = dropdown.querySelector('.status-options');
-
-    // Simulando dados do backend
-    const backendStatus = {
-        default: "em-validacao",
-        options: [
-            { value: "em-andamento", label: "Em andamento" },
-            { value: "em-validacao", label: "Em validação" },
-            { value: "aprovadas", label: "Aprovada" },
-            { value: "congeladas", label: "Congelada" },
-            { value: "reprovadas", label: "Reprovada" }
-        ]
+    const payload = {
+        idNotaFiscal: identificadorNf,
+        usuario: nomeUsuario,
+        comentario: texto,
+        data: new Date().toISOString()
     };
 
-    // Guardar status selecionado
-    let currentValue = backendStatus.default;
+    try {
+        const response = await fetch("http://localhost:8080/syntro/comentar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
 
-    // Função para renderizar opções dinamicamente
-    function renderOptions() {
-        optionsContainer.innerHTML = ''; // limpa tudo
-        backendStatus.options
-            .filter(opt => opt.value !== currentValue) // exclui o selecionado
-            .forEach(opt => {
-                const div = document.createElement('div');
-                div.dataset.value = opt.value;
-                div.innerHTML = `<span class="status-dot ${opt.value}"></span> ${opt.label}`;
-                optionsContainer.appendChild(div);
-
-                div.addEventListener('click', () => {
-                    currentValue = opt.value;
-                    selected.textContent = opt.label;
-                    dropdown.dataset.value = opt.value;
-                    renderOptions(); // re-renderiza mantendo a lógica de ocultar o selecionado
-                    optionsContainer.style.display = 'none';
-                    console.log("Valor enviado ao backend:", dropdown.dataset.value);
-                });
-            });
+        if (!response.ok) throw new Error(`Erro ao enviar comentário: ${response.status}`);
+        const resultado = await response.json();
+        return { ...payload, id: resultado.id || null };
+    } catch (erro) {
+        console.error(erro);
+        return null;
     }
+}
 
-    // Set default
-    const defaultOption = backendStatus.options.find(o => o.value === backendStatus.default);
-    if (defaultOption) {
-        selected.textContent = defaultOption.label;
-        dropdown.dataset.value = defaultOption.value;
-    }
+async function comentar() {
+    const texto = textarea.value.trim();
+    if (!texto) return;
 
-    // Render inicial
-    renderOptions();
+    const comentario = await enviarComentario(texto);
+    if (!comentario) return;
 
-    // Toggle dropdown
-    dropdown.querySelector('.status-selected').addEventListener('click', () => {
-        optionsContainer.style.display = optionsContainer.style.display === 'flex' ? 'none' : 'flex';
-    });
+    const item = document.createElement("div");
+    item.classList.add("comment-item");
+    item.innerHTML = `
+        <div class="comment-author">${comentario.usuario}</div>
+        <div class="comment-text">${comentario.comentario}</div>
+        <div class="comment-date">${new Date(comentario.data).toLocaleString()}</div>
+    `;
+    commentsList.prepend(item);
+    textarea.value = "";
+}
 
-    // Fechar dropdown ao clicar fora
-    document.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-            optionsContainer.style.display = 'none';
-        }
-    });
+btnPost.addEventListener("click", comentar);
 
+// Inicialização
+window.addEventListener("DOMContentLoaded", async () => {
+    await definirInputs();
+    atualizarBotaoSeguir();
+});
 </script>
 
 </html>
