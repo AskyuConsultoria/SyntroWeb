@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Syntro Web - Visualização notas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../components/sidebar.js">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="../../assets/syntro_icon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="../../styles/upload.css">
+    <link rel="stylesheet" href="../../styles/fornecedor.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+        th[data-col] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body style="background-color: #F1F5F8;">
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <side-bar></side-bar>
+        </div>
+        <div class="all-content">
+            <div>
+                <div class="nav-content">
+                    <div class="bnts" style="display: flex; width: 110px; justify-content: space-evenly;">
+                        <img src="/assets/arrow-square-right.svg" style="transform: rotate(180deg); cursor: pointer;"
+                            onclick="history.back()" alt="Voltar">
+                        <img src="/assets/arrow-square-right.svg" style="cursor: pointer;" onclick="history.forward()"
+                            alt="Avançar">
+                    </div>
+                    <div class="d-flex flex-row align-items-center acesso">
+                        <span style="color: #5e5959;">Minhas notas | <a href="/visualizacao"
+                                style="all: unset; cursor: pointer;">Visualização</a></span>
+                        <div style="gap: 10px;">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly"
+                                    style="cursor: pointer">
+                                    <img src="/assets/bell.svg" style="height: 20px;">
+                                </div>
+                                <div>
+                                    <img src="/assets/Component 1.svg" style="height: 30px;">
+                                    <span>Fornecedor</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="add-text-icon">
+                    <div class="d-flex flex-row align-center" style="gap: 5%">
+                        <div>
+                            <span id="id_nf"></span>
+                        </div>
+                        <button id="addNotaBtn" class="btn btn-primary"
+                            style="background-color: #1A2A80; border-color: #1A2A80;" onclick="upload()">
+                            <i class="bi bi-plus-lg"></i> Seguir NF
+                        </button>
+                    </div>
+                </div>
+                <hr style="width: 90%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
+                <div class="d-flex flex-row align-center" style="gap: 8%">
+                    <div>
+                        <div style="display: none;">
+                            <span>Entrada no sistema</span>
+                            <input type="datetime-local" class="form-control search-bar" id="entrada"
+                                style="border-radius: 4px" readonly>
+                        </div>
+                        <div>
+                            <span>Data vencimento</span>
+                            <input type="date" class="form-control search-bar" style="border-radius: 4px"
+                                id="vencimento" readonly>
+                        </div>
+                        <div>
+                            <span>Data e hora de emissão</span>
+                            <input type="datetime-local" class="form-control search-bar" id="emissao"
+                                style="border-radius: 4px" readonly>
+                        </div>
+                        <div>
+                            <span>Valor da cobrança*</span>
+                            <input type="text" class="form-control search-bar" id="cobranca" style="border-radius: 4px"
+                                placeholder="R$ 00,00" readonly>
+                        </div>
+                        <div>
+                            <span>Descrição do serviço</span>
+                            <textarea class="form-control search-bar" id="descricao"
+                            style="border-radius: 4px; height: 130px; resize: none;" 
+                            placeholder="..." readonly></textarea>
+                        </div>
+                    </div>
+                    <div style="width: 500px;" class="d-flex flex-column justify-content-evenly gap-3">
+                        <div class="status-dropdown" id="statusDropdown" style="margin-left: 10%;">
+                            <div class="status-selected">
+                                <span></span>
+                                <img src="../../assets/arrow-down.svg" alt="arrow" width="16">
+                            </div>
+                            <div class="status-options"></div>
+                        </div>
+                        <div class="form d-flex flex-column justify-content-evenly">
+                            <div style="margin-left: 10%;">
+                                <div style="width: 270px;">
+                                    <span style="font-size: 22px;">Informações</span>
+                                </div>
+                                <div>
+                                    <span>Nome do serviço*</span>
+                                    <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                                        placeholder="Nome serviço" readonly>
+                                </div>
+                                <div>
+                                    <span>Representante do fornecedor*</span>
+                                    <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                                        placeholder="Nome do representante fornecedor" readonly>
+                                </div>
+                                <div>
+                                    <span>Empresa fornecedora*</span>
+                                    <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                                        placeholder="Empresa fornecedora" readonly>
+                                </div>
+                                <div>
+                                    <span>Auditor*</span>
+                                    <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                                        placeholder="Nome auditor" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <!-- <div class="anexos-container bg-light rounded p-4"
+                        style="width: 100%; max-width: 100%; margin-top: 2rem;">
+                        <h6 class="fw-semibold mb-3">Anexos</h6>
+
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Arquivo</th>
+                                    <th scope="col">Tamanho</th>
+                                    <th scope="col">Data em que foi adicionado</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-file-earmark-pdf text-danger fs-4"></i>
+                                        <span>NF - Jun/25 - Dados A.pdf</span>
+                                    </td>
+                                    <td>93 KB</td>
+                                    <td>03 de julho de 2025 às 17:45</td>
+                                    <td class="text-end">
+                                        <i class="bi bi-download" style="cursor: pointer;"></i>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-file-image text-primary fs-4"></i>
+                                        <span>image-202507-193911.png</span>
+                                    </td>
+                                    <td>20 KB</td>
+                                    <td>04 de julho de 2025 às 16:02</td>
+                                    <td class="text-end">
+                                        <i class="bi bi-download" style="cursor: pointer;"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-file-earmark-zip text-warning fs-4"></i>
+                                        <span>arquivos-comprimidos.zip</span>
+                                    </td>
+                                    <td>450 KB</td>
+                                    <td>14 de julho de 2025 às 18:22</td>
+                                    <td class="text-end">
+                                        <i class="bi bi-download" style="cursor: pointer;"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> -->
+                    <hr>
+                    <div>
+                        <span style="font-size: 17px; font-weight: 600;">Atividade</span>
+                        <div>
+                            <div class="d-flex align-center flex-column justify-content-evenly gap-4 ">
+                                <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
+                                    <div style="display: none;"><span class="active" data-status="Tudo">Tudo</span>
+                                    </div>
+                                    <div style="display: none;"><span data-status="Comentários">Comentários</span></div>
+                                    <div style="display: none;"><span data-status="Histórico">Histórico</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="atividade-container">
+                            <div class="comments">
+                                <div class="comment-add">
+                                    <textarea class="comment-textarea" placeholder="Adicione um comentário"></textarea>
+                                    <button class="btn-post">Postar</button>
+                                </div>
+
+                                <div class="comments-list" id="comments-list">
+                                    <!-- Comentários serão adicionados aqui -->
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="/public/components/sidebar.js" type="module"></script>
+
+</body>
+
+<script>
+const identificadorNf = window.sessionStorage.getItem("id");
+const sessaoIdNf = document.getElementById("id_nf");
+sessaoIdNf.innerHTML = `${identificadorNf || "Nota não identificada"}`;
+
+// Botão Seguir NF
+const btnSeguir = document.getElementById("addNotaBtn");
+const seguirKey = `seguir_${identificadorNf}`;
+let estaSeguindo = sessionStorage.getItem(seguirKey) === "true";
+
+function atualizarBotaoSeguir() {
+    if (estaSeguindo) {
+        btnSeguir.innerHTML = `<i class="bi bi-check-lg"></i> Seguindo`;
+        btnSeguir.classList.remove("btn-primary");
+        btnSeguir.classList.add("btn-success");
+    } else {
+        btnSeguir.innerHTML = `<i class="bi bi-plus-lg"></i> Seguir NF`;
+        btnSeguir.classList.remove("btn-success");
+        btnSeguir.classList.add("btn-primary");
+    }
+}
+
+btnSeguir.addEventListener("click", () => {
+    estaSeguindo = !estaSeguindo;
+    sessionStorage.setItem(seguirKey, estaSeguindo);
+    atualizarBotaoSeguir();
+});
+
+// Inputs da nota
+const inputEntrada = document.getElementById("entrada");
+const inputVencimento = document.getElementById("vencimento");
+const inputEmissao = document.getElementById("emissao");
+const inputCobranca = document.getElementById("cobranca");
+const inputDescricao = document.getElementById("descricao");
+
+// Função para carregar nota
+async function carregarNota() {
+    try {
+        const url = `http://localhost:8080/syntro/nota-fiscal/${identificadorNf}`;
+        const response = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" }});
+        if (!response.ok) throw new Error(`Erro na requisição: ${response.status}`);
+        const nota = await response.json();
+
+        // Busca usuário emissor
+        let nomeUsuario = "Não Informado";
+        if (nota.idUsuario) {
+            try {
+                const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                if (userResponse.ok) {
+                    const userData = await userResponse.json();
+                    nomeUsuario = userData.nomeUsuario || nomeUsuario;
+                }
+            } catch (err) {
+                console.warn(`Erro ao buscar usuário ${nota.idUsuario}:`, err);
+            }
+        }
+
+        return {
+            servico: nota.descricao || "Não informado",
+            numero: nota.numeroIdentificador || "Sem número",
+            valor: nota.valorTotal ?? 0,
+            moeda: nota.nomeMoeda || "R$",
+            vencimento: nota.dataVencimento ? new Date(nota.dataVencimento) : null,
+            emissao: nota.dataEmissao ? new Date(nota.dataEmissao) : null,
+            emissor: nomeUsuario,
+            contrato: nota.idContrato,
+            status: nota.status || "em-validacao"
+        };
+    } catch (error) {
+        console.error("Erro ao buscar nota fiscal:", error);
+        return null;
+    }
+}
+
+// Função para definir inputs da nota
+async function definirInputs() {
+    const nota = await carregarNota();
+    if (!nota) return;
+
+    // Preenche datas
+    if (nota.vencimento) inputVencimento.value = nota.vencimento.toISOString().split("T")[0];
+    if (nota.emissao) {
+        const pad = n => n.toString().padStart(2, "0");
+        inputEmissao.value = `${nota.emissao.getFullYear()}-${pad(nota.emissao.getMonth()+1)}-${pad(nota.emissao.getDate())}T${pad(nota.emissao.getHours())}:${pad(nota.emissao.getMinutes())}`;
+    }
+
+    // Preenche valores
+    inputCobranca.value = `R$ ${Number(nota.valor).toFixed(2).replace('.', ',')}`;
+    inputDescricao.value = nota.servico;
+
+    // Preenche dropdown status
+    if (nota.status) currentStatus = nota.status;
+    const defaultStatus = statusList.find(s => s.value === currentStatus);
+    if (defaultStatus) selected.innerHTML = `<span class="status-dot" style="background:${defaultStatus.color}"></span> ${defaultStatus.label}`;
+    renderDropdownOptions();
+
+    // Renderiza contrato
+    await renderizarInfoContrato(nota.contrato);
+}
+
+// Dropdown de status
+const dropdown = document.getElementById('statusDropdown');
+const selected = dropdown.querySelector('.status-selected span');
+const optionsContainer = dropdown.querySelector('.status-options');
+
+const statusList = [
+    { value: "em-andamento", label: "Em andamento", color: "#007bff"}, 
+    { value: "em-validacao", label: "Em validação", color: "#ffc107"},  
+    { value: "aprovadas", label: "Aprovada", color: "#28a745"},        
+    { value: "congeladas", label: "Congelada", color: "#6c757d"},      
+    { value: "reprovadas", label: "Reprovada", color: "#dc3545"} 
+];
+
+let currentStatus = "em-validacao";
+
+function renderDropdownOptions() {
+    optionsContainer.innerHTML = "";
+    statusList.filter(s => s.value !== currentStatus).forEach(s => {
+        const div = document.createElement("div");
+        div.dataset.value = s.value;
+        div.innerHTML = `<span class="status-dot" style="background:${s.color}"></span> ${s.label}`;
+        optionsContainer.appendChild(div);
+
+        div.addEventListener("click", () => {
+            currentStatus = s.value;
+            selected.innerHTML = `<span class="status-dot" style="background:${s.color}"></span> ${s.label}`;
+            optionsContainer.style.display = "none";
+            renderDropdownOptions();
+            sessionStorage.setItem(`status_${identificadorNf}`, currentStatus);
+
+        });
+    });
+}
+
+dropdown.querySelector('.status-selected').addEventListener('click', () => {
+    optionsContainer.style.display = optionsContainer.style.display === 'flex' ? 'none' : 'flex';
+    optionsContainer.style.flexDirection = 'column';
+});
+
+document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) optionsContainer.style.display = 'none';
+});
+
+// Função para renderizar informações do contrato
+async function renderizarInfoContrato(idContrato) {
+    if (!idContrato) return;
+    try {
+        const url = `http://localhost:8080/syntro/contrato/${idContrato}`;
+        const response = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" }});
+        if (!response.ok) throw new Error(`Erro ao buscar contrato: ${response.status}`);
+        const contrato = await response.json();
+
+        // Representante
+        let representanteNome = "Desconhecido";
+        const representanteStr = window.sessionStorage.getItem("usuarioLogado");
+        if (representanteStr) {
+            const representanteObj = JSON.parse(representanteStr);
+            representanteNome = representanteObj.nomeUsuario || representanteNome;
+        }
+
+        // Preenche campos do contrato
+        document.querySelector('input[placeholder="Nome serviço"]').value = contrato.nomeServico || "Não informado";
+        document.querySelector('input[placeholder="Nome do representante fornecedor"]').value = representanteNome;
+        document.querySelector('input[placeholder="Empresa fornecedora"]').value = contrato.nomeEmpresa || "Não informado";
+        document.querySelector('input[placeholder="Nome auditor"]').value = representanteNome;
+
+    } catch (error) {
+        console.error("Erro ao renderizar contrato:", error);
+    }
+}
+
+// Comentários
+const btnPost = document.querySelector(".btn-post");
+const textarea = document.querySelector(".comment-textarea");
+const commentsList = document.getElementById("comments-list");
+
+async function enviarComentario(texto) {
+    const usuarioString = window.sessionStorage.getItem("usuarioLogado");
+    if (!usuarioString) return null;
+    const usuarioObj = JSON.parse(usuarioString);
+    const nomeUsuario = usuarioObj.nomeUsuario || "Desconhecido";
+
+    const payload = {
+        idNotaFiscal: identificadorNf,
+        usuario: nomeUsuario,
+        comentario: texto,
+        data: new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch("http://localhost:8080/syntro/comentar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`Erro ao enviar comentário: ${response.status}`);
+        const resultado = await response.json();
+        return { ...payload, id: resultado.id || null };
+    } catch (erro) {
+        console.error(erro);
+        return null;
+    }
+}
+
+async function comentar() {
+    const texto = textarea.value.trim();
+    if (!texto) return;
+
+    const comentario = await enviarComentario(texto);
+    if (!comentario) return;
+
+    const item = document.createElement("div");
+    item.classList.add("comment-item");
+    item.innerHTML = `
+        <div class="comment-author">${comentario.usuario}</div>
+        <div class="comment-text">${comentario.comentario}</div>
+        <div class="comment-date">${new Date(comentario.data).toLocaleString()}</div>
+    `;
+    commentsList.prepend(item);
+    textarea.value = "";
+}
+
+btnPost.addEventListener("click", comentar);
+
+// Inicialização
+window.addEventListener("DOMContentLoaded", async () => {
+    await definirInputs();
+    atualizarBotaoSeguir();
+});
+</script>
+
+</html>
