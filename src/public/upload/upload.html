@@ -13,6 +13,7 @@
   <link rel="shortcut icon" href="/assets/syntro_icon.png" type="image/x-icon" />
   <link rel="stylesheet" href="/styles/upload.css">
   <script src="/public/components/sidebar.js"></script>
+  <script src="/public/components/modal/modal.js"></script>
 </head>
 <style>a{text-decoration: none;}</style>
 
@@ -54,19 +55,21 @@
               <span>Adicione seus documentos aqui. Você pode enviar até 1 uma nota por vez</span>
             </div>
             <div class="pontilhado">
-              <div class="dropzone upload" id="dropzone">
-                <div class="d-flex flex-column gap-2">
+            <div class="dropzone upload" id="dropzone">
+              <div id="dropzoneContent" class="d-flex flex-column gap-2">
                   <img src="/assets/upload.svg" style="height: 50px;">
                   <span>Arraste seu arquivo e realize o upload</span>
-                </div>
-                <div class="divider">
-                  <span>OU</span>
-                </div>
-                <div>
-                  <input type="file" id="fileInput" hidden accept=".jpg,.png,.svg,.zip,.pdf">
-                  <button class="btn btn-upload" type="button" id="inputPDFButton">Escolha um arquivo</button>
-                </div>
               </div>
+              <div class="divider">
+                  <span>OU</span>
+              </div>
+              <div>
+                  <input type="file" id="fileInput" hidden accept=".jpg,.png,.svg,.zip,.pdf,.jpeg,.pdf">
+                  <button class="btn btn-upload" type="button" id="inputPDFButton">Escolha um arquivo</button>
+              </div>
+              <div id="fileList" class="file-list"></div>
+            </div>
+
 
             </div>
             <div class="mt-3">
@@ -83,7 +86,6 @@
   </div>
   </div>
   <script src="/public/upload/script.js"></script>
-<script src="/public/components/navcontent.js" type="module"></script>
 
 
 </body>

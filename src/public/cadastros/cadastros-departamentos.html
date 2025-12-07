@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/styles/upload.css">
   <link rel="stylesheet" href="/styles/departamento.css">
   <script src="/public/components/sidebar.js" type="module"></script>
+  <script src="/public/components/modal/modal.js"></script>
   <style>
     a {
       text-decoration: none;
@@ -288,7 +289,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
     const nomeDepartamento = document.getElementById("nomeDepartamento").value;
 
     if (!nomeDepartamento) {
-        alert("Insira um nome para o departamento.");
+        showModal("Insira um nome para o departamento.", "error");
         return;
     }
 
@@ -307,12 +308,12 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
               throw new Error("Erro ao salvar departamento");
           }
 
-          alert("Departamento criado com sucesso!");
+          showModal("Departamento criado com sucesso!", "success");
           closeForm();
           window.location.reload();
       } catch (erro) {
           console.error(erro);
-          alert("Erro ao criar departamento.");
+          showModal("Erro ao criar departamento.", "error");
       }
   }
 

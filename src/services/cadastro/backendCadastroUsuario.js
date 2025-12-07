@@ -45,12 +45,12 @@ async function cadastrarUsuario(tipo) {
         if(!response.ok) throw new Error("Erro ao cadastrar usuário");
 
         const dados = await response.json();
-        alert(`${tipo.charAt(0).toUpperCase() + tipo.slice(1)} cadastrado com sucesso! ID: ${dados.id}`);
+        showModal(`${tipo.charAt(0).toUpperCase() + tipo.slice(1)} cadastrado com sucesso! ID: ${dados.id}`, "success");
         limparFormulario(tipo);
 
     } catch (err) {
         console.error(err);
-        alert("Falha ao cadastrar usuário. Veja o console para detalhes.");
+        showModal("Falha ao cadastrar usuário. Veja o console para detalhes.", "error");
     }
 }
 

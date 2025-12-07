@@ -49,7 +49,7 @@ async function eventoEnviarEmail(){
     const email = inputEmail.value.trim();
 
     if (!email) {
-        alert("Digite um e-mail válido.");
+        showModal("Digite um e-mail válido.", "error");
         return;
     }
 
@@ -60,7 +60,7 @@ async function eventoEnviarEmail(){
         console.log("E-mail de recuperação enviado:", response);
     } catch (error) {
         console.error("Erro ao enviar e-mail de recuperação:", error);
-        alert("Ocorreu um erro ao enviar o e-mail. Verifique o console.");
+        showModal("Ocorreu um erro ao enviar o e-mail. Verifique o console.", "error");
     }
 }
 
@@ -70,7 +70,7 @@ async function eventoRedefinirSenha(){
   const confirmacaoSenha = document.querySelector("#input_confirmacao_senha").value
 
   if(senha != confirmacaoSenha) return
-  if(extrairTokenDaURL() == null) return alert("Token inválido ou expirado")
+  if(extrairTokenDaURL() == null) return showModal("Token inválido ou expirado", "error")
 
   try {
     const response = await passwordRecoveryService.resetarSenha(extrairTokenDaURL(), senha)
