@@ -16,50 +16,98 @@ body {
     min-width: 86vw;
 }
 
+.card-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.card-table thead th {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  padding: 1rem;
+  text-align: left;
+}
+
+.card-table tbody tr {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 0.75rem;
+}
+
+.card-table tbody td,
+.card-table tbody th {
+  border: none;
+  padding: 1rem;
+  font-size: 13px;
+  text-align: left;
+}
+
+.card-table tbody tr td:first-child {
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+.card-table tbody tr td:last-child {
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+.card-table tbody tr:hover {
+  background-color: #f8fafc;
+  transition: 0.2s;
+}
+
+
 th {
     cursor: pointer;
     user-select: none;
 }
 
 .search-bar {
-  width: 300px;
-  border-radius: 50px;
-  border: 1px solid #ced4da;
-  padding-left: 15px;
-  transition: all 0.3s ease;
+    width: 300px;
+    border-radius: 50px;
+    border: 1px solid #ced4da;
+    padding-left: 15px;
+    transition: all 0.3s ease;
 }
 
 .search-bar:focus {
-  outline: none;
-  border-color: #0d6efd;
-  box-shadow: 0 0 6px rgba(13, 110, 253, 0.5);
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 6px rgba(13, 110, 253, 0.5);
 }
 
 .tags {
-  display: flex;
-  flex-wrap: wrap; 
-  gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
+
 .tags span {
-  cursor: pointer;
-  padding: 8px 15px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #1A2A80;
-  transition: all 0.3s ease;
-  font-weight: 500;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #1A2A80;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
 
 .tags span:hover {
-  background-color: #E6E9F8;
+    background-color: #E6E9F8;
 }
 
 .tags span.active {
-  background-color: #1A2A80;
-  color: white;
-  border-color: #1A2A80;
+    background-color: #1A2A80;
+    color: white;
+    border-color: #1A2A80;
 }
+
 /* 
 th i {
     margin-left: 4px;
@@ -225,6 +273,13 @@ body.sidebar-collapsed .all-content {
     padding: 0 30px;
 }
 
+#qtdItens {
+    font-weight: 400;
+    cursor: text;
+    color: black;
+    background-color: #F1F5F8;
+}
+
 
 .btn-upload:active,
 .btn-upload:focus {
@@ -251,7 +306,7 @@ body.sidebar-collapsed .all-content {
 }
 
 body.sidebar-collapsed .acesso {
-    gap: 37rem;
+    gap: 36rem;
 }
 
 .fornecedor-icon {
@@ -266,6 +321,55 @@ body.sidebar-collapsed .fornecedor-icon {
     background-color: #f5f8fc;
     padding: 20px;
     border-radius: 8px;
+}
+
+
+.custom-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.custom-table thead th {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  padding: 1rem;
+}
+
+.custom-table tbody tr {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 0.75rem;
+}
+
+.custom-table tbody td,
+.custom-table tbody th {
+  border: none;
+  padding: 1rem;
+  /* vertical-align: middle; */
+  font-size: 13px;
+}
+
+.custom-table tbody tr td:first-child {
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+.custom-table tbody tr td:last-child {
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+.custom-table thead th {
+  border-bottom: none;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f8fafc;
+  transition: 0.2s;
 }
 
 .atividade-title {
@@ -349,6 +453,7 @@ body.sidebar-collapsed .fornecedor-icon {
         margin-left: calc(30vw - 640px)
     }
 }
+
 .file-list {
     display: flex;
     align-items: center;
