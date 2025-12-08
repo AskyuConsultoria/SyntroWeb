@@ -226,6 +226,7 @@
 
 <script>
 const identificadorNf = window.sessionStorage.getItem("id");
+const notaFiscalId = sessionStorage.getItem("NF-ID")
 const sessaoIdNf = document.getElementById("id_nf");
 sessaoIdNf.innerHTML = `${identificadorNf || "Nota não identificada"}`;
 
@@ -407,10 +408,11 @@ async function enviarComentario(texto) {
     const nomeUsuario = usuarioObj.nomeUsuario || "Desconhecido";
 
     const payload = {
-        idNotaFiscal: identificadorNf,
-        usuario: nomeUsuario,
-        comentario: texto,
-        data: new Date().toISOString()
+        tipoAcao: "Comentário",
+        descricao: texto,
+        dataHora: new Date().toISOString(),
+        usuarioId: usuarioObj.id,
+        notaFiscalId: notaFiscalId 
     };
 
     try {
@@ -419,6 +421,10 @@ async function enviarComentario(texto) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         });
+
+
+        console.log("Resultado do comentário: ")
+        console.log(response)
 
         if (!response.ok) throw new Error(`Erro ao enviar comentário: ${response.status}`);
         const resultado = await response.json();
@@ -435,19 +441,47 @@ async function comentar() {
 
     const comentario = await enviarComentario(texto);
     if (!comentario) return;
+    const usuarioString = window.sessionStorage.getItem("usuarioLogado");
+    if (!usuarioString) return null;
+    const usuarioObj = JSON.parse(usuarioString);
 
+     
     const item = document.createElement("div");
     item.classList.add("comment-item");
     item.innerHTML = `
-        <div class="comment-author">${comentario.usuario}</div>
-        <div class="comment-text">${comentario.comentario}</div>
-        <div class="comment-date">${new Date(comentario.data).toLocaleString()}</div>
+        <div class="comment-author">${usuarioObj.nomeUsuario}</div>
+        <div class="comment-text">${comentario.descricao}</div>
+        <div class="comment-date">${new Date(comentario.dataHora).toLocaleString()}</div>
     `;
     commentsList.prepend(item);
     textarea.value = "";
 }
 
 btnPost.addEventListener("click", comentar);
+
+async function buscarComentarios() {
+    const usuarioString = window.sessionStorage.getItem("usuarioLogado");
+    if (!usuarioString) return null;
+    const usuarioObj = JSON.parse(usuarioString);
+
+
+    const response = await fetch(`http://localhost:8080/syntro/comentar?notaId=${notaFiscalId}`)
+    const listaComentarios = await response.json()
+
+    for(i = 0; i < listaComentarios.length; i++){
+      const item = document.createElement("div");
+    item.classList.add("comment-item");
+    item.innerHTML = `
+        <div class="comment-author">${usuarioObj.nomeUsuario}</div>
+        <div class="comment-text">${listaComentarios[i].descricao}</div>
+        <div class="comment-date">${new Date(listaComentarios[i].dataHora).toLocaleString()}</div>
+    `;
+
+     commentsList.prepend(item);
+    }
+}
+
+window.addEventListener('load', buscarComentarios())
 
 // Inicialização
 window.addEventListener("DOMContentLoaded", async () => {

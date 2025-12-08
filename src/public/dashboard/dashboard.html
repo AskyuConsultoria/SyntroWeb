@@ -33,14 +33,10 @@
             <side-bar></side-bar>
         </div>
         <div class="all-content">
-            <div class="nav-content">
-                <div class="bnts" style="display: flex; width: 110px; justify-content: space-evenly;">
-                    <img src="/assets/arrow-square-right.svg" style="transform: rotate(180deg);">
-                    <img src="../../assets/arrow-square-right.svg">
-                </div>
-                <div class="d-flex flex-row align-items-center acesso">
-                    <span style="color: #5e5959;">Meu acesso | Controle</span>
-                    <div style="gap: 10px;">
+            <div class="nav-content w-100">
+                
+                <div class="d-flex flex-row justify-content-end acesso w-75">
+                                       <div style="gap: 10px;">
                         <div class="d-flex align-items-center gap-2">
                             <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly"
                                 style="cursor: pointer">
@@ -67,19 +63,19 @@
                 <div class="d-flex justify-content-between">
                     <div class="d-flex flex-column" style="background-color: #9A9A9A;padding:24px;border-radius: 20px;width:15%;height:10%">
                         <h6 class="mb-0">Não Iniciadas</h6>
-                        <h2 class="mb-0">3</h3>
+                        <h2 class="mb-0" id="nao-iniciada">3</h3>
                     </div>
                     <div style="background-color: #D7F0D1;padding:24px;border-radius: 20px;width:15%;height:10%;">
                         <h6 class="mb-0">Em Andamento</h6>
-                        <h2 class="mb-0">3</h3>
+                        <h2 class="mb-0" id="em-andamento">3</h3>
                     </div>
                     <div style="background-color: #FFB800;padding:24px;border-radius: 20px;width:15%;height:10%;">
                         <h6 class="mb-0">A Vencer</h6>
-                        <h2 class="mb-0">3</h3>
+                        <h2 class="mb-0" id="a-vencer">3</h3>
                     </div>
                     <div style="background-color: #FF8D8D;padding:24px;border-radius: 20px;width:15%;height:10%;">
                         <h6 class="mb-0">Atrasadas</h6>
-                        <h2 class="mb-0">3</h3>
+                        <h2 class="mb-0" id="atrasadas">3</h3>
                     </div>
                 </div>
 
@@ -218,6 +214,8 @@
     async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
         tableBody.innerHTML = "";
         const listaNotas = await carregarNotas();
+        console.log("Lista de Notas: ")
+        console.log(listaNotas)
         const buscaNormalizada = normalizarTexto(termoBusca);
         let filtradas = listaNotas.filter(nota => {
             const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
@@ -264,7 +262,7 @@
   `;
             row.style.cursor = "pointer"; // deixa o cursor de click
             row.addEventListener("click", () => {
-                verIndividual(nota.nota); // ou nota.id se tiver
+                verIndividual(nota.nota, nota.id); // ou nota.id se tiver
             });
             tableBody.appendChild(row);
         });
@@ -342,6 +340,7 @@
                         }
                     }
                     return {
+                        id: nota.id,
                         servico: servicoNota,
                         nota: nota.numeroIdentificador,
                         valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
@@ -576,9 +575,10 @@
         }
     }
 
-    function verIndividual(id) {
+    function verIndividual(id, nota_id) {
         window.location.href = "/individual";
         window.sessionStorage.setItem("id", id)
+        window.sessionStorage.setItem("NF-ID", nota_id)
         console.log(id)
     }
 
