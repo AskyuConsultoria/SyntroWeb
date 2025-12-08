@@ -16,6 +16,52 @@ body {
     min-width: 86vw;
 }
 
+.card-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.card-table thead th {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  padding: 1rem;
+  text-align: left;
+}
+
+.card-table tbody tr {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 0.75rem;
+}
+
+.card-table tbody td,
+.card-table tbody th {
+  border: none;
+  padding: 1rem;
+  font-size: 13px;
+  text-align: left;
+}
+
+.card-table tbody tr td:first-child {
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+.card-table tbody tr td:last-child {
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+.card-table tbody tr:hover {
+  background-color: #f8fafc;
+  transition: 0.2s;
+}
+
+
 .add-text-icon {
     padding-top: 3%;
     color: black;
@@ -190,11 +236,11 @@ body.sidebar-collapsed .all-content {
 }
 
 .acesso {
-    gap: 25rem;
+    gap: 30rem;
 }
 
 body.sidebar-collapsed .acesso {
-    gap: 37rem;
+    gap: 36rem;
 }
 
 .fornecedor-icon{
@@ -231,38 +277,8 @@ body.sidebar-collapsed .fornecedor-icon{
   border-radius: 8px;
 }
 
-.search {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  width: 400px;
-  height: 45px;
-  border-radius: 10px;
-  padding: 0 10px;
-  color: #4b4b4b;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.search label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 5px;
-  color: #9ca3af;
-  cursor: pointer;
-}
-
 .material-symbols-outlined {
   font-size: 22px;
-}
-
-#searchInput {
-  flex: 1;
-  border: none;
-  background-color: transparent;
-  outline: none;
-  font-size: 14px;
-  color: #374151;
 }
 
 .add-btn {

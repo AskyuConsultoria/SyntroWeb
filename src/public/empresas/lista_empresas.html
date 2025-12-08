@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,14 +10,42 @@
   <link rel="stylesheet" href="/styles/upload.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    a { text-decoration: none; }
-    th[data-col] { cursor: pointer; user-select: none; }
+    a {
+      text-decoration: none;
+    }
+
+    th[data-col] {
+      cursor: pointer;
+      user-select: none;
+    }
   </style>
 </head>
+
 <body style="background-color: #F1F5F8;">
   <div class="d-flex flex-row justify-content-between">
     <div><side-bar></side-bar></div>
     <div class="all-content">
+      <div class="nav-content">
+        <!-- <div class="bnts" style="display: flex; width: 110px; justify-content: space-evenly;">
+          <img src="/assets/arrow-square-right.svg" style="transform: rotate(180deg); cursor: pointer;" onclick="history.back()" alt="Voltar">
+          <img src="/assets/arrow-square-right.svg" style="cursor: pointer;" onclick="history.forward()" alt="Avançar">
+        </div> -->
+        <div class="d-flex flex-row align-items-center acesso">
+          <span style="color: #5e5959;">Meu acesso | <a href="#" style="all: unset; cursor: pointer;">Empresas</a>
+          </span>
+          <div style="gap: 10px;">
+            <div class="d-flex align-items-center gap-2">
+              <!-- <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly" style="cursor: pointer">
+              <img src="/assets/bell.svg" style="height: 20px;">
+            </div> -->
+              <div>
+                <img src="/assets/Component 1.svg" style="height: 30px;">
+                <span id="nomeUsuarioHeader"> ?</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="content">
         <div class="add-text-icon">
           <div class="d-flex flex-row gap-4 align-center">
@@ -24,23 +53,32 @@
               <span>Empresas cadastradas</span>
               <img src="/assets/home.svg" style="height: 20px;">
             </div>
-            <input type="search" id="searchInput" class="form-control search-bar" placeholder="Buscar Empresas...">
-            <button id="addNotaBtn" class="btn btn-primary" style="background-color: #1A2A80; border-color: #1A2A80;" onclick="upload()">
-              <i class="bi bi-plus-lg"></i> Adicionar Empresa
-            </button>
           </div>
         </div>
 
         <hr style="width: 90%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0,0,0,0.268);">
 
-        <div class="d-flex align-center flex-column justify-content-evenly gap-4 ">
+        <div class="d-flex flex-row gap-2">
+          <div class="input-group" style="width: 300px; border-radius: 18px;">
+            <span class="input-group-text" id="basic-addon1" style="background-color:#fff; border-right:0;">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="search" id="searchInput" class="form-control" placeholder="Buscar nota..."
+              style="border-left:0;">
+          </div> <button id="addNotaBtn" class="btn btn-primary"
+            style="background-color: #1A2A80; border-color: #1A2A80;" onclick="upload()">
+            <i class="bi bi-plus-lg"></i> Adicionar Empresa
+          </button>
+        </div>
+        <div class="d-flex align-center flex-column justify-content-evenly gap-4 mt-3">
           <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
             <div><span class="active" data-status="Todas">Todas</span></div>
-            <div><span data-status="Empresas fornecedoras">Empresas fornecedoras</span></div>
+            <div><span data-status="Empresas fornecedoras">Empresas fornecedoras <small id="qtdItens">:0</small></span>
+            </div>
           </div>
 
           <div>
-            <table class="table-bordered align-middle text-center mt-2">
+            <table class="table custom-table align-middle mb-0" style="margin-left:0;">
               <thead>
                 <tr>
                   <th data-col="servico">Empresa <i class="bi bi-arrow-down-up"></i></th>
@@ -61,7 +99,11 @@
 
   <script>
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+    const nomeHeader = document.getElementById('nomeUsuarioHeader');
+    nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
+
     const sidebarElement = document.querySelector('side-bar');
+    const qtdItens = document.getElementById('qtdItens');
     if (sidebarElement) sidebarElement.addEventListener('toggle-sidebar', () => document.body.classList.toggle('sidebar-collapsed'));
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -88,10 +130,8 @@
     const tags = document.querySelectorAll(".tags span");
     const searchInput = document.getElementById("searchInput");
 
-    // currentSort.col = propriedade real (e.g. 'nome_fantasia'), currentSort.asc = boolean
     let currentSort = { col: null, asc: true };
 
-    // Mapeia data-col do TH para a propriedade real do objeto empresa
     const columnMap = {
       servico: "nome_fantasia",
       nota: "area_atuacao",
@@ -105,43 +145,36 @@
 
     async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
       tableBody.innerHTML = "";
-      const listaEmpreas = await carregarEmpresas();
-
+      const listaEmpresas = await carregarEmpresas();
       const buscaNormalizada = normalizarTexto(termoBusca);
-
-      // Filtra por fornecedor quando a tag indicar isso (aceita "fornecedora", "fornecedor", etc.)
       const filtroFornecedoras = String(filtroStatus || "").toLowerCase().includes("fornecedor");
 
-      let filtradas = listaEmpreas.filter(empresa => {
+      let filtradas = listaEmpresas.filter(empresa => {
         const matchStatus = !filtroFornecedoras || (empresa.fornecedor === 1 || empresa.fornecedor === true);
-        // texto para busca: só os campos que queremos pesquisar
         const textoEmpresa = `${empresa.nome_fantasia ?? ""} ${empresa.area_atuacao ?? ""} ${empresa.identificacao_fiscal ?? ""}`;
-        const matchTexto = normalizarTexto(textoEmpresa).includes(buscaNormalizada);
-        return matchStatus && matchTexto;
+        return matchStatus && normalizarTexto(textoEmpresa).includes(buscaNormalizada);
       });
 
-      // Aplica ordenação apenas se tiver sortCol definido
+      tags.forEach(tag => {
+        if (tag.classList.contains("active")) {
+          tag.textContent = `${tag.dataset.status} (${filtradas.length})`;
+        } else {
+          tag.textContent = tag.dataset.status;
+        }
+      });
+
       if (sortCol) {
         filtradas.sort((a, b) => {
           let valA = a[sortCol] ?? "";
           let valB = b[sortCol] ?? "";
-
-          // strings em lowercase para comparar corretamente
           if (typeof valA === "string") valA = valA.toLowerCase();
           if (typeof valB === "string") valB = valB.toLowerCase();
-
-          // usa localeCompare para tratar acentos corretamente se forem strings
-          if (typeof valA === "string" && typeof valB === "string") {
-            return asc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-          }
-
-          if (valA < valB) return asc ? -1 : 1;
-          if (valA > valB) return asc ? 1 : -1;
-          return 0;
+          if (typeof valA === "string" && typeof valB === "string") return asc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+          return valA < valB ? (asc ? -1 : 1) : valA > valB ? (asc ? 1 : -1) : 0;
         });
       }
 
-      if (filtradas.length === 0) {
+      if (!filtradas.length) {
         tableBody.innerHTML = `<tr><td colspan="3" class="text-muted">Nenhuma empresa encontrada.</td></tr>`;
         return;
       }
@@ -149,27 +182,23 @@
       filtradas.forEach(empresa => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${empresa.nome_fantasia ?? empresa.nomeServico ?? "-"}</td>
-          <td>${empresa.area_atuacao ?? "-"}</td>
-          <td>${empresa.identificacao_fiscal ? empresa.identificacao_fiscal : "000000000"}</td>
-        `;
+      <td>${empresa.nome_fantasia ?? empresa.nomeServico ?? "-"}</td>
+      <td>${empresa.area_atuacao ?? "-"}</td>
+      <td>${empresa.identificacao_fiscal ?? "000000000"}</td>
+    `;
         tableBody.appendChild(row);
       });
     }
 
-    // Inicial
     renderTable("Todas");
 
-    // TAGS: ativa a tag e re-renderiza mantendo a ordenação atual (se houver)
     tags.forEach(tag => tag.addEventListener("click", () => {
       tags.forEach(t => t.classList.remove("active"));
       tag.classList.add("active");
 
-      // mantém currentSort (se usuário já clicou em cabeçalho)
       renderTable(tag.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
     }));
 
-    // BUSCA: filtra a lista — NÃO ordena automaticamente (ordenar só quando o usuário clicar no cabeçalho)
     if (searchInput) {
       searchInput.addEventListener("input", () => {
         const tagAtiva = document.querySelector(".tags span.active");
@@ -178,14 +207,12 @@
       });
     }
 
-    // CLIQUE NO CABEÇALHO -> ordena pelo campo correspondente (toggle asc/desc)
     document.querySelectorAll("th[data-col]").forEach(th => {
       th.addEventListener("click", () => {
         const dataCol = th.dataset.col;
         const prop = columnMap[dataCol];
         if (!prop) return;
 
-        // toggla: se já tá nessa coluna, inverter asc; senão setar asc true
         if (currentSort.col === prop) currentSort.asc = !currentSort.asc;
         else currentSort = { col: prop, asc: true };
 
@@ -202,12 +229,11 @@
     async function carregarEmpresas() {
       try {
         const url = 'http://localhost:8080/syntro/empresas';
-        const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' }});
+        const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
         if (!response.ok) throw new Error(`Erro: ${response.status}`);
         const data = await response.json();
         console.log("empresas:", data);
 
-        // Mapeia camelCase do backend para as propriedades usadas no frontend
         return data.map(empresa => ({
           id: empresa.id,
           nomeServico: empresa.nomeServico,
@@ -215,7 +241,7 @@
           area_atuacao: empresa.areaAtuacao,
           identificacao_fiscal: empresa.identificacaoFiscal,
           tipo_identificacao_fiscal: empresa.tipoIdentificacaoFiscal,
-          fornecedor: empresa.fornecedor 
+          fornecedor: empresa.fornecedor
         }));
       } catch (error) {
         console.error("Erro ao carregar empresas:", error);
@@ -224,4 +250,5 @@
     }
   </script>
 </body>
+
 </html>
