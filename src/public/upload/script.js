@@ -62,8 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
             showModal('Upload realizado com sucesso!', "success");
             console.log('Sucesso:', result);
-
             fileInput.value = '';
+            
+            if(result) setInterval(()=> window.location.href="/visualizacao", "2000")
+
         } catch (error) {
             showModal('Erro ao enviar o arquivo!', "error");
             console.error('Erro:', error);
