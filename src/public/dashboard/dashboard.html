@@ -362,6 +362,219 @@
         }
     }
 
+    async function carregarNotasPorStatus(status) {
+        try {
+            const url = `http://localhost:8080/syntro/nota-fiscal/status/${status}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const listaNotas = await Promise.all(
+                data.map(async (nota) => {
+                    console.log(nota)
+                    let nomeUsuario = "Não Informado";
+
+                    if (nota.idUsuario) {
+                        try {
+                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            if (userResponse.ok) {
+                                const userData = await userResponse.json();
+                                nomeUsuario = userData.nomeUsuario;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    var servicoNota = nota.descricao;
+                    if (nota.idContrato) {
+                        try {
+                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            if (contratoResponse.ok) {
+                                const contratoData = await contratoResponse.json();
+                                servicoNota = contratoData.nomeServico;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    return {
+                        servico: servicoNota,
+                        nota: nota.numeroIdentificador,
+                        valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                        vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                        idEmpresa: nota.idEmpresa,
+                        emissor: nomeUsuario,
+                        status: nota.status,
+                        idUsuario: nota.idUsuario
+                    };
+                })
+            );
+
+            return listaNotas;
+
+        } catch (error) {
+            console.error('Erro ao buscar notas fiscais por status:', error);
+            return [];
+        }
+    }
+
+    async function CarregarNotasAtrasadas() {
+        try {
+            const dataDeHoje = new Date().toISOString().split('T')[0];
+            const url = `http://localhost:8080/syntro/nota-fiscal/data-vencimento/menor-que?data=${dataDeHoje}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const listaNotas = await Promise.all(
+                data.map(async (nota) => {
+                    console.log(nota)
+                    let nomeUsuario = "Não Informado";
+
+                    if (nota.idUsuario) {
+                        try {
+                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            if (userResponse.ok) {
+                                const userData = await userResponse.json();
+                                nomeUsuario = userData.nomeUsuario;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    var servicoNota = nota.descricao;
+                    if (nota.idContrato) {
+                        try {
+                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            if (contratoResponse.ok) {
+                                const contratoData = await contratoResponse.json();
+                                servicoNota = contratoData.nomeServico;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    return {
+                        servico: servicoNota,
+                        nota: nota.numeroIdentificador,
+                        valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                        vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                        idEmpresa: nota.idEmpresa,
+                        emissor: nomeUsuario,
+                        status: nota.status,
+                        idUsuario: nota.idUsuario
+                    };
+                })
+            );
+
+            return listaNotas;
+
+        } catch (error) {
+            console.error('Erro ao buscar notas fiscais por status:', error);
+            return [];
+        }
+    }
+
+    async function CarregarNotasAVencer() {
+        try {
+            const dataFim = new Date();
+            dataFim.setHours(23, 59, 59, 999);
+
+            const dataInicio = new Date();
+            dataInicio.setDate(dataInicio.getDate() - 7);
+            dataInicio.setHours(0, 0, 0, 0);
+
+            const formatForURL = (date) => {
+                const pad = (num) => num.toString().padStart(2, '0');
+                const year = date.getFullYear();
+                const month = pad(date.getMonth() + 1);
+                const day = pad(date.getDate());
+                const hours = pad(date.getHours());
+                const minutes = pad(date.getMinutes());
+                const seconds = pad(date.getSeconds());
+                return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+            };
+
+            const url = `http://localhost:8080/syntro/nota-fiscal/data-vencimento/entre?dataInicio=${formatForURL(dataInicio)}&dataFim=${formatForURL(dataFim)}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const listaNotas = await Promise.all(
+                data.map(async (nota) => {
+                    console.log(nota)
+                    let nomeUsuario = "Não Informado";
+
+                    if (nota.idUsuario) {
+                        try {
+                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            if (userResponse.ok) {
+                                const userData = await userResponse.json();
+                                nomeUsuario = userData.nomeUsuario;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    var servicoNota = nota.descricao;
+                    if (nota.idContrato) {
+                        try {
+                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            if (contratoResponse.ok) {
+                                const contratoData = await contratoResponse.json();
+                                servicoNota = contratoData.nomeServico;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    return {
+                        servico: servicoNota,
+                        nota: nota.numeroIdentificador,
+                        valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                        vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                        idEmpresa: nota.idEmpresa,
+                        emissor: nomeUsuario,
+                        status: nota.status,
+                        idUsuario: nota.idUsuario
+                    };
+                })
+            );
+
+            return listaNotas;
+
+        } catch (error) {
+            console.error('Erro ao buscar notas fiscais a vencer:', error);
+            return [];
+        }
+    }
 
     function verIndividual(id) {
         window.location.href = "/individual";
