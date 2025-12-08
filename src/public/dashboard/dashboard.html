@@ -61,21 +61,21 @@
 
             <div class="mt-3">
                 <div class="d-flex justify-content-between">
-                    <div class="d-flex flex-column" style="background-color: #9A9A9A;padding:24px;border-radius: 20px;width:15%;height:10%">
+                    <div id="kpi-nao-iniciadas" class="d-flex flex-column" style="background-color: #9A9A9A;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
                         <h6 class="mb-0">Não Iniciadas</h6>
-                        <h2 class="mb-0" id="nao-iniciada">3</h3>
+                        <h2 class="mb-0" id="nao-iniciada">0</h2>
                     </div>
-                    <div style="background-color: #D7F0D1;padding:24px;border-radius: 20px;width:15%;height:10%;">
+                    <div id="kpi-em-andamento" class="d-flex flex-column" style="background-color: #D7F0D1;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
                         <h6 class="mb-0">Em Andamento</h6>
-                        <h2 class="mb-0" id="em-andamento">3</h3>
+                        <h2 class="mb-0" id="em-andamento">0</h2>
                     </div>
-                    <div style="background-color: #FFB800;padding:24px;border-radius: 20px;width:15%;height:10%;">
+                    <div id="kpi-a-vencer" class="d-flex flex-column" style="background-color: #FFB800;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
                         <h6 class="mb-0">A Vencer</h6>
-                        <h2 class="mb-0" id="a-vencer">3</h3>
+                        <h2 class="mb-0" id="a-vencer">0</h2>
                     </div>
-                    <div style="background-color: #FF8D8D;padding:24px;border-radius: 20px;width:15%;height:10%;">
+                    <div id="kpi-atrasadas" class="d-flex flex-column" style="background-color: #FF8D8D;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
                         <h6 class="mb-0">Atrasadas</h6>
-                        <h2 class="mb-0" id="atrasadas">3</h3>
+                        <h2 class="mb-0" id="atrasadas">0</h2>
                     </div>
                 </div>
 
@@ -120,13 +120,58 @@
         document.body.classList.toggle('sidebar-collapsed');
     });
 
-    // const listaNotas = [
-    //   { servico: "Serviço de Consultoria Técnica", nota: "NF-001245", emissor: "Mariana Costa", vencimento: "15/11/2025", status: "Em andamento", valor: "R$ 2.500,00" },
-    //   { servico: "Treinamento de Equipe", nota: "NF-001246", emissor: "João Ribeiro", vencimento: "22/11/2025", status: "Aprovada", valor: "R$ 1.800,00" },
-    //   { servico: "Auditoria Interna", nota: "NF-001247", emissor: "Ana Souza", vencimento: "30/11/2025", status: "Em validação", valor: "R$ 3.200,00" },
-    //   { servico: "Serviço Contábil", nota: "NF-001248", emissor: "Carlos Lima", vencimento: "05/12/2025", status: "Congelada", valor: "R$ 1.000,00" },
-    //   { servico: "Auditoria Externa", nota: "NF-001249", emissor: "Fernanda Dias", vencimento: "10/12/2025", status: "Reprovada", valor: "R$ 2.000,00" }
-    // ];
+    function displayNotas(listaNotas) {
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+
+        if (!listaNotas || listaNotas.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-muted">Nenhuma nota encontrada.</td></tr>`;
+            return;
+        }
+
+        listaNotas.forEach(nota => {
+            const row = document.createElement("tr");
+            const servico = nota.servico || '';
+            const numeroNota = nota.nota || '';
+            const emissor = nota.emissor || '';
+            const vencimento = nota.vencimento || '';
+            const status = nota.status || '';
+            const valor = nota.valor || '';
+
+            row.innerHTML = `
+                <td>${servico}</td>
+                <td>${numeroNota}</td>
+                <td>${emissor}</td>
+                <td>${vencimento}</td>
+                <td>${status}</td>
+                <td>${valor}</td>
+            `;
+            row.style.cursor = "pointer";
+            row.addEventListener("click", () => {
+                verIndividual(nota.nota, nota.id);
+            });
+            tableBody.appendChild(row);
+        });
+    }
+
+    async function atualizarContagensKPIs() {
+        try {
+            const [naoIniciada, emAndamento, aVencer, atrasadas] = await Promise.all([
+                carregarNotasPorStatus(1),
+                carregarNotasPorStatus(2),
+                CarregarNotasAVencer(),
+                CarregarNotasAtrasadas()
+            ]);
+
+            document.getElementById('nao-iniciada').textContent = naoIniciada.length;
+            document.getElementById('em-andamento').textContent = emAndamento.length;
+            document.getElementById('a-vencer').textContent = aVencer.length;
+            document.getElementById('atrasadas').textContent = atrasadas.length;
+        } catch (error) {
+            console.error('Erro ao atualizar contagens dos KPIs:', error);
+        }
+    }
+
 
     document.addEventListener("DOMContentLoaded", () => {
         const table = document.querySelector("table");
@@ -200,6 +245,45 @@
     }
   `;
         document.head.appendChild(style);
+
+        atualizarContagensKPIs();
+
+        const kpiNaoIniciadas = document.getElementById('kpi-nao-iniciadas');
+        const kpiEmAndamento = document.getElementById('kpi-em-andamento');
+        const kpiAVencer = document.getElementById('kpi-a-vencer');
+        const kpiAtrasadas = document.getElementById('kpi-atrasadas');
+
+        if (kpiNaoIniciadas) {
+            kpiNaoIniciadas.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await carregarNotasPorStatus(1);
+                displayNotas(notas);
+            });
+        }
+
+        if (kpiEmAndamento) {
+            kpiEmAndamento.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await carregarNotasPorStatus(2);
+                displayNotas(notas);
+            });
+        }
+
+        if (kpiAVencer) {
+            kpiAVencer.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await CarregarNotasAVencer();
+                displayNotas(notas);
+            });
+        }
+
+        if (kpiAtrasadas) {
+            kpiAtrasadas.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await CarregarNotasAtrasadas();
+                displayNotas(notas);
+            });
+        }
     });
 
     const tableBody = document.getElementById("tableBody");
@@ -347,7 +431,7 @@
                         vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
                         idEmpresa: nota.idEmpresa,
                         emissor: nomeUsuario,
-                        status: "Em andamento",
+                        status: nota.status,
                         idUsuario: nota.idUsuario
                     };
                 })
@@ -495,10 +579,10 @@
     async function CarregarNotasAVencer() {
         try {
             const dataFim = new Date();
+            dataFim.setDate(dataFim.getDate() + 7);
             dataFim.setHours(23, 59, 59, 999);
 
             const dataInicio = new Date();
-            dataInicio.setDate(dataInicio.getDate() - 7);
             dataInicio.setHours(0, 0, 0, 0);
 
             const formatForURL = (date) => {
