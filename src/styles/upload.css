@@ -145,6 +145,7 @@ th.active i {
     font-family: sans-serif;
     transition: 0.3s;
     cursor: pointer;
+    position: relative;
 }
 
 .dropzone.dragover {
@@ -347,4 +348,48 @@ body.sidebar-collapsed .fornecedor-icon {
     body.sidebar-collapsed .fornecedor-icon {
         margin-left: calc(30vw - 640px)
     }
+}
+.file-list {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.file-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90px;
+    position: relative;
+}
+
+.file-item img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+}
+
+.file-item span {
+    font-size: 12px;
+    margin-top: 6px;
+    color: #444;
+    text-align: center;
+}
+
+.remove-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
 }

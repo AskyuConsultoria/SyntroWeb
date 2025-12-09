@@ -1,0 +1,64 @@
+/* Fundo escuro */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Caixa do modal */
+.modal-box {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn .25s ease-in-out;
+}
+
+/* Ícone (✔ ou ✖) */
+.modal-icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.modal-icon.success {
+    color: #28a745;
+}
+
+.modal-icon.error {
+    color: #dc3545;
+}
+
+/* Botão */
+.close-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background: #0056b3;
+}
+
+/* Animação */
+@keyframes fadeIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}

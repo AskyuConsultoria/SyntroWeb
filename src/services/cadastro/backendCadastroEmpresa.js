@@ -29,7 +29,7 @@ async function cadastrarEmpresa() {
         if (!response.ok) throw new Error("Erro ao cadastrar a empresa.");
 
         const dadosEmpresa = await response.json();
-        alert(`Empresa cadastrada com sucesso! ID: ${dadosEmpresa.id}`);
+        showModal(`Empresa cadastrada com sucesso! ID: ${dadosEmpresa.id}`, "success");
 
         // Após cadastrar empresa, cadastra o endereço vinculado
         await cadastrarEndereco(dadosEmpresa.id);
@@ -37,7 +37,7 @@ async function cadastrarEmpresa() {
         limparFormulario();
     } catch (error) {
         console.error(error);
-        alert("Falha ao cadastrar a empresa. Veja o console para detalhes.");
+        showModal("Falha ao cadastrar a empresa. Veja o console para detalhes.", "error");
     }
 }
 
@@ -76,10 +76,10 @@ async function cadastrarEndereco(idEmpresa) {
         if (!response.ok) throw new Error("Erro ao cadastrar o endereço.");
 
         const dadosEndereco = await response.json();
-        alert(`Endereço cadastrado com sucesso! ID: ${dadosEndereco.id}`);
+        showModal(`Endereço cadastrado com sucesso! ID: ${dadosEndereco.id}`, "success");
     } catch (error) {
         console.error(error);
-        alert("Falha ao cadastrar o endereço. Veja o console para detalhes.");
+        showModal("Falha ao cadastrar o endereço. Veja o console para detalhes.", "error");
     }
 }
 

@@ -37,12 +37,12 @@ async function cadastrarContrato() {
         if (!response.ok) throw new Error("Erro ao cadastrar contrato.");
 
         const dadosContrato = await response.json();
-        alert(`Contrato cadastrado com sucesso! ID: ${dadosContrato.id}`);
+        showModal(`Contrato cadastrado com sucesso! ID: ${dadosContrato.id}`, "success");
 
         limparFormulario();
     } catch (error) {
         console.error(error);
-        alert("Falha ao cadastrar o contrato. Veja o console para detalhes.");
+        showModal("Falha ao cadastrar o contrato. Veja o console para detalhes.", "error");
     }
 }
 

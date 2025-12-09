@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/styles/upload.css">
   <script src="/public/components/sidebar.js"></script>
   <link rel="stylesheet" href="/styles/departamento-detalhes.css">
+  <script src="/public/components/modal/modal.js"></script>
 </head>
 
 <style>
@@ -203,7 +204,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 
   async function openForm() {
     if(usuarioLogado.permissao == "Auditor"){
-      alert("Você não tem permissão para adicionar membros.")
+      showModal("Você não tem permissão para adicionar membros.", "error");
       return
     }
     const panel = document.getElementById("memberForm");
@@ -231,7 +232,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
     const idDepartamento = sessionStorage.getItem("departamentoSelecionado");
 
     if (!idUsuario || !accessLevel || !idDepartamento) {
-      alert("Preencha todos os campos.");
+      showModal("Preencha todos os campos.", "error");
       return;
     }
 
@@ -251,12 +252,12 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
         throw new Error("Erro ao atualizar o usuário");
       }
 
-      alert("Usuário atualizado com sucesso!");
+      showModal("Usuário atualizado com sucesso!", "success");
       closeForm();
 
     } catch (erro) {
       console.error(erro);
-      alert("Erro ao salvar alterações.");
+      showModal("Erro ao salvar alterações.", "error");
     }
   }
 
@@ -285,7 +286,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 
     } catch (erro) {
       console.error(erro);
-      alert("Erro ao carregar lista de usuários.");
+      showModal("Erro ao carregar lista de usuários.", "error");
     }
   }
   function mostrarNivelAtual() {
@@ -313,12 +314,12 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
     const nivelAlvo = usuarioAlvo.permissao;  
 
     if (nivelAlvo < nivelAtual) {
-        alert("Você não tem permissão para alterar alguém com cargo maior que o seu.");
+        showModal("Você não tem permissão para alterar alguém com cargo maior que o seu.", "error");
         return false;
     }
 
     if (novaPermissao <= nivelAtual) {
-        alert("Você não pode atribuir uma permissão maior que a sua.");
+        showModal("Você não pode atribuir uma permissão maior que a sua.", "error");
         return false;
     }
 

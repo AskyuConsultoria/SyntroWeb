@@ -13,7 +13,8 @@
   <link rel="shortcut icon" href="/assets/syntro_icon.png" type="image/x-icon" />
   <link rel="stylesheet" href="/styles/cadastro.css">
   <script src="/public/components/sidebar.js"></script>
-    <script src="/services/cadastro/backendCadastroEmpresa.js"></script>
+  <script src="/services/cadastro/backendCadastroEmpresa.js"></script>
+  <script src="/public/components/modal/modal.js"></script>
 </head>
 <style>a{text-decoration: none;}</style>
 
@@ -150,7 +151,7 @@ sidebarElement.addEventListener('toggle-sidebar', () => {
           const data = await response.json();
 
           if (data.erro) {
-            alert("CEP não encontrado!");
+            showModal("CEP não encontrado!", "error");
             return;
           }
 
@@ -160,7 +161,7 @@ sidebarElement.addEventListener('toggle-sidebar', () => {
           logradouroInput.value = data.logradouro || "";
         } catch (error) {
           console.error("Erro ao buscar CEP:", error);
-          alert("Erro ao buscar o CEP. Tente novamente.");
+          showModal("Erro ao buscar o CEP. Tente novamente.", "error");
         }
       }
     });
