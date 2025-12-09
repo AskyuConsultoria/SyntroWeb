@@ -225,8 +225,21 @@
 </body>
 
 <script>
+const notaFiscalId = sessionStorage.getItem("NF-ID");
+
+if (!notaFiscalId || notaFiscalId === 'undefined' || notaFiscalId === 'null') {
+    alert("Erro: ID da Nota Fiscal não encontrado ou inválido. Retornando para a página anterior.");
+    console.error("Página individual.html carregada sem um NF-ID válido. Valor encontrado:", notaFiscalId);
+    
+    // Redireciona para a página anterior, ou para o dashboard como um fallback seguro.
+    if (document.referrer) {
+        window.history.back();
+    } else {
+        window.location.href = "../dashboard/dashboard.html";
+    }
+}
+
 const identificadorNf = window.sessionStorage.getItem("id");
-const notaFiscalId = sessionStorage.getItem("NF-ID")
 const sessaoIdNf = document.getElementById("id_nf");
 sessaoIdNf.innerHTML = `${identificadorNf || "Nota não identificada"}`;
 
@@ -316,9 +329,29 @@ async function definirInputs() {
     inputDescricao.value = nota.servico;
 
     // Preenche dropdown status
-    if (nota.status) currentStatus = nota.status;
-    const defaultStatus = statusList.find(s => s.value === currentStatus);
-    if (defaultStatus) selected.innerHTML = `<span class="status-dot" style="background:${defaultStatus.color}"></span> ${defaultStatus.label}`;
+    const savedStatus = sessionStorage.getItem(`status_${identificadorNf}`);
+    const apiStatus = nota.status;
+    const defaultStatusValue = "em-andamento-2";
+
+    let statusToSet = defaultStatusValue; // Começa com o padrão
+
+    // Prioriza sessionStorage, depois API, e por último o padrão.
+    if (savedStatus && statusList.find(s => s.value === savedStatus)) {
+        statusToSet = savedStatus;
+    } else if (apiStatus && statusList.find(s => s.value === apiStatus)) {
+        statusToSet = apiStatus;
+    } else {
+        if (apiStatus) {
+             console.warn(`Status "${apiStatus}" da API não é válido. Usando o padrão.`);
+        }
+    }
+
+    currentStatus = statusToSet;
+    
+    const initialStatus = statusList.find(s => s.value === currentStatus);
+    if (initialStatus) {
+        selected.innerHTML = `<span class="status-dot" style="background:${initialStatus.color}"></span> ${initialStatus.label}`;
+    }
     renderDropdownOptions();
 
     // Renderiza contrato
@@ -330,42 +363,112 @@ const dropdown = document.getElementById('statusDropdown');
 const selected = dropdown.querySelector('.status-selected span');
 const optionsContainer = dropdown.querySelector('.status-options');
 
+// Lista de status com a ordem correta e sem "Em validação"
 const statusList = [
-    { value: "em-andamento", label: "Em andamento", color: "#007bff"}, 
-    { value: "em-validacao", label: "Em validação", color: "#ffc107"},  
-    { value: "aprovadas", label: "Aprovada", color: "#28a745"},        
-    { value: "congeladas", label: "Congelada", color: "#6c757d"},      
-    { value: "reprovadas", label: "Reprovada", color: "#dc3545"} 
+    { value: "nao-iniciado-1", label: "Não iniciado", color: "#6c757d" },
+    { value: "em-andamento-2", label: "Em andamento", color: "#007bff" },
+    { value: "aprovada-3", label: "Aprovada", color: "#28a745" },
+    { value: "finalizada-4", label: "Finalizada", color: "#17a2b8" },
+    { value: "congelada-5", label: "Congelada", color: "#ffc107" },
+    { value: "reprovada-6", label: "Reprovada", color: "#dc3545" }
 ];
 
-let currentStatus = "em-validacao";
+let currentStatus; // Será definido na função definirInputs()
 
-function renderDropdownOptions() {
-    optionsContainer.innerHTML = "";
-    statusList.filter(s => s.value !== currentStatus).forEach(s => {
-        const div = document.createElement("div");
-        div.dataset.value = s.value;
-        div.innerHTML = `<span class="status-dot" style="background:${s.color}"></span> ${s.label}`;
-        optionsContainer.appendChild(div);
+// Função para fazer a chamada PUT para a API
+async function updateStatusOnServer(newStatusValue) {
+    // Usa a variável 'notaFiscalId' que já é pega do sessionStorage no topo do script
+    if (!notaFiscalId) {
+        console.error("ID da Nota Fiscal (NF-ID) não encontrado no sessionStorage.");
+        alert("Erro: ID da Nota Fiscal não encontrado para a atualização.");
+        return Promise.reject("ID da NF não encontrado.");
+    }
 
-        div.addEventListener("click", () => {
-            currentStatus = s.value;
-            selected.innerHTML = `<span class="status-dot" style="background:${s.color}"></span> ${s.label}`;
-            optionsContainer.style.display = "none";
-            renderDropdownOptions();
-            sessionStorage.setItem(`status_${identificadorNf}`, currentStatus);
+    // Extrai o número do ID do status (ex: "em-andamento-2" -> "2")
+    const statusId = newStatusValue.split('-').pop();
+    if (!statusId || isNaN(parseInt(statusId))) {
+        console.error("ID de status inválido:", newStatusValue);
+        return Promise.reject("Status selecionado é inválido.");
+    }
 
+    const url = `http://localhost:8080/syntro/nota-fiscal/status/${notaFiscalId}?status=${statusId}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
         });
-    });
+
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(`Falha ao atualizar o status: ${response.status} - ${errorData}`);
+        }
+
+        console.log(`Status da nota ${notaFiscalId} atualizado para ${newStatusValue}`);
+        return Promise.resolve();
+
+    } catch (error) {
+        console.error("Erro ao fazer a chamada PUT:", error);
+        alert(`Ocorreu um erro ao atualizar o status. A alteração foi desfeita.\nDetalhes: ${error.message}`);
+        return Promise.reject(error);
+    }
 }
 
-dropdown.querySelector('.status-selected').addEventListener('click', () => {
-    optionsContainer.style.display = optionsContainer.style.display === 'flex' ? 'none' : 'flex';
+function renderDropdownOptions() {
+    if (!optionsContainer) return;
+    optionsContainer.innerHTML = "";
+    statusList
+        .filter(s => s.value !== currentStatus) // Mostra apenas as opções diferentes da atual
+        .forEach(status => {
+            const div = document.createElement("div");
+            div.dataset.value = status.value;
+            div.innerHTML = `<span class="status-dot" style="background:${status.color}"></span> ${status.label}`;
+            optionsContainer.appendChild(div);
+
+            // Adiciona o evento de clique para cada opção
+            div.addEventListener("click", async (e) => {
+                e.stopPropagation(); // Impede que o evento de fechar seja acionado
+
+                const newStatusValue = status.value;
+                const oldStatusValue = currentStatus;
+
+                // Atualiza a UI otimisticamente
+                currentStatus = newStatusValue;
+                selected.innerHTML = `<span class="status-dot" style="background:${status.color}"></span> ${status.label}`;
+                optionsContainer.style.display = "none";
+                renderDropdownOptions(); // Re-renderiza a lista de opções
+
+                // Tenta atualizar no servidor
+                try {
+                    await updateStatusOnServer(newStatusValue);
+                    // Se sucesso, salva no sessionStorage
+                    sessionStorage.setItem(`status_${identificadorNf}`, newStatusValue);
+                } catch (error) {
+                    // Se falhar, reverte a UI para o estado anterior
+                    currentStatus = oldStatusValue;
+                    const previousStatus = statusList.find(s => s.value === oldStatusValue);
+                    if (previousStatus) {
+                        selected.innerHTML = `<span class="status-dot" style="background:${previousStatus.color}"></span> ${previousStatus.label}`;
+                    }
+                    renderDropdownOptions(); // Re-renderiza para corrigir a lista de opções
+                }
+            });
+        });
+}
+
+// Adiciona evento para abrir/fechar o dropdown
+dropdown.querySelector('.status-selected').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const currentDisplay = optionsContainer.style.display;
+    optionsContainer.style.display = currentDisplay === 'flex' ? 'none' : 'flex';
     optionsContainer.style.flexDirection = 'column';
 });
 
+// Listener global para fechar o dropdown ao clicar fora
 document.addEventListener('click', e => {
-    if (!dropdown.contains(e.target)) optionsContainer.style.display = 'none';
+    if (dropdown && !dropdown.contains(e.target)) {
+        optionsContainer.style.display = 'none';
+    }
 });
 
 // Função para renderizar informações do contrato
