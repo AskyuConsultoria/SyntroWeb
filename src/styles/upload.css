@@ -214,7 +214,7 @@ th.active i {
     display: flex;
     flex-direction: column;
     margin-top: 3%;
-    height: 500px;
+    height: 525px;
     border-radius: 22px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
