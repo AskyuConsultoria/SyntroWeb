@@ -1,6 +1,6 @@
 let modalLoadedP = false;
 
-async function loadModal() {
+async function loadModalP() {
     if (modalLoadedP) return;
 
     const html = await fetch("/public/components/passwordChange/password.html").then(r => r.text());
@@ -15,15 +15,13 @@ async function loadModal() {
 }
 
 function initializeModalP() {
-    window.modalOverlay = document.getElementById("globalModal");
-    window.modalMessage = document.getElementById("modalMessage");
-    window.modalIcon = document.getElementById("modalIcon");
-    window.modalCloseBtn = document.getElementById("modalCloseBtn");
+    window.modalOverlayP = document.getElementById("globalModalP");
+    window.modalCloseBtnP = document.getElementById("modalCloseBtnP");
     window.modalFinishBtn = document.getElementById("modalFinishBtn");
     window.SenhaAntiga = document.getElementById("SenhaAntiga");
     window.NovaSenha = document.getElementById("NovaSenha");
 
-    modalCloseBtn.addEventListener("click", closeModalP);
+    modalCloseBtnP.addEventListener("click", closeModalP);
 
     modalFinishBtn.addEventListener("click", () => {
         const autentificado = autentificar(SenhaAntiga.value)
@@ -40,7 +38,7 @@ function initializeModalP() {
     }
     });
     
-    modalOverlay.addEventListener("click", (event) => {
+    modalOverlayP.addEventListener("click", (event) => {
         if (event.target === modalOverlay) {
             closeModalP();
         }
@@ -49,23 +47,21 @@ function initializeModalP() {
 
 function showPasswordChanger() {
     if (!modalLoadedP) {
-        loadModal().then(() => {
+        loadModalP().then(() => {
             setTimeout(() => showPasswordChanger(), 50);
         });
         return;
     }
 
     // Agora tem certeza que tudo está carregado
-    const modalOverlay = document.getElementById("globalModal");
-    const modalMessage = document.getElementById("modalMessage");
-    const modalIcon = document.getElementById("modalIcon");
+    const modalOverlayP = document.getElementById("globalModalP");
 
-    modalOverlay.classList.remove("hidden");
+    modalOverlayP.classList.remove("hidden");
 }
 
 
 function closeModalP() {
-    modalOverlay.classList.add("hidden");
+    modalOverlayP.classList.add("hidden");
 }
 
 async function autentificar(senha){
