@@ -19,6 +19,7 @@
       cursor: pointer;
       user-select: none;
     }
+    tr { cursor: pointer; }
   </style>
 </head>
 
@@ -182,6 +183,7 @@
 
       filtradas.forEach(empresa => {
         const row = document.createElement("tr");
+        row.onclick = () => abrirEmpresa(empresa.id);
         row.innerHTML = `
       <td>${empresa.nome_fantasia ?? empresa.nomeServico ?? "-"}</td>
       <td>${empresa.area_atuacao ?? "-"}</td>
@@ -248,6 +250,13 @@
         console.error("Erro ao carregar empresas:", error);
         return [];
       }
+    }
+
+    function abrirEmpresa(empresa) {
+
+      sessionStorage.setItem("empresaSelecionada", JSON.stringify(empresa));
+      window.location.href = "/empresas/detalhes";
+
     }
   </script>
 </body>
