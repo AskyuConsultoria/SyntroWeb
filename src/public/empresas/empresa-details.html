@@ -103,14 +103,14 @@ let membrosOriginais = [];
     }
 
     try {
-      const resposta = await fetch(`http://localhost:8080/syntro/empresas/${empresaId}`);
+      const resposta = await fetch(`/syntro/empresas/${empresaId}`);
       if (!resposta.ok) throw new Error("Erro ao buscar empresa");
       const empresa = await resposta.json();
       console.log(empresa);
 
       document.getElementById('nomeEmpresa').innerText = "Empresa " + empresa.nomeFantasia;
 
-      const usuarios = await fetch(`http://localhost:8080/syntro/user`);
+      const usuarios = await fetch(`/syntro/user`);
       const todosUsuarios = await usuarios.json();
       const membrosEmpresa = todosUsuarios.filter(e => e.idEmpresa == empresaId);
       console.log(membrosEmpresa);

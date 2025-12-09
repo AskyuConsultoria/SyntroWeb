@@ -401,9 +401,9 @@
 
     async function carregarNotas() {
         try {
-            var url = 'http://localhost:8080/syntro/nota-fiscal'
+            var url = '/syntro/nota-fiscal'
             if (usuarioLogado?.emissor == true) {
-                url = `http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
+                url = `/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
             }
             const response = await fetch(url, {
                 method: 'GET',
@@ -424,7 +424,7 @@
 
                     if (nota.idUsuario) {
                         try {
-                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            const userResponse = await fetch(`/syntro/user/${nota.idUsuario}`);
                             if (userResponse.ok) {
                                 const userData = await userResponse.json();
                                 nomeUsuario = userData.nomeUsuario;
@@ -436,7 +436,7 @@
                     var servicoNota = nota.descricao;
                     if (nota.idContrato) {
                         try {
-                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            const contratoResponse = await fetch(`/syntro/contrato/${nota.idContrato}`);
                             if (contratoResponse.ok) {
                                 const contratoData = await contratoResponse.json();
                                 servicoNota = contratoData.nomeServico;
@@ -469,7 +469,7 @@
 
     async function carregarNotasPorStatus(status) {
         try {
-            const url = `http://localhost:8080/syntro/nota-fiscal/status/${status}`;
+            const url = `/syntro/nota-fiscal/status/${status}`;
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -489,7 +489,7 @@
 
                     if (nota.idUsuario) {
                         try {
-                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            const userResponse = await fetch(`/syntro/user/${nota.idUsuario}`);
                             if (userResponse.ok) {
                                 const userData = await userResponse.json();
                                 nomeUsuario = userData.nomeUsuario;
@@ -501,7 +501,7 @@
                     var servicoNota = nota.descricao;
                     if (nota.idContrato) {
                         try {
-                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            const contratoResponse = await fetch(`/syntro/contrato/${nota.idContrato}`);
                             if (contratoResponse.ok) {
                                 const contratoData = await contratoResponse.json();
                                 servicoNota = contratoData.nomeServico;
@@ -535,7 +535,7 @@
     async function CarregarNotasAtrasadas() {
         try {
             const dataDeHoje = new Date().toISOString().split('T')[0];
-            const url = `http://localhost:8080/syntro/nota-fiscal/data-vencimento/menor-que?data=${dataDeHoje}`;
+            const url = `/syntro/nota-fiscal/data-vencimento/menor-que?data=${dataDeHoje}`;
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -555,7 +555,7 @@
 
                     if (nota.idUsuario) {
                         try {
-                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            const userResponse = await fetch(`/syntro/user/${nota.idUsuario}`);
                             if (userResponse.ok) {
                                 const userData = await userResponse.json();
                                 nomeUsuario = userData.nomeUsuario;
@@ -567,7 +567,7 @@
                     var servicoNota = nota.descricao;
                     if (nota.idContrato) {
                         try {
-                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            const contratoResponse = await fetch(`/syntro/contrato/${nota.idContrato}`);
                             if (contratoResponse.ok) {
                                 const contratoData = await contratoResponse.json();
                                 servicoNota = contratoData.nomeServico;
@@ -618,7 +618,7 @@
                 return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
             };
 
-            const url = `http://localhost:8080/syntro/nota-fiscal/data-vencimento/entre?dataInicio=${formatForURL(dataInicio)}&dataFim=${formatForURL(dataFim)}`;
+            const url = `/syntro/nota-fiscal/data-vencimento/entre?dataInicio=${formatForURL(dataInicio)}&dataFim=${formatForURL(dataFim)}`;
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -638,7 +638,7 @@
 
                     if (nota.idUsuario) {
                         try {
-                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            const userResponse = await fetch(`/syntro/user/${nota.idUsuario}`);
                             if (userResponse.ok) {
                                 const userData = await userResponse.json();
                                 nomeUsuario = userData.nomeUsuario;
@@ -650,7 +650,7 @@
                     var servicoNota = nota.descricao;
                     if (nota.idContrato) {
                         try {
-                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            const contratoResponse = await fetch(`/syntro/contrato/${nota.idContrato}`);
                             if (contratoResponse.ok) {
                                 const contratoData = await contratoResponse.json();
                                 servicoNota = contratoData.nomeServico;
@@ -761,7 +761,7 @@
     const mesAtual = `${ano}-${mes}`; // exemplo: 2025-12
 
     try {
-        const response = await fetch(`http://localhost:8080/syntro/nota-fiscal/periodo?inicio=${mesAtual}&fim=${mesAtual}`, {
+        const response = await fetch(`/syntro/nota-fiscal/periodo?inicio=${mesAtual}&fim=${mesAtual}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

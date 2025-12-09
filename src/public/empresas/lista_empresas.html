@@ -231,7 +231,7 @@
 
     async function carregarEmpresas() {
       try {
-        const url = 'http://localhost:8080/syntro/empresas';
+        const url = '/syntro/empresas';
         const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
         if (!response.ok) throw new Error(`Erro: ${response.status}`);
         const data = await response.json();
