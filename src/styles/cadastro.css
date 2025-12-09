@@ -108,7 +108,7 @@ body {
     width: 90%;
     display: flex;
     flex-direction: column;
-    border-radius: 22px;
+    border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
@@ -188,11 +188,11 @@ body.sidebar-collapsed .all-content {
 }
 
 .acesso {
-    gap: 25rem;
+    gap: 30rem;
 }
 
 body.sidebar-collapsed .acesso {
-    gap: 37rem;
+    gap: 36rem;
 }
 
 .fornecedor-icon{

@@ -28,6 +28,14 @@ app.get("/visualizacao", (req, res) => {
     res.sendFile(path.join(__dirname, "src/public/fornecedor/visualizacao.html"));
 });
 
+app.get("/empresas", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/public/empresas/lista_empresas.html"));
+});
+
+app.get("/servicos", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/public/servicos/servicos.html"));
+});
+
 app.get("/individual", (req, res) => {
     res.sendFile(path.join(__dirname, "src/public/fornecedor/individual.html"));
 });

@@ -25,27 +25,26 @@ class Sidebar extends HTMLElement {
     if(usuarioLogado?.auditor == true){
       links = [
         { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
-        { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
-        { text: "Empresas", icon: "/assets/building-3.svg", href: ["#"] },
+        { text: "Serviços", icon: "/assets/box.svg", href: ["/servicos"] },
+        { text: "Empresas", icon: "/assets/building-3.svg", href: ["/empresas"] },
         { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
-        { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
+        { text: "Ajuda", icon: "/assets/info.svg", href: ["https://app.pipefy.com/organizations/301284564/portal?form=1bbad609-f3d5-4690-9d92-62cc8b34bc9f"] },
       ];
     } else if(usuarioLogado?.emissor == true){
       links = [
         { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
-        { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
-        { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
+        { text: "Serviços", icon: "/assets/box.svg", href: ["/servicos"] },
+        { text: "Ajuda", icon: "/assets/info.svg", href: ["https://app.pipefy.com/organizations/301284564/portal?form=1bbad609-f3d5-4690-9d92-62cc8b34bc9f"] },
       ]
     } else {
       links = [
         { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
-        { text: "Serviços", icon: "/assets/box.svg", href: ["#"] },
-        { text: "Repres.", icon: "/assets/people.svg", href: ["#"] },
-        { text: "Empresas", icon: "/assets/building-3.svg", href: ["#"] },
+        { text: "Serviços", icon: "/assets/box.svg", href: ["/servicos"] },
+        { text: "Empresas", icon: "/assets/building-3.svg", href: ["/empresas"] },
         { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
         { text: "Permissões", icon: "/assets/user-search.svg", href: ["/permissionamento"] },
         { text: "Controle", icon: "/assets/icons.svg", href: ["#"] },
-        { text: "Ajuda", icon: "/assets/info.svg", href: ["#"] },
+        { text: "Ajuda", icon: "/assets/info.svg", href: ["https://app.pipefy.com/organizations/301284564/portal?form=1bbad609-f3d5-4690-9d92-62cc8b34bc9f"]},
       ]
     }
 
