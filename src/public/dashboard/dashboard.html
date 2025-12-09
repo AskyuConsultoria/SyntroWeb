@@ -18,7 +18,7 @@
     <link rel="shortcut icon" href="../../assets/syntro_icon.sv" type="image/x-icon" />
     <link rel="stylesheet" href="../../styles/acesso.css">
     <link rel="stylesheet" href="../../styles/upload.css">
-
+    <script src="/public/components/passwordChange/password.js"></script>
     <script src="../components/sidebar.js"></script>
 </head>
 <style>
@@ -38,13 +38,13 @@
                 <div class="d-flex flex-row justify-content-end acesso w-75">
                                        <div style="gap: 10px;">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly"
+                            <!-- <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly"
                                 style="cursor: pointer">
                                 <img src="../../assets/bell.svg" style="height: 20px;">
-                            </div>
+                            </div> -->
                             <div>
-                                <img src="../../assets/Component 1.svg" style="height: 30px;">
-                                <span>Gestor</span>
+                                <img src="../../assets/Component 1.svg" style="height: 30px; cursor: pointer;" onclick="showPasswordChanger()">
+                                <span id="nomeUsuarioHeader"> ?</span>
                             </div>
                         </div>
                     </div>
@@ -114,6 +114,7 @@
 </html>
 <script>
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+    document.getElementById('nomeUsuarioHeader').textContent = usuarioLogado.nomeUsuario || '?';
 
     const sidebarElement = document.querySelector('side-bar');
     sidebarElement.addEventListener('toggle-sidebar', () => {
@@ -680,5 +681,6 @@
 
         return `${dia}/${mes}/${ano}`;
     }
+
 
 </script>
