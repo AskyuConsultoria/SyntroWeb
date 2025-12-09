@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0
+" />
+    <title>Syntro Web - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="shortcut icon" href="../../assets/syntro_icon.sv" type="image/x-icon" />
+    <link rel="stylesheet" href="../../styles/acesso.css">
+    <link rel="stylesheet" href="../../styles/upload.css">
+
+    <script src="../components/sidebar.js"></script>
+</head>
+<style>
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<body style="background-color: #F1F5F8;">
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <side-bar></side-bar>
+        </div>
+        <div class="all-content">
+            <div class="nav-content w-100">
+                
+                <div class="d-flex flex-row justify-content-end acesso w-75">
+                                       <div style="gap: 10px;">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly"
+                                style="cursor: pointer">
+                                <img src="../../assets/bell.svg" style="height: 20px;">
+                            </div>
+                            <div>
+                                <img src="../../assets/Component 1.svg" style="height: 30px;">
+                                <span>Gestor</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="add-text-icon">
+                    <span>Painel</span>
+                    <img src="../../assets/chart-bar.svg" style="height: 20px;">
+                </div>
+                <hr style="width: 100%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
+            </div>
+
+
+            <div class="mt-3">
+                <div class="d-flex justify-content-between">
+                    <div id="kpi-nao-iniciadas" class="d-flex flex-column" style="background-color: #9A9A9A;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
+                        <h6 class="mb-0">Não Iniciadas</h6>
+                        <h2 class="mb-0" id="nao-iniciada">0</h2>
+                    </div>
+                    <div id="kpi-em-andamento" class="d-flex flex-column" style="background-color: #D7F0D1;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
+                        <h6 class="mb-0">Em Andamento</h6>
+                        <h2 class="mb-0" id="em-andamento">0</h2>
+                    </div>
+                    <div id="kpi-a-vencer" class="d-flex flex-column" style="background-color: #FFB800;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
+                        <h6 class="mb-0">A Vencer</h6>
+                        <h2 class="mb-0" id="a-vencer">0</h2>
+                    </div>
+                    <div id="kpi-atrasadas" class="d-flex flex-column" style="background-color: #FF8D8D;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
+                        <h6 class="mb-0">Atrasadas</h6>
+                        <h2 class="mb-0" id="atrasadas">0</h2>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <div class="d-flex align-center flex-column justify-content-evenly gap-4" >
+                        <div class="m-0">
+                            <table class="table-bordered align-middle text-center" style="width: 100%;">
+                                <thead >
+                                    <tr>
+                                        <th data-col="servico">Serviço<i class="bi bi-arrow-down-up"></i></th>
+                                        <th data-col="nota">Nº da nf <i class="bi bi-arrow-down-up"></i></th>
+                                        <th data-col="auditor">Emissor <i class="bi bi-arrow-down-up"></i></th>
+                                        <th data-col="vencimento" style="width: 300px;">Vencimento<i
+                                                class="bi bi-arrow-down-up"></i></th>
+                                        <th data-col="status">Status <i class="bi bi-arrow-down-up"></i></th>
+                                        <th data-col="valor">Valor <i class="bi bi-arrow-down-up"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    </div>
+    </div>
+    <script src="/public/components/sidebar.js"></script>
+
+</body>
+
+</html>
+<script>
+    const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+
+    const sidebarElement = document.querySelector('side-bar');
+    sidebarElement.addEventListener('toggle-sidebar', () => {
+        document.body.classList.toggle('sidebar-collapsed');
+    });
+
+    function displayNotas(listaNotas) {
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+
+        if (!listaNotas || listaNotas.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-muted">Nenhuma nota encontrada.</td></tr>`;
+            return;
+        }
+
+        listaNotas.forEach(nota => {
+            const row = document.createElement("tr");
+            const servico = nota.servico || '';
+            const numeroNota = nota.nota || '';
+            const emissor = nota.emissor || '';
+            const vencimento = nota.vencimento || '';
+            const status = nota.status || '';
+            const valor = nota.valor || '';
+
+            row.innerHTML = `
+                <td>${servico}</td>
+                <td>${numeroNota}</td>
+                <td>${emissor}</td>
+                <td>${vencimento}</td>
+                <td>${status}</td>
+                <td>${valor}</td>
+            `;
+            row.style.cursor = "pointer";
+            row.addEventListener("click", () => {
+                verIndividual(nota.nota, nota.id);
+            });
+            tableBody.appendChild(row);
+        });
+    }
+
+    async function atualizarContagensKPIs() {
+        try {
+            const [naoIniciada, emAndamento, aVencer, atrasadas] = await Promise.all([
+                carregarNotasPorStatus(1),
+                carregarNotasPorStatus(2),
+                CarregarNotasAVencer(),
+                CarregarNotasAtrasadas()
+            ]);
+
+            document.getElementById('nao-iniciada').textContent = naoIniciada.length;
+            document.getElementById('em-andamento').textContent = emAndamento.length;
+            document.getElementById('a-vencer').textContent = aVencer.length;
+            document.getElementById('atrasadas').textContent = atrasadas.length;
+        } catch (error) {
+            console.error('Erro ao atualizar contagens dos KPIs:', error);
+        }
+    }
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const table = document.querySelector("table");
+        if (!table) return;
+
+        table.classList.add("card-table");
+
+        const style = document.createElement("style");
+        style.textContent = `
+    /* Estilo apenas da tabela dessa página */
+    .card-table {
+      border-collapse: separate !important;
+      border-spacing: 0 12px; /* espaçamento entre as linhas */
+      width: 90%;
+      background: transparent;
+      border: none !important;
+    }
+
+    .card-table thead {
+      background: transparent !important;
+    }
+
+    .card-table th {
+      border: none !important;
+      padding: 12px 16px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #1A2A80;
+    }
+
+    .card-table th[data-col] {
+      cursor: pointer;
+    }
+
+    .card-table th i {
+      margin-left: 6px;
+      font-size: 0.8rem;
+      color: #A0A0A0;
+    }
+
+    .card-table tbody tr {
+      background-color: transparent;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    /* Espaçamento visual entre as linhas */
+    .card-table tbody tr td:first-child {
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+
+    .card-table tbody tr td:last-child {
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+
+    .card-table tbody tr:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .card-table td {
+      border: none !important;
+      padding: 14px 16px;
+      text-align: center;
+      font-size: 0.92rem;
+      background: white;
+    }
+  `;
+        document.head.appendChild(style);
+
+        atualizarContagensKPIs();
+
+        const kpiNaoIniciadas = document.getElementById('kpi-nao-iniciadas');
+        const kpiEmAndamento = document.getElementById('kpi-em-andamento');
+        const kpiAVencer = document.getElementById('kpi-a-vencer');
+        const kpiAtrasadas = document.getElementById('kpi-atrasadas');
+
+        if (kpiNaoIniciadas) {
+            kpiNaoIniciadas.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await carregarNotasPorStatus(1);
+                displayNotas(notas);
+            });
+        }
+
+        if (kpiEmAndamento) {
+            kpiEmAndamento.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await carregarNotasPorStatus(2);
+                displayNotas(notas);
+            });
+        }
+
+        if (kpiAVencer) {
+            kpiAVencer.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await CarregarNotasAVencer();
+                displayNotas(notas);
+            });
+        }
+
+        if (kpiAtrasadas) {
+            kpiAtrasadas.addEventListener('click', async () => {
+                tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+                const notas = await CarregarNotasAtrasadas();
+                displayNotas(notas);
+            });
+        }
+    });
+
+    const tableBody = document.getElementById("tableBody");
+    const tags = document.querySelectorAll(".tags span");
+    const searchInput = document.getElementById("searchInput");
+    let currentSort = { col: null, asc: true };
+
+    function normalizarTexto(texto) {
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9\s]/g, "").toLowerCase();
+    }
+
+    async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
+        tableBody.innerHTML = "";
+        const listaNotas = await carregarNotas();
+        console.log("Lista de Notas: ")
+        console.log(listaNotas)
+        const buscaNormalizada = normalizarTexto(termoBusca);
+        let filtradas = listaNotas.filter(nota => {
+            const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
+            const textoNota = Object.values(nota).join(" ");
+            return matchStatus && normalizarTexto(textoNota).includes(buscaNormalizada);
+        });
+
+        if (sortCol) {
+            filtradas.sort((a, b) => {
+                let valA = a[sortCol];
+                let valB = b[sortCol];
+
+                if (sortCol === "vencimento") {
+                    const [dA, mA, aA] = valA.split("/").map(Number);
+                    const [dB, mB, aB] = valB.split("/").map(Number);
+                    valA = new Date(aA, mA - 1, dA);
+                    valB = new Date(aB, mB - 1, dB);
+                }
+
+                if (sortCol === "valor") {
+                    valA = Number(valA.replace(/[^\d,]/g, "").replace(",", "."));
+                    valB = Number(valB.replace(/[^\d,]/g, "").replace(",", "."));
+                }
+
+                if (valA < valB) return asc ? -1 : 1;
+                if (valA > valB) return asc ? 1 : -1;
+                return 0;
+            });
+        }
+
+        if (filtradas.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" class="text-muted">Nenhuma nota encontrada.</td></tr>`;
+            return;
+        }
+        filtradas.forEach(nota => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+    <td>${nota.servico}</td>
+    <td>${nota.nota}</td>
+    <td>${nota.emissor}</td>
+    <td>${nota.vencimento}</td>
+    <td>${nota.status}</td>
+    <td>${nota.valor}</td>
+  `;
+            row.style.cursor = "pointer"; // deixa o cursor de click
+            row.addEventListener("click", () => {
+                verIndividual(nota.nota, nota.id); // ou nota.id se tiver
+            });
+            tableBody.appendChild(row);
+        });
+    }
+    renderTable("Todas");
+
+    tags.forEach(tag => tag.addEventListener("click", () => {
+        tags.forEach(t => t.classList.remove("active"));
+        tag.classList.add("active");
+        renderTable(tag.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
+    }));
+
+    searchInput.addEventListener("input", () => {
+        const tagAtiva = document.querySelector(".tags span.active");
+        renderTable(tagAtiva.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
+    });
+
+    document.querySelectorAll("th[data-col]").forEach(th => th.addEventListener("click", () => {
+        const col = th.dataset.col;
+        if (currentSort.col === col) currentSort.asc = !currentSort.asc;
+        else currentSort = { col: col, asc: true };
+        const tagAtiva = document.querySelector(".tags span.active");
+        renderTable(tagAtiva.dataset.status, searchInput.value, currentSort.col, currentSort.asc);
+    }));
+
+    function upload() {
+        window.location.href = "/upload";
+    }
+
+    async function carregarNotas() {
+        try {
+            var url = 'http://localhost:8080/syntro/nota-fiscal'
+            if (usuarioLogado?.emissor == true) {
+                url = `http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${usuarioLogado.idEmpresa}`;
+            }
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const listaNotas = await Promise.all(
+                data.map(async (nota) => {
+                    console.log(nota)
+                    let nomeUsuario = "Não Informado";
+
+                    if (nota.idUsuario) {
+                        try {
+                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            if (userResponse.ok) {
+                                const userData = await userResponse.json();
+                                nomeUsuario = userData.nomeUsuario;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    var servicoNota = nota.descricao;
+                    if (nota.idContrato) {
+                        try {
+                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            if (contratoResponse.ok) {
+                                const contratoData = await contratoResponse.json();
+                                servicoNota = contratoData.nomeServico;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    return {
+                        id: nota.id,
+                        servico: servicoNota,
+                        nota: nota.numeroIdentificador,
+                        valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                        vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                        idEmpresa: nota.idEmpresa,
+                        emissor: nomeUsuario,
+                        status: nota.status,
+                        idUsuario: nota.idUsuario
+                    };
+                })
+            );
+
+            return listaNotas;
+
+        } catch (error) {
+            console.error('Erro ao buscar notas fiscais:', error);
+            return [];
+        }
+    }
+
+    async function carregarNotasPorStatus(status) {
+        try {
+            const url = `http://localhost:8080/syntro/nota-fiscal/status/${status}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const listaNotas = await Promise.all(
+                data.map(async (nota) => {
+                    console.log(nota)
+                    let nomeUsuario = "Não Informado";
+
+                    if (nota.idUsuario) {
+                        try {
+                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            if (userResponse.ok) {
+                                const userData = await userResponse.json();
+                                nomeUsuario = userData.nomeUsuario;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    var servicoNota = nota.descricao;
+                    if (nota.idContrato) {
+                        try {
+                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            if (contratoResponse.ok) {
+                                const contratoData = await contratoResponse.json();
+                                servicoNota = contratoData.nomeServico;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    return {
+                        id: nota.id,
+                        servico: servicoNota,
+                        nota: nota.numeroIdentificador,
+                        valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                        vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                        idEmpresa: nota.idEmpresa,
+                        emissor: nomeUsuario,
+                        status: nota.status,
+                        idUsuario: nota.idUsuario
+                    };
+                })
+            );
+
+            return listaNotas;
+
+        } catch (error) {
+            console.error('Erro ao buscar notas fiscais por status:', error);
+            return [];
+        }
+    }
+
+    async function CarregarNotasAtrasadas() {
+        try {
+            const dataDeHoje = new Date().toISOString().split('T')[0];
+            const url = `http://localhost:8080/syntro/nota-fiscal/data-vencimento/menor-que?data=${dataDeHoje}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const listaNotas = await Promise.all(
+                data.map(async (nota) => {
+                    console.log(nota)
+                    let nomeUsuario = "Não Informado";
+
+                    if (nota.idUsuario) {
+                        try {
+                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            if (userResponse.ok) {
+                                const userData = await userResponse.json();
+                                nomeUsuario = userData.nomeUsuario;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    var servicoNota = nota.descricao;
+                    if (nota.idContrato) {
+                        try {
+                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            if (contratoResponse.ok) {
+                                const contratoData = await contratoResponse.json();
+                                servicoNota = contratoData.nomeServico;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    return {
+                        id: nota.id,
+                        servico: servicoNota,
+                        nota: nota.numeroIdentificador,
+                        valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                        vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                        idEmpresa: nota.idEmpresa,
+                        emissor: nomeUsuario,
+                        status: nota.status,
+                        idUsuario: nota.idUsuario
+                    };
+                })
+            );
+
+            return listaNotas;
+
+        } catch (error) {
+            console.error('Erro ao buscar notas fiscais por status:', error);
+            return [];
+        }
+    }
+
+    async function CarregarNotasAVencer() {
+        try {
+            const dataFim = new Date();
+            dataFim.setDate(dataFim.getDate() + 7);
+            dataFim.setHours(23, 59, 59, 999);
+
+            const dataInicio = new Date();
+            dataInicio.setHours(0, 0, 0, 0);
+
+            const formatForURL = (date) => {
+                const pad = (num) => num.toString().padStart(2, '0');
+                const year = date.getFullYear();
+                const month = pad(date.getMonth() + 1);
+                const day = pad(date.getDate());
+                const hours = pad(date.getHours());
+                const minutes = pad(date.getMinutes());
+                const seconds = pad(date.getSeconds());
+                return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+            };
+
+            const url = `http://localhost:8080/syntro/nota-fiscal/data-vencimento/entre?dataInicio=${formatForURL(dataInicio)}&dataFim=${formatForURL(dataFim)}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const listaNotas = await Promise.all(
+                data.map(async (nota) => {
+                    console.log(nota)
+                    let nomeUsuario = "Não Informado";
+
+                    if (nota.idUsuario) {
+                        try {
+                            const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                            if (userResponse.ok) {
+                                const userData = await userResponse.json();
+                                nomeUsuario = userData.nomeUsuario;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    var servicoNota = nota.descricao;
+                    if (nota.idContrato) {
+                        try {
+                            const contratoResponse = await fetch(`http://localhost:8080/syntro/contrato/${nota.idContrato}`);
+                            if (contratoResponse.ok) {
+                                const contratoData = await contratoResponse.json();
+                                servicoNota = contratoData.nomeServico;
+                            }
+                        } catch (err) {
+                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                        }
+                    }
+                    return {
+                        id: nota.id,
+                        servico: servicoNota,
+                        nota: nota.numeroIdentificador,
+                        valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
+                        vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
+                        idEmpresa: nota.idEmpresa,
+                        emissor: nomeUsuario,
+                        status: nota.status,
+                        idUsuario: nota.idUsuario
+                    };
+                })
+            );
+
+            return listaNotas;
+
+        } catch (error) {
+            console.error('Erro ao buscar notas fiscais a vencer:', error);
+            return [];
+        }
+    }
+
+    function verIndividual(id, nota_id) {
+        window.location.href = "/individual";
+        window.sessionStorage.setItem("id", id)
+        window.sessionStorage.setItem("NF-ID", nota_id)
+        console.log(id)
+    }
+
+    function formatarData(data) {
+        if (!data) return null;
+
+        const d = new Date(data);
+
+        const dia = String(d.getDate()).padStart(2, '0');
+        const mes = String(d.getMonth() + 1).padStart(2, '0');
+        const ano = d.getFullYear();
+
+        return `${dia}/${mes}/${ano}`;
+    }
+
+</script>
