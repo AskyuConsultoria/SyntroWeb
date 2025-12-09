@@ -1,6 +1,6 @@
 // Endpoints da API
-const API_BASE_EMPRESA = "http://localhost:8080/syntro/empresas";
-const API_BASE_ENDERECO = "http://localhost:8080/syntro/enderecos";
+const API_BASE_EMPRESA = "/syntro/empresas";
+const API_BASE_ENDERECO = "/syntro/enderecos";
 
 // Função para cadastrar empresa e retornar o ID
 async function cadastrarEmpresa() {
