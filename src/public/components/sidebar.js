@@ -23,13 +23,24 @@ class Sidebar extends HTMLElement {
     const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
 
     if(usuarioLogado?.auditor == true){
-      links = [
-        { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
-        { text: "Serviços", icon: "/assets/box.svg", href: ["/servicos"] },
-        { text: "Empresas", icon: "/assets/building-3.svg", href: ["/empresas"] },
-        { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
-        { text: "Ajuda", icon: "/assets/info.svg", href: ["https://app.pipefy.com/organizations/301284564/portal?form=1bbad609-f3d5-4690-9d92-62cc8b34bc9f"] },
-      ];
+      if(usuarioLogado?.permissao === "Adm. Interno" || usuarioLogado?.permissao === "Gestor"){
+        links = [
+          { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
+          { text: "Serviços", icon: "/assets/box.svg", href: ["/servicos"] },
+          { text: "Empresas", icon: "/assets/building-3.svg", href: ["/empresas"] },
+          { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
+          { text: "Controle", icon: "/assets/icons.svg", href: ["/dashboard"] },
+          { text: "Ajuda", icon: "/assets/info.svg", href: ["https://app.pipefy.com/organizations/301284564/portal?form=1bbad609-f3d5-4690-9d92-62cc8b34bc9f"]},
+        ]
+      } else {
+        links = [
+          { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
+          { text: "Serviços", icon: "/assets/box.svg", href: ["/servicos"] },
+          { text: "Empresas", icon: "/assets/building-3.svg", href: ["/empresas"] },
+          { text: "Cadastros", icon: "/assets/folder-add2.svg", href: ["/cadastros/home"] },
+          { text: "Ajuda", icon: "/assets/info.svg", href: ["https://app.pipefy.com/organizations/301284564/portal?form=1bbad609-f3d5-4690-9d92-62cc8b34bc9f"] },
+        ];
+      }
     } else if(usuarioLogado?.emissor == true){
       links = [
         { text: "Minhas notas", icon: "/assets/home.svg", href: ["/visualizacao","/upload","/individual"] },
