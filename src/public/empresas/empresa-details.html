@@ -35,7 +35,7 @@
           <img src="/assets/arrow-square-right.svg" style="cursor: pointer;" onclick="history.forward()" alt="Avançar">
         </div>
         <div class="d-flex flex-row align-items-center acesso">
-          <span style="color: #5e5959;">Meu acesso | <a href="/cadastros/home"
+          <span style="color: #5e5959;">Meu acesso | <a href="/empresas"
               style="all: unset; cursor: pointer;">Empresa</a></span>
           <div style="gap: 10px;">
             <div class="d-flex align-items-center gap-2">
@@ -43,8 +43,8 @@
                 style="cursor: pointer">
                 <img src="/assets/bell.svg" style="height: 20px;">
               </div> -->
-              <div>
-                <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;" onclick="showPasswordChanger()">
+              <div onclick="showPasswordChanger()" style="cursor: pointer;">
+                <img src="/assets/Component 1.svg" style="height: 30px;">
                 <span id="nomeUsuarioHeader"> ?</span>
               </div>
             </div>
@@ -73,7 +73,9 @@
             <thead>
               <tr>
                 <th data-col="nome">Nome <i class="bi bi-arrow-down-up"></i></th>
-                <th data-col="accessLevel">Usuario<i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="usuario">Usuario<i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="cargo">Cargo<i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="accessLevel">Permissao<i class="bi bi-arrow-down-up"></i></th>
               </tr>
             </thead>
             <tbody id="empresaTableBody">
@@ -137,6 +139,8 @@ let membrosOriginais = [];
       tr.innerHTML = `
         <td>${membro.nomeCompleto}</td>
         <td>${membro.nomeUsuario}</td>
+        <td>${membro.cargo}</td>
+        <td>${membro.permissao}</td>
       `;
       tableBody.appendChild(tr);
     });

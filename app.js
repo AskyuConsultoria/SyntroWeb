@@ -40,6 +40,10 @@ app.get("/servicos", (req, res) => {
     res.sendFile(path.join(__dirname, "src/public/servicos/servicos.html"));
 });
 
+app.get("/servicos/detalhes", (req, res) => {
+    res.sendFile(path.join(__dirname, "src/public/servicos/servico-detail.html"));
+});
+
 app.get("/individual", (req, res) => {
     res.sendFile(path.join(__dirname, "src/public/fornecedor/individual.html"));
 });

@@ -43,10 +43,10 @@
               <!-- <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly" style="cursor: pointer">
               <img src="/assets/bell.svg" style="height: 20px;">
             </div> -->
-            <div>
-              <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;" onclick="showPasswordChanger()">
-              <span id="nomeUsuarioHeader"> ?</span>
-            </div>
+            <div onclick="showPasswordChanger()">
+                <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;">
+                <span id="nomeUsuarioHeader"> ?</span>
+              </div>
             </div>
           </div>
         </div>
@@ -70,8 +70,9 @@
           <div class="d-flex align-center flex-column justify-content-evenly gap-4 ">
             <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
               <div><span class="active" data-status="Todas">Todas</span></div>
+              <div><span data-status="Não Iniciada">Não Iniciada</span></div>
               <div><span data-status="Em andamento">Em andamento</span></div>
-              <div><span data-status="Em validação">Em validação</span></div>
+              <!-- <div><span data-status="Em validação">Em validação</span></div> -->
               <div><span data-status="Aprovada">Aprovadas</span></div>
               <div><span data-status="Congelada">Congeladas</span></div>
               <div><span data-status="Reprovada">Reprovadas</span></div>
@@ -201,7 +202,7 @@
 
     async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
       tableBody.innerHTML = "";
-      const listaNotas = await carregarNotas();
+      const listaNotas = (await carregarNotas()).reverse();
       const buscaNormalizada = normalizarTexto(termoBusca);
       let filtradas = listaNotas.filter(nota => {
         const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
@@ -245,10 +246,10 @@
     <td>${nota.vencimento}</td>
     <td>${nota.status}</td>
     <td>${nota.valor}</td>
-  `;
+  `; 
         row.style.cursor = "pointer"; // deixa o cursor de click
         row.addEventListener("click", () => {
-          verIndividual(nota.nota); // ou nota.id se tiver
+          verIndividual(nota.nota, nota.id); // ou nota.id se tiver
         });
         tableBody.appendChild(row);
       });
@@ -326,13 +327,14 @@
                 }
               }
               return {
+                id: nota.id,
                 servico: servicoNota,
                 nota: nota.numeroIdentificador,
                 valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
                 vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
                 idEmpresa: nota.idEmpresa,
                 emissor: nomeUsuario,
-                status: "Em andamento",
+                status: obterStatusNota(nota.status),
                 idUsuario: nota.idUsuario
               };
             })
@@ -347,10 +349,29 @@
       }
 
 
-    function verIndividual(id) {
+    function verIndividual(codigoNota, idNota) {
       window.location.href = "/individual";
-      window.sessionStorage.setItem("id", id)
-      console.log(id)
+      window.sessionStorage.setItem("id", codigoNota)
+      window.sessionStorage.setItem("NF-ID", idNota)
+    }
+
+    function obterStatusNota(codigoStatus) {
+      switch (codigoStatus) {
+        case 1:
+          return "Não Iniciada";
+        case 2:
+          return "Em andamento";
+        case 3:
+          return "Aprovada";
+        case 4:
+          return "Reprovada";
+        case 5:
+          return "Congelada";
+        case 6:
+          return "Finalizada";
+        default:
+          return "Desconhecido";
+      }
     }
 
       function formatarData(data) {

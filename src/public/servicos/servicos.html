@@ -19,6 +19,7 @@
             cursor: pointer;
             user-select: none;
         }
+        tr { cursor: pointer; }
     </style>
 </head>
 
@@ -31,8 +32,8 @@
                     <span style="color: #5e5959;">Meu acesso | <a href="#"
                             style="all: unset; cursor: pointer;">Serviços</a></span>
                     <div class="d-flex align-items-center gap-2">
-                        <div>
-                            <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;" onclick="showPasswordChanger()">
+                        <div onclick="showPasswordChanger()">
+                            <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;">
                             <span id="nomeUsuarioHeader"> ?</span>
                         </div>
                     </div>
@@ -71,7 +72,8 @@
 
             <div class="d-flex flex-row tags mt-4" style="gap: 15px;">
                 <div><span class="active" data-status="Todas">Todos</span></div>
-                <div><span data-status="Em andamento">Serviços seguidos</span></div>
+                <div><span data-status="Em andamento">Em Andamento</span></div>
+                <div><span data-status="Finalizados">Serviços seguidos</span></div>
             </div>
 
             <div class="d-flex flex-column gap-4 mt-1">
@@ -133,10 +135,12 @@
             return contratos.map(c => {
                 const emp = empresasMap.get(c.idEmpresa);
                 return {
+                    id: c.id,
                     nomeServico: c.nomeServico ?? '',
                     empresaNome: emp?.nomeFantasia ?? '-',
                     valor: c.valor ?? null,
-                    moeda: c.nome_Moeda ?? 'BRL'
+                    moeda: c.nome_Moeda ?? 'BRL',
+                    statusContrato: c.statusContrato
                 };
             });
         }
@@ -144,15 +148,16 @@
         function aplicarEstiloTabela() {
             const style = document.createElement("style");
             style.textContent = `
-                .card-table { border-collapse: separate !important; border-spacing: 0 12px; width: 90%; background: transparent; border: none !important; margin-top: 12px;}
+                .card-table { border-collapse: separate !important; border-spacing: 0 12px; width: 90%; background: transparent; border: none !important; }
                 .card-table thead { background: transparent !important; }
-                .card-table th { border: none !important; padding: 12px 16px; text-align: left !important; font-weight: 600; font-size: 0.95rem; color: #1A2A80; }
+                .card-table th { border: none !important; padding: 12px 16px; text-align: center; font-weight: 600; font-size: 0.95rem; color: #1A2A80; }
+                .card-table th[data-col] { cursor: pointer; }
                 .card-table th i { margin-left: 6px; font-size: 0.8rem; color: #A0A0A0; }
-                .card-table tbody tr { background-color: white; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
-                .card-table tbody tr:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+                .card-table tbody tr { background-color: transparent; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
                 .card-table tbody tr td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
                 .card-table tbody tr td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
-                .card-table td { border: none !important; padding: 14px 16px; text-align: left !important; font-size: 0.92rem; }
+                .card-table tbody tr:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+                .card-table td { border: none !important; padding: 14px 16px; text-align: center; font-size: 0.92rem; background: white; }
             `;
             document.head.appendChild(style);
         }
@@ -170,8 +175,21 @@
 
             let filtradas = lista.filter(i => {
                 const txt = normalizarTexto(`${i.nomeServico} ${i.empresaNome} ${i.valor ?? ''}`);
-                return filtroNormalizado === '' || txt.includes(filtroNormalizado);
+                const correspondeTexto = filtroNormalizado === '' || txt.includes(filtroNormalizado);
+
+                const tagAtiva = document.querySelector('.tags span.active')?.dataset.status;
+
+                let correspondeStatus = true;
+
+                if (tagAtiva === "Em andamento") {
+                    correspondeStatus = i.statusContrato === true;
+                } else if (tagAtiva === "Finalizados") {
+                    correspondeStatus = i.statusContrato === false;
+                }
+
+                return correspondeTexto && correspondeStatus;
             });
+
 
             tags.forEach(tag => {
                 if (tag.classList.contains("active")) {
@@ -196,6 +214,8 @@
 
             filtradas.forEach(i => {
                 const row = document.createElement('tr');
+                console.log(i);
+                row.onclick = () => abrirServico(i.id);
                 row.innerHTML = `
                     <td>${i.nomeServico}</td>
                     <td>${i.empresaNome}</td>
@@ -227,6 +247,11 @@
         });
 
         function upload() { window.location.href = '/cadastros/servicos'; }
+
+        function abrirServico(servico) {
+            sessionStorage.setItem("servicoSelecionado", JSON.stringify(servico));
+            window.location.href = "/servicos/detalhes";
+        }
     </script>
 </body>
 

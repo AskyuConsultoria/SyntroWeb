@@ -17,8 +17,12 @@ async function logar() {
     if (resposta.ok) {
       const dados = await resposta.json();
       sessionStorage.setItem("usuarioLogado", JSON.stringify(dados));
-      window.location.href = "/upload";
+      showModal("Login realizado com sucesso!", "success");
+      setTimeout(() => {
+        window.location.href = "/upload";
+      }, 2000);
     } else {
+      showModal('Falha no login !', "error");
       // const msg = await resposta.text();
       // erroLogin.textContent = "Falha no login: " + msg;
       // erroLogin.style.display = "block";

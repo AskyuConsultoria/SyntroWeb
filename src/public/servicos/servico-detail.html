@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syntro Web - Empresa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <link rel="shortcut icon" href="/assets/syntro_icon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="/styles/upload.css">
+  <script src="/public/components/sidebar.js"></script>
+  <link rel="stylesheet" href="/styles/departamento-detalhes.css">
+  <script src="/public/components/modal/modal.js"></script>
+  <script src="/public/components/passwordChange/password.js"></script>
+</head>
+
+<style>
+
+</style>
+
+<body style="background-color: #F1F5F8;">
+  <div class="d-flex flex-row justify-content-between">
+    <div>
+      <side-bar></side-bar>
+    </div>
+    <div class="all-content">
+      <div class="nav-content">
+        <div class="bnts" style="display: flex; width: 110px; justify-content: space-evenly;">
+          <img src="/assets/arrow-square-right.svg" style="transform: rotate(180deg); cursor: pointer;"
+            onclick="history.back()" alt="Voltar">
+          <img src="/assets/arrow-square-right.svg" style="cursor: pointer;" onclick="history.forward()" alt="Avançar">
+        </div>
+        <div class="d-flex flex-row align-items-center acesso">
+          <span style="color: #5e5959;">Meu acesso | <a href="/servicos"
+              style="all: unset; cursor: pointer;">Servico</a> | Detalhes</span>
+          <div style="gap: 10px;">
+            <div class="d-flex align-items-center gap-2">
+              <div onclick="showPasswordChanger()">
+                <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;">
+                <span id="nomeUsuarioHeader"> ?</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="add-text-icon d-flex align-items-center gap-2">
+          <span id="nomeServico">Carregando...</span>
+          <img src="/assets/box.svg" style="height: 20px;">
+
+          <button class="btn btn-primary"
+              style="background-color: #1A2A80; border-color: #1A2A80;"
+              onclick="finalizarContrato()">
+              Encerrar Contrato
+          </button>
+      </div>
+
+        <hr style="width: 95%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
+        <div style="width: 95%;">
+          <table class="table-bordered align-middle text-center card-table">
+            <thead>
+              <tr>
+                <th data-col="descricao">Descricao <i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="dataInicio">Data Inicio <i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="dataFim">Data Fim <i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="valor">Valor <i class="bi bi-arrow-down-up"></i></th>
+              </tr>
+            </thead>
+            <tbody id="servicoTableBody">
+              <tr>
+                <td colspan="4" class="text-muted">Carregando Servico...</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table-bordered align-middle text-center mt-4 card-table">
+            <thead>
+              <tr>
+                <th data-col="nota">Nº da nf <i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="auditor">Emissor <i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="vencimento" style="width: 300px;">Vencimento<i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="status">Status <i class="bi bi-arrow-down-up"></i></th>
+                <th data-col="valor">Valor <i class="bi bi-arrow-down-up"></i></th>
+              </tr>
+            </thead>
+            <tbody id="notasTableBody">
+              <tr>
+                <td colspan="4" class="text-muted">Carregando Notas...</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+let notasGlobais = [];
+const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+const nomeHeader = document.getElementById('nomeUsuarioHeader');
+nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
+const servicoId = sessionStorage.getItem('servicoSelecionado');
+let membrosOriginais = [];
+
+  async function carregarServico() {
+    if (!servicoId) {
+      document.getElementById('nomeServico').innerText = "Servico sem nome";
+      return;
+    }
+
+    const resposta = await fetch(`http://localhost:8080/syntro/contrato/${servicoId}`);
+    if (!resposta.ok) throw new Error("Erro ao buscar servico");
+    const servico = await resposta.json();
+    console.log("servico", servico);
+    const tableBodyServico = document.getElementById("servicoTableBody");
+    tableBodyServico.innerHTML = "";
+
+    const dataInicio = new Date(servico.dataRealizacao);
+    const dataFim = calcularDataFim(servico);
+    document.getElementById('nomeServico').innerText = servico.nomeServico;
+    const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${servico.descricao}</td>
+        <td>${formatarData(dataInicio)}</td>
+        <td>${formatarData(dataFim)}</td>
+        <td>${servico.nomeMoeda} ${servico.valor}</td>
+      `;
+      tableBodyServico.appendChild(tr);
+
+    try {
+      const resposta = await fetch(`http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${servico.idEmpresa}`);
+      if (!resposta.ok) throw new Error("Erro ao buscar notas");
+      const notas = await resposta.json();
+
+      const usuarios = await fetch(`http://localhost:8080/syntro/user`);
+      const todosUsuarios = await usuarios.json();
+      membrosOriginais = todosUsuarios || [];
+
+
+      renderTabelaNotasServico(membrosOriginais, notas);
+
+    } catch (erro) {
+      console.error(erro);
+      document.getElementById('nomeServico').innerText = "Erro ao carregar Servico";
+    }
+  }
+
+function calcularDataFim(servico) {
+    const data = new Date(servico.dataRealizacao);
+    const meses = parseInt(servico.tempoContrato, 10);
+
+    const fim = new Date(data);
+    fim.setMonth(fim.getMonth() + meses);
+
+    return fim;
+}
+
+
+function formatarData(d) {
+    const pad = (n) => n.toString().padStart(2, "0");
+    const dia = pad(d.getDate());
+    const mes = pad(d.getMonth() + 1);
+    const ano = d.getFullYear();
+    //const hora = pad(d.getHours());
+    //const min = pad(d.getMinutes());
+    return `${dia}/${mes}/${ano}`;// ${hora}:${min}`;
+}
+
+
+  function renderTabelaNotasServico(usuarios, notas) {
+    notasGlobais = notas;
+    const tableBody = document.getElementById("notasTableBody");
+    tableBody.innerHTML = "";
+
+    if (!notas || notas.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="4" class="text-muted">Nenhuma nota encontrado.</td></tr>`;
+      return;
+    }
+    notas.forEach(nota => {
+      const tr = document.createElement("tr");
+      tr.onclick = () => verIndividual(nota.numeroIdentificador);
+      tr.innerHTML = `
+        <td>${nota.numeroIdentificador}</td>
+        <td>${usuarios.find(u => u.id == nota.idUsuario).nomeCompleto}</td>
+        <td>${formatarData(new Date(nota.dataVencimento))}</td>
+        <td>${obterStatusString(nota.status)}</td>
+        <td>${nota.nomeMoeda} ${nota.valorTotal}</td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  }
+
+  function obterStatusString(status){
+        switch(status){
+            case 1:
+                return "Não Iniciada";
+            case 2:
+                return "Em Andamento";
+            case 3:
+                return "Finalizada";
+            case 4:
+                return "Finalizada";
+            default:
+                return "Desconhecido";
+        }
+    }
+
+  window.addEventListener('DOMContentLoaded', carregarServico);
+
+  function verIndividual(id) {
+    window.location.href = "/individual";
+    window.sessionStorage.setItem("id", id)
+    console.log(id)
+  }
+
+  async function finalizarContrato() {
+    var usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+    if(usuarioLogado.permissao == "Emissor" || usuarioLogado.permissao == "Auditor") {
+        showModal("Você não tem permisao para finalizar um contrato", "error");
+        return;
+    }
+    console.log("Finalizando contrato id:", servicoId);
+    try {
+        const resposta = await fetch(`http://localhost:8080/syntro/contrato/${servicoId}`);
+        if (!resposta.ok) throw new Error("Erro ao buscar servico");
+        const servico = await resposta.json();
+        console.log("servico a finalizar", servico);
+        const contrato = {
+            id: servico.id,
+            nomeServico: servico.nomeServico,
+            descricao: servico.descricao,
+            dataRealizacao: servico.dataRealizacao,
+            statusContrato: false,
+            tempoContrato: servico.tempoContrato,
+            valor: servico.valor,
+            nomeMoeda: servico.nomeMoeda,
+            idDepartamento: servico.idDepartamento,
+            idEmpresa: servico.idEmpresa
+        };
+
+        const response = await fetch("http://localhost:8080/syntro/contrato", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(contrato)
+        });
+
+        if (!response.ok) throw new Error("Erro ao atualizar contrato.");
+
+        const dadosContrato = await response.json();
+        showModal(`Contrato atualizado com sucesso! ID: ${dadosContrato.id}`, "success");
+    } catch (error) {
+        console.error(error);
+        showModal("Falha ao atualizar o contrato. Veja o console para detalhes.", "error");
+    }
+}
+
+</script>

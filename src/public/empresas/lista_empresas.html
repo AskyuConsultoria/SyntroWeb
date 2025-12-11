@@ -28,20 +28,13 @@
     <div><side-bar></side-bar></div>
     <div class="all-content">
       <div class="nav-content">
-        <!-- <div class="bnts" style="display: flex; width: 110px; justify-content: space-evenly;">
-          <img src="/assets/arrow-square-right.svg" style="transform: rotate(180deg); cursor: pointer;" onclick="history.back()" alt="Voltar">
-          <img src="/assets/arrow-square-right.svg" style="cursor: pointer;" onclick="history.forward()" alt="Avançar">
-        </div> -->
         <div class="d-flex flex-row align-items-center acesso">
           <span style="color: #5e5959;">Meu acesso | <a href="#" style="all: unset; cursor: pointer;">Empresas</a>
           </span>
           <div style="gap: 10px;">
             <div class="d-flex align-items-center gap-2">
-              <!-- <div class="fornecedor-icon icon-btn d-flex align-items-center justify-content-evenly" style="cursor: pointer">
-              <img src="/assets/bell.svg" style="height: 20px;">
-            </div> -->
-              <div>
-                <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;" onclick="showPasswordChanger()">
+              <div onclick="showPasswordChanger()" style="cursor: pointer;">
+                <img src="/assets/Component 1.svg" style="height: 30px;">
                 <span id="nomeUsuarioHeader"> ?</span>
               </div>
             </div>
@@ -74,8 +67,11 @@
         </div>
         <div class="d-flex align-center flex-column justify-content-evenly gap-4 mt-3">
           <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
-            <div><span class="active" data-status="Todas">Todas</span></div>
-            <div><span data-status="Empresas fornecedoras">Empresas fornecedoras <small id="qtdItens">:0</small></span>
+            <div>
+              <span class="active" data-status="Todas">Todas</span>
+              <span data-status="Minha Empresa">Minha Empresa <small id="qtdItens">:0</small></span>
+              <span data-status="Empresas fornecedoras">Empresas fornecedoras <small id="qtdItens">:0</small></span>
+              <span data-status="Empresas subsidiarias">Empresas subsidiarias <small id="qtdItens">:0</small></span>
             </div>
           </div>
 
@@ -149,13 +145,29 @@
       tableBody.innerHTML = "";
       const listaEmpresas = await carregarEmpresas();
       const buscaNormalizada = normalizarTexto(termoBusca);
-      const filtroFornecedoras = String(filtroStatus || "").toLowerCase().includes("fornecedor");
+      let filtradas = listaEmpresas;
 
-      let filtradas = listaEmpresas.filter(empresa => {
-        const matchStatus = !filtroFornecedoras || (empresa.fornecedor === 1 || empresa.fornecedor === true);
-        const textoEmpresa = `${empresa.nome_fantasia ?? ""} ${empresa.area_atuacao ?? ""} ${empresa.identificacao_fiscal ?? ""}`;
-        return matchStatus && normalizarTexto(textoEmpresa).includes(buscaNormalizada);
-      });
+        if (filtroStatus.toLowerCase().includes("minha")) {
+            filtradas = listaEmpresas.filter(e => e.id === 1);
+        }
+
+        else if (filtroStatus.toLowerCase().includes("fornecedora")) {
+            filtradas = listaEmpresas.filter(e => e.fornecedor === true || e.fornecedor === 1);
+        }
+
+        else if (filtroStatus.toLowerCase().includes("subsidiaria")) {
+            filtradas = listaEmpresas.filter(e => e.fornecedor === true || e.fornecedor === 1);
+        }
+
+        else {
+            filtradas = listaEmpresas;
+        }
+
+        filtradas = filtradas.filter(empresa => {
+            const textoEmpresa = `${empresa.nome_fantasia ?? ""} ${empresa.area_atuacao ?? ""} ${empresa.identificacao_fiscal ?? ""}`;
+            return normalizarTexto(textoEmpresa).includes(buscaNormalizada);
+        });
+
 
       tags.forEach(tag => {
         if (tag.classList.contains("active")) {

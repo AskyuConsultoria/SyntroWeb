@@ -2,30 +2,31 @@ const API_BASE_CONTRATO = "http://localhost:8080/syntro/contrato";
 
 // Função para cadastrar contrato
 async function cadastrarContrato() {
+
     try {
-        // Captura os valores do formulário
+        const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
         const nomeServico = document.getElementById("nomeServico").value;
         const descricao = document.getElementById("descricaoServico").value;
         const dataInicioRaw = document.getElementById("dataInicio").value;
         const duracaoContrato = document.getElementById("duracaoContrato").value;
         const valorCobrancaRaw = document.getElementById("valorCobranca").value;
         const moedaCobranca = document.getElementById("moedaCobranca").value;
-        const idEmpresa = "" //vai pegar do session;
-        const idDepartamento = "" //vai pegar do session;
+        const idEmpresa = documento.getElementById("empresaFornecedor").value;
+        const idDepartamento = usuarioLogado.idDepartamento;
 
         const dataRealizacao = dataInicioRaw ? new Date(dataInicioRaw).getTime() : null;
         const valor = parseFloat(valorCobrancaRaw.replace(",", "."));
 
         const contrato = {
-            nomeServico,
-            descricao,
+            nomeServico: nomeServico,
+            descricao: descricao,
             dataRealizacao: dataRealizacao ? new Date(dataRealizacao).toISOString() : null,
             statusContrato: true,
             tempoContrato: duracaoContrato,
-            valor,
+            valor: valor,
             nomeMoeda: moedaCobranca,
-            idDepartamento,
-            idEmpresa
+            idDepartamento: idDepartamento,
+            idEmpresa: idEmpresa
         };
 
         const response = await fetch(API_BASE_CONTRATO, {
