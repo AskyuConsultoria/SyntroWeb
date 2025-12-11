@@ -119,8 +119,8 @@
                                         placeholder="Nome serviço" readonly>
                                 </div>
                                 <div>
-                                    <span>Representante do fornecedor*</span>
-                                    <input type="text" class="form-control search-bar" style="border-radius: 4px"
+                                    <span>Emissor*</span>
+                                    <input type="text" class="form-control search-bar" id="emissor" style="border-radius: 4px"
                                         placeholder="Nome do representante fornecedor" readonly>
                                 </div>
                                 <div>
@@ -276,6 +276,7 @@ const inputVencimento = document.getElementById("vencimento");
 const inputEmissao = document.getElementById("emissao");
 const inputCobranca = document.getElementById("cobranca");
 const inputDescricao = document.getElementById("descricao");
+const inputEmissor = document.getElementById("emissor");
 
 // Função para carregar nota
 async function carregarNota() {
@@ -327,6 +328,7 @@ async function definirInputs() {
         const pad = n => n.toString().padStart(2, "0");
         inputEmissao.value = `${nota.emissao.getFullYear()}-${pad(nota.emissao.getMonth()+1)}-${pad(nota.emissao.getDate())}T${pad(nota.emissao.getHours())}:${pad(nota.emissao.getMinutes())}`;
     }
+    inputEmissor.value = nota.emissor;
 
     // Preenche valores
     inputCobranca.value = `R$ ${Number(nota.valor).toFixed(2).replace('.', ',')}`;
@@ -491,13 +493,13 @@ async function renderizarInfoContrato(idContrato) {
             const representanteObj = JSON.parse(representanteStr);
             representanteNome = representanteObj.nomeUsuario || representanteNome;
         }
+        const responseEmpresa = await fetch(`http://localhost:8080/syntro/empresas/${contrato.idEmpresa}`);
+        const empresa = await responseEmpresa.json();
 
         // Preenche campos do contrato
         document.querySelector('input[placeholder="Nome serviço"]').value = contrato.nomeServico || "Não informado";
-        document.querySelector('input[placeholder="Nome do representante fornecedor"]').value = representanteNome;
-        document.querySelector('input[placeholder="Empresa fornecedora"]').value = contrato.nomeEmpresa || "Não informado";
+        document.querySelector('input[placeholder="Empresa fornecedora"]').value = empresa.nomeFantasia || "Não informado";
         document.querySelector('input[placeholder="Nome auditor"]').value = representanteNome;
-
     } catch (error) {
         console.error("Erro ao renderizar contrato:", error);
     }
@@ -575,16 +577,22 @@ async function buscarComentarios() {
     const response = await fetch(`http://localhost:8080/syntro/comentar?notaId=${notaFiscalId}`)
     const listaComentarios = await response.json()
 
-    for(i = 0; i < listaComentarios.length; i++){
-      const item = document.createElement("div");
-    item.classList.add("comment-item");
-    item.innerHTML = `
-        <div class="comment-author">${usuarioObj.nomeUsuario}</div>
-        <div class="comment-text">${listaComentarios[i].descricao}</div>
-        <div class="comment-date">${new Date(listaComentarios[i].dataHora).toLocaleString()}</div>
-    `;
+    const responseComentadores = await fetch(`http://localhost:8080/syntro/user`)
+    const usuariosComentadores = await responseComentadores.json()
 
-     commentsList.prepend(item);
+    for(i = 0; i < listaComentarios.length; i++){
+        const item = document.createElement("div");
+        const idUsuarioComentou = listaComentarios[i].usuarioId;
+        const usuarioComentador = usuariosComentadores.find(u => u.id === idUsuarioComentou);
+        const nomeComentador = usuarioComentador ? usuarioComentador.nomeUsuario : "Desconhecido";
+        item.classList.add("comment-item");
+        item.innerHTML = `
+            <div class="comment-author">${nomeComentador}</div>
+            <div class="comment-text">${listaComentarios[i].descricao}</div>
+            <div class="comment-date">${new Date(listaComentarios[i].dataHora).toLocaleString()}</div>
+        `;
+
+        commentsList.prepend(item);
     }
 }
 
