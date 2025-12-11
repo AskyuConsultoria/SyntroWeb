@@ -62,7 +62,7 @@ function closeModalV() {
 
 async function carregarContratos() {
     try {
-        const response = await fetch("http://localhost:8080/syntro/contrato/contratos");
+        const response = await fetch("/syntro/contrato/contratos");
         if (!response.ok) {
             throw new Error("Erro ao buscar contratos");
         }
@@ -94,7 +94,7 @@ async function carregarContratos() {
 
 async function vincularContrato(idNota, idContrato) {
     try {
-        const response = await fetch(`http://localhost:8080/syntro/nota-fiscal/${idNota}?idContrato=${idContrato}`, {
+        const response = await fetch(`/syntro/nota-fiscal/${idNota}?idContrato=${idContrato}`, {
             method: "PUT"
         });
 

@@ -95,8 +95,8 @@
     <script src="/public/components/sidebar.js" type="module"></script>
 
     <script>
-        const CONTRATOS_URL = 'http://localhost:8080/syntro/contrato/contratos';
-        const EMPRESAS_URL = 'http://localhost:8080/syntro/empresas';
+        const CONTRATOS_URL = '/syntro/contrato/contratos';
+        const EMPRESAS_URL = '/syntro/empresas';
 
         const usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado") || '{}');
         document.getElementById('nomeUsuarioHeader').textContent = usuarioLogado.nomeUsuario || '?';

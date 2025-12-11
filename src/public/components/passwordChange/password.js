@@ -67,7 +67,7 @@ function closeModalP() {
 async function autentificar(senha){
     var usuario = sessionStorage.getItem("usuarioLogado");
     email = JSON.parse(usuario).email;
-    const resposta = await fetch('http://localhost:8080/syntro/user/login', {
+    const resposta = await fetch('/syntro/user/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ async function autentificar(senha){
 function mudarsenha(novaSenha){
     var usuario = sessionStorage.getItem("usuarioLogado");
     id = JSON.parse(usuario).id;
-    fetch(`http://localhost:8080/syntro/user/${id}?novaSenha=${novaSenha}`, {
+    fetch(`/syntro/user/${id}?novaSenha=${novaSenha}`, {
       method: 'PUT'
     });
 }

@@ -115,7 +115,7 @@ let membrosOriginais = [];
       return;
     }
 
-    const resposta = await fetch(`http://localhost:8080/syntro/contrato/${servicoId}`);
+    const resposta = await fetch(`/syntro/contrato/${servicoId}`);
     if (!resposta.ok) throw new Error("Erro ao buscar servico");
     const servico = await resposta.json();
     console.log("servico", servico);
@@ -135,11 +135,11 @@ let membrosOriginais = [];
       tableBodyServico.appendChild(tr);
 
     try {
-      const resposta = await fetch(`http://localhost:8080/syntro/nota-fiscal/empresa?empresaId=${servico.idEmpresa}`);
+      const resposta = await fetch(`/syntro/nota-fiscal/empresa?empresaId=${servico.idEmpresa}`);
       if (!resposta.ok) throw new Error("Erro ao buscar notas");
       const notas = await resposta.json();
 
-      const usuarios = await fetch(`http://localhost:8080/syntro/user`);
+      const usuarios = await fetch(`/syntro/user`);
       const todosUsuarios = await usuarios.json();
       membrosOriginais = todosUsuarios || [];
 
@@ -228,7 +228,7 @@ function formatarData(d) {
     }
     console.log("Finalizando contrato id:", servicoId);
     try {
-        const resposta = await fetch(`http://localhost:8080/syntro/contrato/${servicoId}`);
+        const resposta = await fetch(`/syntro/contrato/${servicoId}`);
         if (!resposta.ok) throw new Error("Erro ao buscar servico");
         const servico = await resposta.json();
         console.log("servico a finalizar", servico);
@@ -245,7 +245,7 @@ function formatarData(d) {
             idEmpresa: servico.idEmpresa
         };
 
-        const response = await fetch("http://localhost:8080/syntro/contrato", {
+        const response = await fetch("/syntro/contrato", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(contrato)

@@ -143,7 +143,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 
    async function carregarEmpresas() {
         try {
-            const response = await fetch('http://localhost:8080/syntro/empresas');
+            const response = await fetch('/syntro/empresas');
             if (!response.ok) throw new Error('Erro ao buscar empresas');
             
             const empresas = await response.json();

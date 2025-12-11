@@ -293,7 +293,7 @@ const inputEmissor = document.getElementById("emissor");
 // Função para carregar nota
 async function carregarNota() {
     try {
-        const url = `http://localhost:8080/syntro/nota-fiscal/${identificadorNf}`;
+        const url = `/syntro/nota-fiscal/${identificadorNf}`;
         const response = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" }});
         if (!response.ok) throw new Error(`Erro na requisição: ${response.status}`);
         const nota = await response.json();
@@ -302,7 +302,7 @@ async function carregarNota() {
         let nomeUsuario = "Não Informado";
         if (nota.idUsuario) {
             try {
-                const userResponse = await fetch(`http://localhost:8080/syntro/user/${nota.idUsuario}`);
+                const userResponse = await fetch(`/syntro/user/${nota.idUsuario}`);
                 if (userResponse.ok) {
                     const userData = await userResponse.json();
                     nomeUsuario = userData.nomeUsuario || nomeUsuario;
@@ -390,7 +390,7 @@ async function updateStatusOnServer(newStatusValue) {
         return Promise.reject("Status selecionado é inválido.");
     }
 
-    const url = `http://localhost:8080/syntro/nota-fiscal/status/${notaFiscalId}?status=${statusId}`;
+    const url = `/syntro/nota-fiscal/status/${notaFiscalId}?status=${statusId}`;
 
     try {
         const response = await fetch(url, {
@@ -474,7 +474,7 @@ document.addEventListener('click', e => {
 async function renderizarInfoContrato(idContrato) {
     if (!idContrato) return;
     try {
-        const url = `http://localhost:8080/syntro/contrato/${idContrato}`;
+        const url = `/syntro/contrato/${idContrato}`;
         const response = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" }});
         if (!response.ok) throw new Error(`Erro ao buscar contrato: ${response.status}`);
         const contrato = await response.json();
@@ -486,7 +486,7 @@ async function renderizarInfoContrato(idContrato) {
             const representanteObj = JSON.parse(representanteStr);
             representanteNome = representanteObj.nomeUsuario || representanteNome;
         }
-        const responseEmpresa = await fetch(`http://localhost:8080/syntro/empresas/${contrato.idEmpresa}`);
+        const responseEmpresa = await fetch(`/syntro/empresas/${contrato.idEmpresa}`);
         const empresa = await responseEmpresa.json();
 
         // Preenche campos do contrato
@@ -518,7 +518,7 @@ async function enviarComentario(texto) {
     };
 
     try {
-        const response = await fetch("http://localhost:8080/syntro/comentar", {
+        const response = await fetch("/syntro/comentar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -568,10 +568,10 @@ async function buscarComentarios() {
     const usuarioObj = JSON.parse(usuarioString);
 
 
-    const response = await fetch(`http://localhost:8080/syntro/comentar?notaId=${notaFiscalId}`)
+    const response = await fetch(`/syntro/comentar?notaId=${notaFiscalId}`)
     const listaComentarios = await response.json()
     console.log("Lista de comentários recebida:", listaComentarios);
-    const responseComentadores = await fetch(`http://localhost:8080/syntro/user`)
+    const responseComentadores = await fetch(`/syntro/user`)
     const usuariosComentadores = await responseComentadores.json()
 
     for(i = 0; i < listaComentarios.length; i++){

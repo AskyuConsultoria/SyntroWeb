@@ -200,7 +200,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
 
     async function carregarDepartamentos() {
       try {
-        const response = await fetch("http://localhost:8080/syntro/departamentos");
+        const response = await fetch("/syntro/departamentos");
         if (!response.ok) throw new Error("Erro ao buscar departamentos");
         const data = await response.json();
 
@@ -295,7 +295,7 @@ nomeHeader.innerHTML = usuarioLogado.nomeUsuario;
     }
 
       try {
-          const resposta = await fetch("http://localhost:8080/syntro/departamentos", {
+          const resposta = await fetch("/syntro/departamentos", {
               method: "POST",
               headers: {
                   "Content-Type": "application/json"
