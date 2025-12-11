@@ -17,15 +17,15 @@ async function cadastrarContrato() {
         const valor = parseFloat(valorCobrancaRaw.replace(",", "."));
 
         const contrato = {
-            nomeServico,
-            descricao,
+            nomeServico: nomeServico,
+            descricao: descricao,
             dataRealizacao: dataRealizacao ? new Date(dataRealizacao).toISOString() : null,
             statusContrato: true,
             tempoContrato: duracaoContrato,
-            valor,
+            valor: valor,
             nomeMoeda: moedaCobranca,
-            idDepartamento,
-            idEmpresa
+            idDepartamento: idDepartamento,
+            idEmpresa: idEmpresa
         };
 
         const response = await fetch(API_BASE_CONTRATO, {

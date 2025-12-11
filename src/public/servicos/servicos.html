@@ -32,8 +32,8 @@
                     <span style="color: #5e5959;">Meu acesso | <a href="#"
                             style="all: unset; cursor: pointer;">Serviços</a></span>
                     <div class="d-flex align-items-center gap-2">
-                        <div>
-                            <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;" onclick="showPasswordChanger()">
+                        <div onclick="showPasswordChanger()">
+                            <img src="/assets/Component 1.svg" style="height: 30px; cursor: pointer;">
                             <span id="nomeUsuarioHeader"> ?</span>
                         </div>
                     </div>
@@ -234,7 +234,7 @@
         function upload() { window.location.href = '/cadastros/servicos'; }
 
         function abrirServico(servico) {
-            sessionStorage.setItem("servicoSelecionada", JSON.stringify(servico));
+            sessionStorage.setItem("servicoSelecionado", JSON.stringify(servico));
             window.location.href = "/servicos/detalhes";
         }
     </script>
