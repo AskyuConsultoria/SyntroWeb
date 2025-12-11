@@ -68,14 +68,13 @@
         <hr style="width: 90%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
         <div>
           <div class="d-flex align-center flex-column justify-content-evenly gap-4 ">
-            <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
-              <div><span class="active" data-status="Todas">Todas</span></div>
-              <div><span data-status="Não Iniciada">Não Iniciada</span></div>
-              <div><span data-status="Em andamento">Em andamento</span></div>
-              <!-- <div><span data-status="Em validação">Em validação</span></div> -->
-              <div><span data-status="Aprovada">Aprovadas</span></div>
-              <div><span data-status="Congelada">Congeladas</span></div>
-              <div><span data-status="Reprovada">Reprovadas</span></div>
+             <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
+              <div><span class="active" data-status="Todas">Todas </span></div>
+              <div><span data-status="Não Iniciada">Não Iniciada </span></div>
+              <div><span data-status="Em andamento">Em andamento </span></div>
+              <div><span data-status="Aprovada">Aprovadas </span></div>
+              <div><span data-status="Congelada">Congeladas </span></div>
+              <div><span data-status="Reprovada">Reprovadas </span></div>
             </div>
             <div>
               <table class="table-bordered align-middle text-center mt-2">
@@ -200,60 +199,74 @@
       return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9\s]/g, "").toLowerCase();
     }
 
-    async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
-      tableBody.innerHTML = "";
-      const listaNotas = (await carregarNotas()).reverse();
-      const buscaNormalizada = normalizarTexto(termoBusca);
-      let filtradas = listaNotas.filter(nota => {
+async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
+    tableBody.innerHTML = "";
+    const listaNotas = (await carregarNotas()).reverse();
+    const buscaNormalizada = normalizarTexto(termoBusca);
+
+    let filtradas = listaNotas.filter(nota => {
         const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
         const textoNota = Object.values(nota).join(" ");
         return matchStatus && normalizarTexto(textoNota).includes(buscaNormalizada);
+    });
+
+          tags.forEach(tag => {
+          if (tag.dataset.status === filtroStatus) {
+              tag.classList.add("active");
+              tag.textContent = `${tag.dataset.status} (${filtradas.length})`; // contador entre parênteses
+          } else {
+              tag.classList.remove("active");
+              tag.textContent = tag.dataset.status; // sem contador
+          }
       });
 
-      if (sortCol) {
+    // Ordenação
+    if (sortCol) {
         filtradas.sort((a, b) => {
-          let valA = a[sortCol];
-          let valB = b[sortCol];
+            let valA = a[sortCol];
+            let valB = b[sortCol];
 
-          if (sortCol === "vencimento") {
-            const [dA, mA, aA] = valA.split("/").map(Number);
-            const [dB, mB, aB] = valB.split("/").map(Number);
-            valA = new Date(aA, mA - 1, dA);
-            valB = new Date(aB, mB - 1, dB);
-          }
+            if (sortCol === "vencimento") {
+                const [dA, mA, aA] = valA.split("/").map(Number);
+                const [dB, mB, aB] = valB.split("/").map(Number);
+                valA = new Date(aA, mA - 1, dA);
+                valB = new Date(aB, mB - 1, dB);
+            }
 
-          if (sortCol === "valor") {
-            valA = Number(valA.replace(/[^\d,]/g, "").replace(",", "."));
-            valB = Number(valB.replace(/[^\d,]/g, "").replace(",", "."));
-          }
+            if (sortCol === "valor") {
+                valA = Number(valA.replace(/[^\d,]/g, "").replace(",", "."));
+                valB = Number(valB.replace(/[^\d,]/g, "").replace(",", "."));
+            }
 
-          if (valA < valB) return asc ? -1 : 1;
-          if (valA > valB) return asc ? 1 : -1;
-          return 0;
+            if (valA < valB) return asc ? -1 : 1;
+            if (valA > valB) return asc ? 1 : -1;
+            return 0;
         });
-      }
+    }
 
-      if (filtradas.length === 0) {
+    if (filtradas.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="6" class="text-muted">Nenhuma nota encontrada.</td></tr>`;
         return;
-      }
-      filtradas.forEach(nota => {
+    }
+
+    // Preenche tabela
+    filtradas.forEach(nota => {
         const row = document.createElement("tr");
         row.innerHTML = `
-    <td>${nota.servico}</td>
-    <td>${nota.nota}</td>
-    <td>${nota.emissor}</td>
-    <td>${nota.vencimento}</td>
-    <td>${nota.status}</td>
-    <td>${nota.valor}</td>
-  `; 
-        row.style.cursor = "pointer"; // deixa o cursor de click
+            <td>${nota.servico}</td>
+            <td>${nota.nota}</td>
+            <td>${nota.emissor}</td>
+            <td>${nota.vencimento}</td>
+            <td>${nota.status}</td>
+            <td>${nota.valor}</td>
+        `;
+        row.style.cursor = "pointer";
         row.addEventListener("click", () => {
-          verIndividual(nota.nota, nota.id); // ou nota.id se tiver
+            verIndividual(nota.nota, nota.id);
         });
         tableBody.appendChild(row);
-      });
-    }
+    });
+}
       renderTable("Todas");
 
       tags.forEach(tag => tag.addEventListener("click", () => {
