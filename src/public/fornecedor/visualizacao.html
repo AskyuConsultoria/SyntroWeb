@@ -70,8 +70,9 @@
           <div class="d-flex align-center flex-column justify-content-evenly gap-4 ">
             <div class="d-flex flex-row tags mt-2" style="gap: 15px;">
               <div><span class="active" data-status="Todas">Todas</span></div>
+              <div><span data-status="Não Iniciada">Não Iniciada</span></div>
               <div><span data-status="Em andamento">Em andamento</span></div>
-              <div><span data-status="Em validação">Em validação</span></div>
+              <!-- <div><span data-status="Em validação">Em validação</span></div> -->
               <div><span data-status="Aprovada">Aprovadas</span></div>
               <div><span data-status="Congelada">Congeladas</span></div>
               <div><span data-status="Reprovada">Reprovadas</span></div>
@@ -332,7 +333,7 @@
                 vencimento: nota.dataVencimento ? formatarData(new Date(nota.dataVencimento)) : null,
                 idEmpresa: nota.idEmpresa,
                 emissor: nomeUsuario,
-                status: "Em andamento",
+                status: obterStatusNota(nota.status),
                 idUsuario: nota.idUsuario
               };
             })
@@ -351,6 +352,25 @@
       window.location.href = "/individual";
       window.sessionStorage.setItem("id", id)
       console.log(id)
+    }
+
+    function obterStatusNota(codigoStatus) {
+      switch (codigoStatus) {
+        case 1:
+          return "Não Iniciada";
+        case 2:
+          return "Em andamento";
+        case 3:
+          return "Aprovada";
+        case 4:
+          return "Reprovada";
+        case 5:
+          return "Congelada";
+        case 6:
+          return "Finalizada";
+        default:
+          return "Desconhecido";
+      }
     }
 
       function formatarData(data) {

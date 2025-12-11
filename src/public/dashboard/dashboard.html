@@ -26,6 +26,30 @@
     a {
         text-decoration: none;
     }
+    .btn-limpar-filtro {
+        background-color: #1A2A80;
+        color: white;
+        border: none;
+        padding: 6px 14px;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-limpar-filtro .mais {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 2px;
+    }
+
+    .btn-limpar-filtro:hover {
+        background-color: #152066;
+    }
+
 </style>
 
 <body style="background-color: #F1F5F8;" onload="chart()">
@@ -58,13 +82,19 @@
                         </div>
                     </div>
                 </div>
-            <div class="content">
-                <div class="add-text-icon">
+            <div class="add-text-icon" 
+                style="display: flex; align-items: center; justify-content: space-between;">
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
                     <span>Painel</span>
                     <img src="/assets/icons.svg" style="height: 20px;">
                 </div>
-                <hr style="width: 100%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
+
+                <button id="btnLimparFiltro" class="btn-limpar-filtro">
+                    Limpar filtro
+                </button>
             </div>
+            <hr style="width: 100%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
             <div class="mt-3">
                 <div class="d-flex justify-content-between">
                     <div id="kpi-nao-iniciadas" class="d-flex flex-column" style="background-color: #9A9A9A;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
@@ -72,7 +102,7 @@
                         <h2 class="mb-0" id="nao-iniciada">0</h2>
                     </div>
                     <div id="kpi-em-andamento" class="d-flex flex-column" style="background-color: #D7F0D1;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
-                        <h6 class="mb-0">Em Andamento</h6>
+                        <h6 class="mb-0" style="white-space: nowrap;">Em Andamento</h6>
                         <h2 class="mb-0" id="em-andamento">0</h2>
                     </div>
                     <div id="kpi-a-vencer" class="d-flex flex-column" style="background-color: #FFB800;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
@@ -82,6 +112,11 @@
                     <div id="kpi-atrasadas" class="d-flex flex-column" style="background-color: #FF8D8D;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
                         <h6 class="mb-0">Atrasadas</h6>
                         <h2 class="mb-0" id="atrasadas">0</h2>
+                    </div>
+                    <div id="kpi-finalizadas" class="d-flex flex-column"
+                        style="background-color: #007bff;padding:24px;border-radius: 20px;width:15%;height:10%; cursor: pointer;">
+                        <h6 class="mb-0">Finalizadas</h6>
+                        <h2 class="mb-0" id="finalizadas">0</h2>
                     </div>
                 </div>
                 <hr style="width: 100%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
@@ -158,9 +193,8 @@
             const numeroNota = nota.nota || '';
             const emissor = nota.emissor || '';
             const vencimento = nota.vencimento || '';
-            const status = nota.status || '';
+            const status = obterStatusString(nota.status);
             const valor = nota.valor || '';
-
             row.innerHTML = `
                 <td>${servico}</td>
                 <td>${numeroNota}</td>
@@ -177,24 +211,56 @@
         });
     }
 
+    function obterStatusString(status){
+        switch(status){
+            case 1:
+                return "Não Iniciada";
+            case 2:
+                return "Em Andamento";
+            case 3:
+                return "Finalizada";
+            case 4:
+                return "Finalizada";
+            default:
+                return "Desconhecido";
+        }
+    }
+
+    document.getElementById("btnLimparFiltro").addEventListener("click", async () => {
+        tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+        const notas = await carregarNotas();
+        displayNotas(notas);
+    });
+
+    async function CarregarNotasFinalizadas() {
+        try {
+            const todas = await carregarNotas();
+            return todas.filter(n => n.status === 3 || n.status === 4);
+        } catch (error) {
+            console.error("Erro ao buscar finalizadas:", error);
+            return [];
+        }
+    }
+
     async function atualizarContagensKPIs() {
         try {
-            const [naoIniciada, emAndamento, aVencer, atrasadas] = await Promise.all([
+            const [naoIniciada, emAndamento, aVencer, atrasadas, finalizadas] = await Promise.all([
                 carregarNotasPorStatus(1),
                 carregarNotasPorStatus(2),
                 CarregarNotasAVencer(),
-                CarregarNotasAtrasadas()
+                CarregarNotasAtrasadas(),
+                CarregarNotasFinalizadas()
             ]);
 
             document.getElementById('nao-iniciada').textContent = naoIniciada.length;
             document.getElementById('em-andamento').textContent = emAndamento.length;
             document.getElementById('a-vencer').textContent = aVencer.length;
             document.getElementById('atrasadas').textContent = atrasadas.length;
+            document.getElementById('finalizadas').textContent = finalizadas.length;
         } catch (error) {
             console.error('Erro ao atualizar contagens dos KPIs:', error);
         }
     }
-
 
     document.addEventListener("DOMContentLoaded", () => {
         const table = document.querySelector("table");
@@ -275,6 +341,7 @@
         const kpiEmAndamento = document.getElementById('kpi-em-andamento');
         const kpiAVencer = document.getElementById('kpi-a-vencer');
         const kpiAtrasadas = document.getElementById('kpi-atrasadas');
+        const kpiFinalizadas = document.getElementById('kpi-finalizadas');
 
         if (kpiNaoIniciadas) {
             kpiNaoIniciadas.addEventListener('click', async () => {
@@ -307,6 +374,14 @@
                 displayNotas(notas);
             });
         }
+
+        if (kpiFinalizadas) {
+            kpiFinalizadas.addEventListener('click', async () => {
+            tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+            const notas = await carregarNotasFinalizadas();
+            displayNotas(notas);
+        });
+    }
     });
 
     const tableBody = document.getElementById("tableBody");
@@ -321,8 +396,7 @@
     async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
         tableBody.innerHTML = "";
         const listaNotas = await carregarNotas();
-        console.log("Lista de Notas: ")
-        console.log(listaNotas)
+        console.log("Lista de Notas: ", listaNotas)
         const buscaNormalizada = normalizarTexto(termoBusca);
         let filtradas = listaNotas.filter(nota => {
             const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
@@ -364,7 +438,7 @@
     <td>${nota.nota}</td>
     <td>${nota.emissor}</td>
     <td>${nota.vencimento}</td>
-    <td>${nota.status}</td>
+    <td>${obterStatusString(nota.status)}</td>
     <td>${nota.valor}</td>
   `;
             row.style.cursor = "pointer"; // deixa o cursor de click
@@ -633,7 +707,9 @@
             const data = await response.json();
 
             const listaNotas = await Promise.all(
-                data.map(async (nota) => {
+                data
+                    .filter(nota => nota.status === 1 || nota.status === 2)
+                    .map(async (nota) => {
                     let nomeUsuario = "Não Informado";
 
                     if (nota.idUsuario) {
@@ -656,7 +732,7 @@
                                 servicoNota = contratoData.nomeServico;
                             }
                         } catch (err) {
-                            console.warn(`Não foi possível buscar o usuário ${nota.idUsuario}:`, err);
+                            console.warn(`Não foi possível buscar o contrato ${nota.idContrato}:`, err);
                         }
                     }
                     return {
@@ -707,11 +783,13 @@
         var listaAprovadas = []
         var listaReprovadas = []
         var listaNaoLidas = []
+        var listaEmAdamento = []
         dados.forEach(dado => {
             listaLabels.push(dado.nomeUsuario);
             listaAprovadas.push(dado.notasAprovadas);
             listaReprovadas.push(dado.notasReprovadas);
             listaNaoLidas.push(dado.notasNaoIniciadas);
+            listaEmAdamento.push(dado.notasEmAndamento);
         });
         const ctx = document.getElementById('myChart');
         var config = {
@@ -722,17 +800,20 @@
                 // datasets = coluna y
                 datasets: [{
                     label: "Aprovadas",
-
                     data: listaAprovadas,
-                    backgroundColor: '#72CEFD'
+                    backgroundColor: '#80EF80'
                 },{
                     label: "Reprovadas",
                     data: listaReprovadas,
-                    backgroundColor: '#855CF8'
+                    backgroundColor: '#FF6961'
                 },{
-                    label: "Não Lidas",
+                    label: "Não Iniciadas",
                     data: listaNaoLidas,
                     backgroundColor: '#9A9A9A'
+                },{
+                    label: "Em Andamento",
+                    data: listaEmAdamento,
+                    backgroundColor: '#72CEFD'
                 }]
             },
             options: {
