@@ -152,7 +152,7 @@
         }
 
         else if (filtroStatus.toLowerCase().includes("fornecedora")) {
-            filtradas = listaEmpresas.filter(e => e.fornecedor === true || e.fornecedor === 1);
+            filtradas = listaEmpresas.filter(e => e.fornecedor === true && e.id != 1 || e.fornecedor === 1 && e.id != 1);
         }
 
         else if (filtroStatus.toLowerCase().includes("subsidiaria")) {
