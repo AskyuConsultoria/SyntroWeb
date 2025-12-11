@@ -202,7 +202,7 @@
 
     async function renderTable(filtroStatus = "Todas", termoBusca = "", sortCol = null, asc = true) {
       tableBody.innerHTML = "";
-      const listaNotas = await carregarNotas();
+      const listaNotas = (await carregarNotas()).reverse();
       const buscaNormalizada = normalizarTexto(termoBusca);
       let filtradas = listaNotas.filter(nota => {
         const matchStatus = filtroStatus === "Todas" || nota.status === filtroStatus;
@@ -353,7 +353,6 @@
       window.location.href = "/individual";
       window.sessionStorage.setItem("id", codigoNota)
       window.sessionStorage.setItem("NF-ID", idNota)
-      console.log(id)
     }
 
     function obterStatusNota(codigoStatus) {

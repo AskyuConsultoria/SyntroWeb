@@ -1,0 +1,81 @@
+<style>
+    /* Fundo escuro */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Caixa do modal */
+.modal-box {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    width: 350px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn .25s ease-in-out;
+}
+.modal-box input {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.modal-box input:focus {
+    border-color: #1A2A80;
+}
+
+/* Ícone (✔ ou ✖) */
+.modal-icon {
+    font-size: 55px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Botão */
+.close-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    background: #1A2A80;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Animação */
+@keyframes fadeIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+</style>
+<div id="globalModalV" class="modal-overlay hidden">
+    <div class="modal-box">
+        <span class="modal-icon">❗</span>
+        <p>Escolha o serviço a ser Vinculado</p>
+        <select id="contratosSelect" class="form-control search-bar" style="border-radius: 4px">
+            <option value="">Selecione um contrato</option>
+        </select>
+        <button id="modalFinishBtnV" class="close-btn">Vincular</button>
+        <button id="modalCloseBtnV" class="close-btn">Fechar</button>
+    </div>
+</div>
