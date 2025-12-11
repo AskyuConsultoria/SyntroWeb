@@ -378,7 +378,7 @@
         if (kpiFinalizadas) {
             kpiFinalizadas.addEventListener('click', async () => {
             tableBody.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
-            const notas = await carregarNotasFinalizadas();
+            const notas = await CarregarNotasFinalizadas();
             displayNotas(notas);
         });
     }
