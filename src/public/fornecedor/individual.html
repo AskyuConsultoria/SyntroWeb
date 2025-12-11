@@ -346,27 +346,8 @@ async function definirInputs() {
     inputCobranca.value = `R$ ${Number(nota.valor).toFixed(2).replace('.', ',')}`;
     inputDescricao.value = nota.servico;
 
-    // Preenche dropdown status
-    const savedStatus = sessionStorage.getItem(`status_${identificadorNf}`);
-    const apiStatus = nota.status;
-    const defaultStatusValue = "em-andamento-2";
-
-    let statusToSet = defaultStatusValue; // Começa com o padrão
-
-    // Prioriza sessionStorage, depois API, e por último o padrão.
-    if (savedStatus && statusList.find(s => s.value === savedStatus)) {
-        statusToSet = savedStatus;
-    } else if (apiStatus && statusList.find(s => s.value === apiStatus)) {
-        statusToSet = apiStatus;
-    } else {
-        if (apiStatus) {
-             console.warn(`Status "${apiStatus}" da API não é válido. Usando o padrão.`);
-        }
-    }
-
-    currentStatus = statusToSet;
-    
-    const initialStatus = statusList.find(s => s.value === currentStatus);
+    currentStatus = nota.status;
+    const initialStatus = statusList.find(s => s.value == currentStatus);
     if (initialStatus) {
         selected.innerHTML = `<span class="status-dot" style="background:${initialStatus.color}"></span> ${initialStatus.label}`;
     }
@@ -383,12 +364,12 @@ const optionsContainer = dropdown.querySelector('.status-options');
 
 // Lista de status com a ordem correta e sem "Em validação"
 const statusList = [
-    { value: "nao-iniciado-1", label: "Não iniciado", color: "#6c757d" },
-    { value: "em-andamento-2", label: "Em andamento", color: "#007bff" },
-    { value: "aprovada-3", label: "Aprovada", color: "#28a745" },
-    { value: "finalizada-4", label: "Finalizada", color: "#17a2b8" },
-    { value: "congelada-5", label: "Congelada", color: "#ffc107" },
-    { value: "reprovada-6", label: "Reprovada", color: "#dc3545" }
+    { value: "1", label: "Não iniciado", color: "#6c757d" },
+    { value: "2", label: "Em andamento", color: "#007bff" },
+    { value: "3", label: "Aprovada", color: "#28a745" },
+    { value: "4", label: "Reprovada", color: "#dc3545" },
+    { value: "5", label: "Finalizada", color: "#17a2b8" },
+    { value: "6", label: "Congelada", color: "#ffc107" }
 ];
 
 let currentStatus; // Será definido na função definirInputs()
@@ -398,7 +379,7 @@ async function updateStatusOnServer(newStatusValue) {
     // Usa a variável 'notaFiscalId' que já é pega do sessionStorage no topo do script
     if (!notaFiscalId) {
         console.error("ID da Nota Fiscal (NF-ID) não encontrado no sessionStorage.");
-        alert("Erro: ID da Nota Fiscal não encontrado para a atualização.");
+        showModal("Erro: ID da Nota Fiscal não encontrado para a atualização.", "error");
         return Promise.reject("ID da NF não encontrado.");
     }
 
