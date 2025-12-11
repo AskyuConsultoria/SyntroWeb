@@ -72,7 +72,8 @@
 
             <div class="d-flex flex-row tags mt-4" style="gap: 15px;">
                 <div><span class="active" data-status="Todas">Todos</span></div>
-                <div><span data-status="Em andamento">Serviços seguidos</span></div>
+                <div><span data-status="Em andamento">Em Andamento</span></div>
+                <div><span data-status="Finalizados">Serviços seguidos</span></div>
             </div>
 
             <div class="d-flex flex-column gap-4 mt-1">
@@ -138,7 +139,8 @@
                     nomeServico: c.nomeServico ?? '',
                     empresaNome: emp?.nomeFantasia ?? '-',
                     valor: c.valor ?? null,
-                    moeda: c.nome_Moeda ?? 'BRL'
+                    moeda: c.nome_Moeda ?? 'BRL',
+                    statusContrato: c.statusContrato
                 };
             });
         }
@@ -173,8 +175,21 @@
 
             let filtradas = lista.filter(i => {
                 const txt = normalizarTexto(`${i.nomeServico} ${i.empresaNome} ${i.valor ?? ''}`);
-                return filtroNormalizado === '' || txt.includes(filtroNormalizado);
+                const correspondeTexto = filtroNormalizado === '' || txt.includes(filtroNormalizado);
+
+                const tagAtiva = document.querySelector('.tags span.active')?.dataset.status;
+
+                let correspondeStatus = true;
+
+                if (tagAtiva === "Em andamento") {
+                    correspondeStatus = i.statusContrato === true;
+                } else if (tagAtiva === "Finalizados") {
+                    correspondeStatus = i.statusContrato === false;
+                }
+
+                return correspondeTexto && correspondeStatus;
             });
+
 
             tags.forEach(tag => {
                 if (tag.classList.contains("active")) {

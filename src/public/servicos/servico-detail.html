@@ -49,10 +49,17 @@
       </div>
 
       <div class="content">
-        <div class="add-text-icon">
-          <span class="me-2" id="nomeServico">Carregando...</span>
+        <div class="add-text-icon d-flex align-items-center gap-2">
+          <span id="nomeServico">Carregando...</span>
           <img src="/assets/box.svg" style="height: 20px;">
-        </div>
+
+          <button class="btn btn-primary"
+              style="background-color: #1A2A80; border-color: #1A2A80;"
+              onclick="finalizarContrato()">
+              Encerrar Contrato
+          </button>
+      </div>
+
         <hr style="width: 95%; height: 1px; background: #e0e0e0; box-shadow: 0 4px 4px rgba(0, 0, 0, 0.268);">
         <div style="width: 95%;">
           <table class="table-bordered align-middle text-center card-table">
@@ -212,5 +219,46 @@ function formatarData(d) {
     window.sessionStorage.setItem("id", id)
     console.log(id)
   }
+
+  async function finalizarContrato() {
+    var usuarioLogado = JSON.parse(sessionStorage.getItem("usuarioLogado"));
+    if(usuarioLogado.permissao == "Emissor" || usuarioLogado.permissao == "Auditor") {
+        showModal("Você não tem permisao para finalizar um contrato", "error");
+        return;
+    }
+    console.log("Finalizando contrato id:", servicoId);
+    try {
+        const resposta = await fetch(`http://localhost:8080/syntro/contrato/${servicoId}`);
+        if (!resposta.ok) throw new Error("Erro ao buscar servico");
+        const servico = await resposta.json();
+        console.log("servico a finalizar", servico);
+        const contrato = {
+            id: servico.id,
+            nomeServico: servico.nomeServico,
+            descricao: servico.descricao,
+            dataRealizacao: servico.dataRealizacao,
+            statusContrato: false,
+            tempoContrato: servico.tempoContrato,
+            valor: servico.valor,
+            nomeMoeda: servico.nomeMoeda,
+            idDepartamento: servico.idDepartamento,
+            idEmpresa: servico.idEmpresa
+        };
+
+        const response = await fetch("http://localhost:8080/syntro/contrato", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(contrato)
+        });
+
+        if (!response.ok) throw new Error("Erro ao atualizar contrato.");
+
+        const dadosContrato = await response.json();
+        showModal(`Contrato atualizado com sucesso! ID: ${dadosContrato.id}`, "success");
+    } catch (error) {
+        console.error(error);
+        showModal("Falha ao atualizar o contrato. Veja o console para detalhes.", "error");
+    }
+}
 
 </script>
