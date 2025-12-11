@@ -569,6 +569,7 @@ async function comentar() {
 btnPost.addEventListener("click", comentar);
 
 async function buscarComentarios() {
+    commentsList.innerHTML = "";
     const usuarioString = window.sessionStorage.getItem("usuarioLogado");
     if (!usuarioString) return null;
     const usuarioObj = JSON.parse(usuarioString);
@@ -576,7 +577,7 @@ async function buscarComentarios() {
 
     const response = await fetch(`http://localhost:8080/syntro/comentar?notaId=${notaFiscalId}`)
     const listaComentarios = await response.json()
-
+    console.log("Lista de comentários recebida:", listaComentarios);
     const responseComentadores = await fetch(`http://localhost:8080/syntro/user`)
     const usuariosComentadores = await responseComentadores.json()
 

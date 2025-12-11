@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Sucesso:', result);
             fileInput.value = '';
             
-            if(result) setInterval(()=> window.location.href="/visualizacao", "2000")
+            if(result) setTimeout(()=> window.location.href="/visualizacao", "2000")
 
         } catch (error) {
             showModal('Erro ao enviar o arquivo!', "error");

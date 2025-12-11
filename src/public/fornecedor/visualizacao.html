@@ -246,10 +246,10 @@
     <td>${nota.vencimento}</td>
     <td>${nota.status}</td>
     <td>${nota.valor}</td>
-  `;
+  `; 
         row.style.cursor = "pointer"; // deixa o cursor de click
         row.addEventListener("click", () => {
-          verIndividual(nota.nota); // ou nota.id se tiver
+          verIndividual(nota.nota, nota.id); // ou nota.id se tiver
         });
         tableBody.appendChild(row);
       });
@@ -327,6 +327,7 @@
                 }
               }
               return {
+                id: nota.id,
                 servico: servicoNota,
                 nota: nota.numeroIdentificador,
                 valor: `${nota.nomeMoeda ? nota.nomeMoeda : "R$ "}${nota.valorTotal}`,
@@ -348,9 +349,10 @@
       }
 
 
-    function verIndividual(id) {
+    function verIndividual(codigoNota, idNota) {
       window.location.href = "/individual";
-      window.sessionStorage.setItem("id", id)
+      window.sessionStorage.setItem("id", codigoNota)
+      window.sessionStorage.setItem("NF-ID", idNota)
       console.log(id)
     }
 
